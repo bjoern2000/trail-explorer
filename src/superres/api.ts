@@ -1,6 +1,6 @@
 // Typed client for the server-side SSDS proxy (server.js, /api/ssds/*).
 //
-// The upstream tiler (references/SSDS_API_GUIDE.md) is never called from the
+// The upstream tiler (docs/references/SSDS_API_GUIDE.md) is never called from the
 // browser: the API key is server-side only, and the server also applies the +2h
 // reference-time correction from guide §7.1 before anything reaches us. So this
 // module knows the proxy's contract and nothing about the tiler's.

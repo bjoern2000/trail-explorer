@@ -55,7 +55,7 @@ const ARCGIS_STALE_MS = 24 * 60 * 60 * 1000; // serve-stale-on-error ceiling: 24
 const ARCGIS_CACHE_MAX = 500;
 const ARCGIS_TIMEOUT_MS = 20_000;
 
-// ---- SSDS config (TWC super-resolution tiler; see references/SSDS_API_GUIDE.md)
+// ---- SSDS config (TWC super-resolution tiler; see docs/references/SSDS_API_GUIDE.md)
 // Point API only. The key is server-side and must never reach a client, a log
 // line or a cache key. An empty key is a supported state: every SSDS route then
 // answers 503 with { configured: false } so the page can say so instead of 500ing.

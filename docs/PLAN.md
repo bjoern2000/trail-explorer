@@ -37,12 +37,17 @@ document wins; on *visuals*, the mockup wins.
 
 ```
 Prototypes/trail-explorer/
-  PLAN.md                    ← this file
+  docs/                      ← plans, API documentation, and reference screenshots
+    PLAN.md                  ← this file
+    BENCHMARK_PLAN.md        ← source of truth for the AllTrails benchmark page
+    DATAMODEL_PLAN.md        ← data model plan
+    MERGE_PLAN.md            ← source of truth for the segment merge page
+    SCOPE_PLAN.md            ← discovery prototype plan
+    TRAIL_PLAN.md            ← trail prototype plan
+    references/              ← SSDS API guide and reference screenshots
   design/mockup.html         ← approved static design (reference only, not shipped)
   package.json
   tsconfig.json
-  BENCHMARK_PLAN.md          ← source of truth for the AllTrails benchmark page
-  MERGE_PLAN.md              ← source of truth for the segment merge page
   vite.config.ts             ← MPA: index/matrix/benchmark/merge; dev proxy /api → :8081
   index.html                 ← map app shell
   matrix.html                ← source matrix page shell
