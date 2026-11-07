@@ -1,0 +1,3575 @@
+{
+  "meta": {
+    "schemaVersion": 4,
+    "region": "ozarks",
+    "bbox": [
+      -92.85,
+      37.95,
+      -92.55,
+      38.2
+    ],
+    "scrapedAt": "2026-07-21",
+    "derivedAt": "2026-07-21T11:32:18.849Z",
+    "inBboxRoutes": 32,
+    "droppedRoutes": 0,
+    "droppedNoCoordRoutes": 0,
+    "sources": {
+      "usfs": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "nps": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "blm": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "usgs": {
+        "featureCount": 127,
+        "namedFeatureCount": 123,
+        "uniqueNormalizedNameCount": 26,
+        "capped": false,
+        "error": null
+      },
+      "cotrex": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "dec": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "osm": {
+        "featureCount": 846,
+        "namedFeatureCount": 148,
+        "uniqueNormalizedNameCount": 84,
+        "capped": false,
+        "error": null
+      }
+    }
+  },
+  "routes": [
+    {
+      "trailId": "10233825",
+      "name": "Rocky Top Trail",
+      "latitude": 38.11345,
+      "longitude": -92.66788,
+      "lengthMeters": 3701.482,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 2000,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Rocky Top Trail"
+          ],
+          "featureIds": [
+            "usgs:1820049",
+            "usgs:1820252",
+            "usgs:1820088"
+          ],
+          "distM": 36,
+          "matchedLenM": 3315
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Rocky Top Trail"
+          ],
+          "featureIds": [
+            "osm:way/1300595524",
+            "osm:way/855597699",
+            "osm:way/1300595525",
+            "osm:way/855597700",
+            "osm:way/855597703"
+          ],
+          "distM": 15,
+          "matchedLenM": 3359
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 36,
+        "cotrex": null,
+        "dec": null,
+        "osm": 4,
+        "overall": 4
+      }
+    },
+    {
+      "trailId": "11214708",
+      "name": "Shady Ridge Trail",
+      "latitude": 38.11608,
+      "longitude": -92.66819,
+      "lengthMeters": 3218.68,
+      "routeType": "out-and-back",
+      "difficulty": "easy",
+      "numReviews": 486,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Shady Ridge Trail"
+          ],
+          "featureIds": [
+            "usgs:1820149"
+          ],
+          "distM": 4,
+          "matchedLenM": 1517
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Shady Ridge Trail"
+          ],
+          "featureIds": [
+            "osm:way/855597698",
+            "osm:way/1300596377",
+            "osm:way/1300596378"
+          ],
+          "distM": 5,
+          "matchedLenM": 1525
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 4,
+        "cotrex": null,
+        "dec": null,
+        "osm": 5,
+        "overall": 4
+      }
+    },
+    {
+      "trailId": "10779890",
+      "name": "Honey Run Trail - South Loop",
+      "latitude": 38.06551,
+      "longitude": -92.61492,
+      "lengthMeters": 4345.218,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 94,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Honey Run Trail"
+          ],
+          "featureIds": [
+            "usgs:1820299",
+            "usgs:1820134",
+            "usgs:1820393",
+            "usgs:1820014",
+            "usgs:1820589"
+          ],
+          "distM": 11,
+          "matchedLenM": 15259
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Honey Run Trail - South Loop",
+            "Honey Run Trail - Upland Flatwoods Section",
+            "Honey Run Trail - North Loop"
+          ],
+          "featureIds": [
+            "osm:way/855589980",
+            "osm:way/855585645",
+            "osm:way/1541038248",
+            "osm:way/1541038249",
+            "osm:way/855589981",
+            "osm:way/855581285"
+          ],
+          "distM": 12,
+          "matchedLenM": 21179
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 11,
+        "cotrex": null,
+        "dec": null,
+        "osm": 12,
+        "overall": 11
+      }
+    },
+    {
+      "trailId": "10242241",
+      "name": "Honey Run Trail - North Loop",
+      "latitude": 38.06684,
+      "longitude": -92.59568,
+      "lengthMeters": 17541.806,
+      "routeType": "out-and-back",
+      "difficulty": "moderate",
+      "numReviews": 194,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Honey Run Trail"
+          ],
+          "featureIds": [
+            "usgs:1820393",
+            "usgs:1820589",
+            "usgs:1820299",
+            "usgs:1820134",
+            "usgs:1820014"
+          ],
+          "distM": 3,
+          "matchedLenM": 15259
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Honey Run Trail - Upland Flatwoods Section",
+            "Honey Run Trail - North Loop",
+            "Honey Run Trail - South Loop"
+          ],
+          "featureIds": [
+            "osm:way/855585645",
+            "osm:way/855589981",
+            "osm:way/855589980",
+            "osm:way/1541038248",
+            "osm:way/1541038249",
+            "osm:way/855581291",
+            "osm:way/855581295"
+          ],
+          "distM": 3,
+          "matchedLenM": 22354
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 3,
+        "cotrex": null,
+        "dec": null,
+        "osm": 3,
+        "overall": 3
+      }
+    },
+    {
+      "trailId": "10718495",
+      "name": "Lake View Bend Trail",
+      "latitude": 38.13011,
+      "longitude": -92.62109,
+      "lengthMeters": 2092.142,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 203,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        }
+      },
+      "anyMatch": false,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 1,
+        "cotrex": null,
+        "dec": null,
+        "osm": 2,
+        "overall": 1
+      }
+    },
+    {
+      "trailId": "11203130",
+      "name": "Thunder Mountain Nature Trail",
+      "latitude": 38.02376,
+      "longitude": -92.79206,
+      "lengthMeters": 804.67,
+      "routeType": "out-and-back",
+      "difficulty": "moderate",
+      "numReviews": 11,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        }
+      },
+      "anyMatch": false,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 445,
+        "cotrex": null,
+        "dec": null,
+        "osm": 1659,
+        "overall": 445
+      }
+    },
+    {
+      "trailId": "10222903",
+      "name": "Coakley Hollow Trail",
+      "latitude": 38.05414,
+      "longitude": -92.58314,
+      "lengthMeters": 1609.34,
+      "routeType": "loop",
+      "difficulty": "hard",
+      "numReviews": 60,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Coakley Hollow Trail"
+          ],
+          "featureIds": [
+            "usgs:1990356",
+            "usgs:1990358",
+            "usgs:1990354"
+          ],
+          "distM": 3,
+          "matchedLenM": 1419
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Coakley Hollow Trail"
+          ],
+          "featureIds": [
+            "osm:way/1539753461",
+            "osm:way/1539753462",
+            "osm:way/855585642",
+            "osm:way/855585643",
+            "osm:way/1539753459",
+            "osm:way/1539753460"
+          ],
+          "distM": 3,
+          "matchedLenM": 1450
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 3,
+        "cotrex": null,
+        "dec": null,
+        "osm": 3,
+        "overall": 3
+      }
+    },
+    {
+      "trailId": "11329091",
+      "name": "Patatay Trail",
+      "latitude": 38.15006,
+      "longitude": -92.77595,
+      "lengthMeters": 2253.076,
+      "routeType": "out-and-back",
+      "difficulty": "moderate",
+      "numReviews": 91,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        }
+      },
+      "anyMatch": false,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 5118,
+        "cotrex": null,
+        "dec": null,
+        "osm": 411,
+        "overall": 411
+      }
+    },
+    {
+      "trailId": "10268949",
+      "name": "Lakeview Bend Trail",
+      "latitude": 38.07624,
+      "longitude": -92.57074,
+      "lengthMeters": 2574.944,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 559,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "fuzzy",
+          "rule": "2c",
+          "names": [
+            "Lake View Bend Trail"
+          ],
+          "featureIds": [
+            "usgs:1990375",
+            "usgs:1990377",
+            "usgs:1990376"
+          ],
+          "distM": 48,
+          "matchedLenM": 2264
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "fuzzy",
+          "rule": "2c",
+          "names": [
+            "Lake View Bend Trail"
+          ],
+          "featureIds": [
+            "osm:way/1301530657",
+            "osm:way/855581284",
+            "osm:way/855581292"
+          ],
+          "distM": 9,
+          "matchedLenM": 2308
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 3,
+        "cotrex": null,
+        "dec": null,
+        "osm": 4,
+        "overall": 3
+      }
+    },
+    {
+      "trailId": "10234585",
+      "name": "Lake of the Ozarks State Park Lake Trail",
+      "latitude": 38.08233,
+      "longitude": -92.56882,
+      "lengthMeters": 4667.086,
+      "routeType": "out-and-back",
+      "difficulty": "moderate",
+      "numReviews": 76,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        }
+      },
+      "anyMatch": false,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 83,
+        "cotrex": null,
+        "dec": null,
+        "osm": 53,
+        "overall": 53
+      }
+    },
+    {
+      "trailId": "10198992",
+      "name": "Fawn's Ridge Trail",
+      "latitude": 38.08185,
+      "longitude": -92.56806,
+      "lengthMeters": 2092.142,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 142,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Fawn's Ridge Trail",
+            "Fawn's Ridge Trail / Lake View Bend Trail"
+          ],
+          "featureIds": [
+            "osm:way/855581286",
+            "osm:way/855581293",
+            "osm:way/1359713038",
+            "osm:way/1359713039"
+          ],
+          "distM": 3,
+          "matchedLenM": 1952
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 3,
+        "cotrex": null,
+        "dec": null,
+        "osm": 3,
+        "overall": 3
+      }
+    },
+    {
+      "trailId": "10198191",
+      "name": "Hidden Springs Trail",
+      "latitude": 38.08372,
+      "longitude": -92.56351,
+      "lengthMeters": 4023.35,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 829,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Hidden Springs Trail"
+          ],
+          "featureIds": [
+            "usgs:1990371",
+            "usgs:1990369",
+            "usgs:1990370",
+            "usgs:1820760"
+          ],
+          "distM": 6,
+          "matchedLenM": 3923
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Hidden Springs Trail / White Oak Trail",
+            "Hidden Springs Trail"
+          ],
+          "featureIds": [
+            "osm:way/855581289",
+            "osm:way/855581288",
+            "osm:way/1359713034",
+            "osm:way/1359713033"
+          ],
+          "distM": 8,
+          "matchedLenM": 3833
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 6,
+        "cotrex": null,
+        "dec": null,
+        "osm": 8,
+        "overall": 6
+      }
+    },
+    {
+      "trailId": "10268948",
+      "name": "White Oak Trail",
+      "latitude": 38.08376,
+      "longitude": -92.56351,
+      "lengthMeters": 1448.406,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 95,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "White Oak Trail"
+          ],
+          "featureIds": [
+            "usgs:1990368",
+            "usgs:1990367"
+          ],
+          "distM": 155,
+          "matchedLenM": 800
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Hidden Springs Trail / White Oak Trail",
+            "White Oak Trail"
+          ],
+          "featureIds": [
+            "osm:way/855581289",
+            "osm:way/1359713034",
+            "osm:way/855581290",
+            "osm:way/855581297"
+          ],
+          "distM": 8,
+          "matchedLenM": 997
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 8,
+        "cotrex": null,
+        "dec": null,
+        "osm": 8,
+        "overall": 8
+      }
+    },
+    {
+      "trailId": "10255776",
+      "name": "Tonka Quarry Trail Green Loop",
+      "latitude": 37.9781,
+      "longitude": -92.76585,
+      "lengthMeters": 4988.954,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 1210,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Quarry Trail"
+          ],
+          "featureIds": [
+            "usgs:1990423",
+            "usgs:1990434",
+            "usgs:1990440",
+            "usgs:1990422",
+            "usgs:1990403",
+            "usgs:1990438",
+            "usgs:1990426",
+            "usgs:1990428",
+            "usgs:1990402",
+            "usgs:1990427",
+            "usgs:1990439",
+            "usgs:1990425"
+          ],
+          "distM": 203,
+          "matchedLenM": 3382
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Quarry Trail"
+          ],
+          "featureIds": [
+            "osm:way/845787141",
+            "osm:way/845787143"
+          ],
+          "distM": 202,
+          "matchedLenM": 2449
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 19,
+        "cotrex": null,
+        "dec": null,
+        "osm": 44,
+        "overall": 19
+      }
+    },
+    {
+      "trailId": "10234261",
+      "name": "Dolomite Rock Trail [CLOSED]",
+      "latitude": 37.97639,
+      "longitude": -92.76163,
+      "lengthMeters": 4345.218,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 16,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        }
+      },
+      "anyMatch": false,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 210,
+        "cotrex": null,
+        "dec": null,
+        "osm": 206,
+        "overall": 206
+      }
+    },
+    {
+      "trailId": "10255772",
+      "name": "Castle Trail",
+      "latitude": 37.97791,
+      "longitude": -92.7664,
+      "lengthMeters": 1287.472,
+      "routeType": "out-and-back",
+      "difficulty": "easy",
+      "numReviews": 1309,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Castle Trail"
+          ],
+          "featureIds": [
+            "usgs:1990393",
+            "usgs:1990430",
+            "usgs:1990429",
+            "usgs:1990394",
+            "usgs:1990399"
+          ],
+          "distM": 7,
+          "matchedLenM": 737
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Castle Trail"
+          ],
+          "featureIds": [
+            "osm:way/845787144"
+          ],
+          "distM": 6,
+          "matchedLenM": 643
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 7,
+        "cotrex": null,
+        "dec": null,
+        "osm": 6,
+        "overall": 6
+      }
+    },
+    {
+      "trailId": "10234260",
+      "name": "Colosseum Trail",
+      "latitude": 37.97482,
+      "longitude": -92.76298,
+      "lengthMeters": 1126.538,
+      "routeType": "loop",
+      "difficulty": "hard",
+      "numReviews": 650,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Colosseum Trail"
+          ],
+          "featureIds": [
+            "usgs:1990389",
+            "usgs:1990687",
+            "usgs:1990686",
+            "usgs:1990688",
+            "usgs:1990685",
+            "usgs:1990435",
+            "usgs:1990419"
+          ],
+          "distM": 4,
+          "matchedLenM": 775
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Colosseum Trail"
+          ],
+          "featureIds": [
+            "osm:way/1222067237",
+            "osm:way/1222067236",
+            "osm:way/1222067238",
+            "osm:way/845778433",
+            "osm:way/845784486"
+          ],
+          "distM": 4,
+          "matchedLenM": 757
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 4,
+        "cotrex": null,
+        "dec": null,
+        "osm": 4,
+        "overall": 4
+      }
+    },
+    {
+      "trailId": "10234258",
+      "name": "Turkey Pen Hollow Trail",
+      "latitude": 37.97395,
+      "longitude": -92.76255,
+      "lengthMeters": 11104.446,
+      "routeType": "loop",
+      "difficulty": "hard",
+      "numReviews": 1468,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Turkey Pen Hollow Trail"
+          ],
+          "featureIds": [
+            "usgs:1990448",
+            "usgs:1990379",
+            "usgs:1990449",
+            "usgs:1990384",
+            "usgs:1990421",
+            "usgs:1990380",
+            "usgs:1990407",
+            "usgs:1990381",
+            "usgs:1990432",
+            "usgs:1990382",
+            "usgs:1990383",
+            "usgs:1990406"
+          ],
+          "distM": 258,
+          "matchedLenM": 12155
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Turkey Pen Hollow Trail"
+          ],
+          "featureIds": [
+            "osm:way/845778425",
+            "osm:way/845778424"
+          ],
+          "distM": 288,
+          "matchedLenM": 10445
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 1,
+        "cotrex": null,
+        "dec": null,
+        "osm": 2,
+        "overall": 1
+      }
+    },
+    {
+      "trailId": "10234235",
+      "name": "Acorn Trail",
+      "latitude": 37.97383,
+      "longitude": -92.76247,
+      "lengthMeters": 1448.406,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 174,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Acorn Trail"
+          ],
+          "featureIds": [
+            "usgs:1990405",
+            "usgs:1990378"
+          ],
+          "distM": 120,
+          "matchedLenM": 906
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Acorn Trail"
+          ],
+          "featureIds": [
+            "osm:way/845778428"
+          ],
+          "distM": 120,
+          "matchedLenM": 1083
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 5,
+        "cotrex": null,
+        "dec": null,
+        "osm": 6,
+        "overall": 5
+      }
+    },
+    {
+      "trailId": "10234259",
+      "name": "Devil's Kitchen Trail",
+      "latitude": 37.97381,
+      "longitude": -92.76253,
+      "lengthMeters": 2253.076,
+      "routeType": "loop",
+      "difficulty": "hard",
+      "numReviews": 1025,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "fuzzy",
+          "rule": "2c",
+          "names": [
+            "Devils Kitchen Trail"
+          ],
+          "featureIds": [
+            "usgs:1990390",
+            "usgs:1990747",
+            "usgs:1990420",
+            "usgs:1990746",
+            "usgs:1990446",
+            "usgs:1990447",
+            "usgs:1990385",
+            "usgs:1990436",
+            "usgs:1990443",
+            "usgs:1990444",
+            "usgs:1990442",
+            "usgs:1990437"
+          ],
+          "distM": 1,
+          "matchedLenM": 1876
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Devil's Kitchen Trail"
+          ],
+          "featureIds": [
+            "osm:way/845778427",
+            "osm:way/845778420",
+            "osm:way/845778426"
+          ],
+          "distM": 3,
+          "matchedLenM": 1428
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 1,
+        "cotrex": null,
+        "dec": null,
+        "osm": 3,
+        "overall": 1
+      }
+    },
+    {
+      "trailId": "10255380",
+      "name": "Oak Woodland Interpretive Trail",
+      "latitude": 37.97364,
+      "longitude": -92.76242,
+      "lengthMeters": 160.934,
+      "routeType": "loop",
+      "difficulty": "easy",
+      "numReviews": 54,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Oak Woodland Interpretive Trail"
+          ],
+          "featureIds": [
+            "usgs:1990748"
+          ],
+          "distM": 3,
+          "matchedLenM": 137
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Oak Woodland Interpretive Trail"
+          ],
+          "featureIds": [
+            "osm:way/845778430"
+          ],
+          "distM": 3,
+          "matchedLenM": 128
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 2,
+        "cotrex": null,
+        "dec": null,
+        "osm": 1,
+        "overall": 1
+      }
+    },
+    {
+      "trailId": "10255773",
+      "name": "Dell Rim Trail",
+      "latitude": 37.9754,
+      "longitude": -92.76727,
+      "lengthMeters": 804.67,
+      "routeType": "out-and-back",
+      "difficulty": "moderate",
+      "numReviews": 214,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Dell Rim Trail"
+          ],
+          "featureIds": [
+            "usgs:1990418",
+            "usgs:1990433",
+            "usgs:1990451",
+            "usgs:1990388",
+            "usgs:1990400"
+          ],
+          "distM": 13,
+          "matchedLenM": 327
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Dell Rim Trail"
+          ],
+          "featureIds": [
+            "osm:way/845786555",
+            "osm:way/845784489",
+            "osm:way/845784491",
+            "osm:way/963772156"
+          ],
+          "distM": 16,
+          "matchedLenM": 452
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 13,
+        "cotrex": null,
+        "dec": null,
+        "osm": 2,
+        "overall": 2
+      }
+    },
+    {
+      "trailId": "10197830",
+      "name": "Woodland Trail",
+      "latitude": 38.1152,
+      "longitude": -92.56272,
+      "lengthMeters": 5632.69,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 232,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Woodland Trail"
+          ],
+          "featureIds": [
+            "usgs:1990359",
+            "usgs:1990364",
+            "usgs:1990363",
+            "usgs:1990360",
+            "usgs:1990361",
+            "usgs:1990362"
+          ],
+          "distM": 37,
+          "matchedLenM": 4992
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Woodland Trail"
+          ],
+          "featureIds": [
+            "osm:way/855591869",
+            "osm:way/855591865",
+            "osm:way/855591866"
+          ],
+          "distM": 6,
+          "matchedLenM": 4779
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 26,
+        "cotrex": null,
+        "dec": null,
+        "osm": 6,
+        "overall": 6
+      }
+    },
+    {
+      "trailId": "10241330",
+      "name": "Boulder Ridge Trail",
+      "latitude": 37.97306,
+      "longitude": -92.76829,
+      "lengthMeters": 3701.482,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 281,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Boulder Ridge Trail"
+          ],
+          "featureIds": [
+            "usgs:1990392",
+            "usgs:1990391"
+          ],
+          "distM": 680,
+          "matchedLenM": 1848
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Boulder Ridge Trail"
+          ],
+          "featureIds": [
+            "osm:way/845784488"
+          ],
+          "distM": 682,
+          "matchedLenM": 1766
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 23,
+        "cotrex": null,
+        "dec": null,
+        "osm": 21,
+        "overall": 21
+      }
+    },
+    {
+      "trailId": "10255774",
+      "name": "Island Trail",
+      "latitude": 37.97314,
+      "longitude": -92.76854,
+      "lengthMeters": 1609.34,
+      "routeType": "loop",
+      "difficulty": "hard",
+      "numReviews": 679,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Island Trail"
+          ],
+          "featureIds": [
+            "usgs:1990413",
+            "usgs:1990450",
+            "usgs:1990410",
+            "usgs:1990411",
+            "usgs:1990409",
+            "usgs:1990408",
+            "usgs:1990415",
+            "usgs:1990412",
+            "usgs:1990414"
+          ],
+          "distM": 188,
+          "matchedLenM": 863
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Island Trail"
+          ],
+          "featureIds": [
+            "osm:way/845786554",
+            "osm:way/845786553",
+            "osm:way/288203023",
+            "osm:way/963774421",
+            "osm:way/963774420",
+            "osm:way/845786552"
+          ],
+          "distM": 185,
+          "matchedLenM": 735
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 1,
+        "cotrex": null,
+        "dec": null,
+        "osm": 1,
+        "overall": 1
+      }
+    },
+    {
+      "trailId": "10255775",
+      "name": "Spring Trail",
+      "latitude": 37.97314,
+      "longitude": -92.76855,
+      "lengthMeters": 2253.076,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 1322,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Spring Trail"
+          ],
+          "featureIds": [
+            "usgs:1990417",
+            "usgs:1990404",
+            "usgs:1990397",
+            "usgs:1990396",
+            "usgs:1990445",
+            "usgs:1990398",
+            "usgs:1990416",
+            "usgs:1990441"
+          ],
+          "distM": 21,
+          "matchedLenM": 2103
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Spring Trail"
+          ],
+          "featureIds": [
+            "osm:way/1222067242",
+            "osm:way/845778421",
+            "osm:way/845784490",
+            "osm:way/288203021",
+            "osm:way/288203031",
+            "osm:way/963772157",
+            "osm:way/963772158"
+          ],
+          "distM": 2,
+          "matchedLenM": 2089
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 2,
+        "cotrex": null,
+        "dec": null,
+        "osm": 2,
+        "overall": 2
+      }
+    },
+    {
+      "trailId": "10425566",
+      "name": "Trail of Four Winds",
+      "latitude": 38.10511,
+      "longitude": -92.55803,
+      "lengthMeters": 18507.41,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 220,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Trail Of Four Winds"
+          ],
+          "featureIds": [
+            "usgs:1820891",
+            "usgs:1820070",
+            "usgs:1820162"
+          ],
+          "distM": 2,
+          "matchedLenM": 21826
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Trail of Four Winds North Loop / South Loop",
+            "Trail of Four Winds - North Loop",
+            "Trail of Four Winds - South Loop"
+          ],
+          "featureIds": [
+            "osm:way/855581291",
+            "osm:way/855581295",
+            "osm:way/855581285",
+            "osm:way/855581296"
+          ],
+          "distM": 3,
+          "matchedLenM": 16499
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 2,
+        "cotrex": null,
+        "dec": null,
+        "osm": 3,
+        "overall": 2
+      }
+    },
+    {
+      "trailId": "10024580",
+      "name": "Trail of the Four Winds - North Loop",
+      "latitude": 38.10467,
+      "longitude": -92.55785,
+      "lengthMeters": 6437.36,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 438,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Trail of Four Winds North Loop / South Loop",
+            "Trail of Four Winds - North Loop",
+            "Honey Run Trail - North Loop"
+          ],
+          "featureIds": [
+            "osm:way/855581291",
+            "osm:way/855581295",
+            "osm:way/855589981"
+          ],
+          "distM": 4,
+          "matchedLenM": 12951
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 4,
+        "cotrex": null,
+        "dec": null,
+        "osm": 4,
+        "overall": 4
+      }
+    },
+    {
+      "trailId": "10276170",
+      "name": "Deers Leap Hill via Del Rim Trail and Spring Trail",
+      "latitude": 37.97378,
+      "longitude": -92.77448,
+      "lengthMeters": 3379.614,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 1451,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Spring Trail"
+          ],
+          "featureIds": [
+            "usgs:1990441",
+            "usgs:1990416",
+            "usgs:1990398",
+            "usgs:1990396",
+            "usgs:1990417",
+            "usgs:1990404",
+            "usgs:1990397",
+            "usgs:1990445"
+          ],
+          "distM": 21,
+          "matchedLenM": 2103
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Spring Trail"
+          ],
+          "featureIds": [
+            "osm:way/963772158",
+            "osm:way/288203021",
+            "osm:way/963772157",
+            "osm:way/845784490",
+            "osm:way/288203031",
+            "osm:way/845778421",
+            "osm:way/1222067242"
+          ],
+          "distM": 17,
+          "matchedLenM": 2089
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 21,
+        "cotrex": null,
+        "dec": null,
+        "osm": 4,
+        "overall": 4
+      }
+    },
+    {
+      "trailId": "10293074",
+      "name": "Bluestem Knoll Trail",
+      "latitude": 38.11745,
+      "longitude": -92.5612,
+      "lengthMeters": 1126.538,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 120,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Bluestem Knoll Trail"
+          ],
+          "featureIds": [
+            "usgs:1990365",
+            "usgs:1990366"
+          ],
+          "distM": 5,
+          "matchedLenM": 1206
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Bluestem Knoll Trail"
+          ],
+          "featureIds": [
+            "osm:way/1359713041",
+            "osm:way/855591868",
+            "osm:way/855591867"
+          ],
+          "distM": 2,
+          "matchedLenM": 1255
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 5,
+        "cotrex": null,
+        "dec": null,
+        "osm": 2,
+        "overall": 2
+      }
+    },
+    {
+      "trailId": "10255771",
+      "name": "Cedar Trail",
+      "latitude": 37.97166,
+      "longitude": -92.76984,
+      "lengthMeters": 643.736,
+      "routeType": "out-and-back",
+      "difficulty": "moderate",
+      "numReviews": 36,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Cedar Trail"
+          ],
+          "featureIds": [
+            "usgs:1990431"
+          ],
+          "distM": 5,
+          "matchedLenM": 309
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Cedar Trail"
+          ],
+          "featureIds": [
+            "osm:way/1246864308",
+            "osm:way/845778423"
+          ],
+          "distM": 3,
+          "matchedLenM": 328
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 5,
+        "cotrex": null,
+        "dec": null,
+        "osm": 3,
+        "overall": 3
+      }
+    },
+    {
+      "trailId": "10373447",
+      "name": "Bittersweet Trail Loop",
+      "latitude": 38.19145,
+      "longitude": -92.71808,
+      "lengthMeters": 14805.928,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 115,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Bittersweet Trail"
+          ],
+          "featureIds": [
+            "osm:way/1528640135",
+            "osm:way/412455435",
+            "osm:way/1528640138",
+            "osm:way/1528640136",
+            "osm:way/1528640137",
+            "osm:way/412455437",
+            "osm:way/1528640131",
+            "osm:way/529024440",
+            "osm:way/1528640133",
+            "osm:way/1528640134",
+            "osm:way/412455436"
+          ],
+          "distM": 29,
+          "matchedLenM": 15268
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": 5613,
+        "cotrex": null,
+        "dec": null,
+        "osm": 20,
+        "overall": 20
+      }
+    }
+  ],
+  "summary": {
+    "bySource": {
+      "usfs": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "nps": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "blm": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "usgs": {
+        "exact": {
+          "matched": 22,
+          "coveragePct": 69,
+          "weightedCoveragePct": 83,
+          "top25Matched": 19,
+          "top25CoveragePct": 76
+        },
+        "inclFuzzy": {
+          "matched": 24,
+          "coveragePct": 75,
+          "weightedCoveragePct": 93,
+          "top25Matched": 21,
+          "top25CoveragePct": 84
+        },
+        "distinctNamedTrails": 26,
+        "distinctNamesInAllTrails": 22,
+        "reverseCoveragePct": 85
+      },
+      "cotrex": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "dec": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "osm": {
+        "exact": {
+          "matched": 26,
+          "coveragePct": 81,
+          "weightedCoveragePct": 94,
+          "top25Matched": 23,
+          "top25CoveragePct": 92
+        },
+        "inclFuzzy": {
+          "matched": 27,
+          "coveragePct": 84,
+          "weightedCoveragePct": 97,
+          "top25Matched": 24,
+          "top25CoveragePct": 96
+        },
+        "distinctNamedTrails": 84,
+        "distinctNamesInAllTrails": 25,
+        "reverseCoveragePct": 30
+      }
+    },
+    "anySource": {
+      "exact": {
+        "matched": 26,
+        "coveragePct": 81,
+        "weightedCoveragePct": 94,
+        "top25Matched": 23,
+        "top25CoveragePct": 92
+      },
+      "inclFuzzy": {
+        "matched": 27,
+        "coveragePct": 84,
+        "weightedCoveragePct": 97,
+        "top25Matched": 24,
+        "top25CoveragePct": 96
+      }
+    },
+    "excluded": {
+      "count": 0,
+      "byReason": {},
+      "routes": []
+    },
+    "denominators": {
+      "raw": 32,
+      "adjusted": 32
+    },
+    "networkPresence": {
+      "within100m": {
+        "count": 29,
+        "pct": 91
+      },
+      "within250m": {
+        "count": 30,
+        "pct": 94
+      },
+      "within1000m": {
+        "count": 32,
+        "pct": 100
+      }
+    },
+    "lengthWeighted": {
+      "denomM": 135989,
+      "denomRoutes": 32,
+      "skippedNullLength": 0,
+      "perSource": {
+        "usfs": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "nps": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "blm": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "usgs": {
+          "exactM": 93664,
+          "exactPct": 69,
+          "inclFuzzyM": 98492,
+          "inclFuzzyPct": 72
+        },
+        "cotrex": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "dec": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "osm": {
+          "exactM": 119252,
+          "exactPct": 88,
+          "inclFuzzyM": 121827,
+          "inclFuzzyPct": 90
+        }
+      },
+      "anySource": {
+        "exactM": 119252,
+        "exactPct": 88,
+        "inclFuzzyM": 121827,
+        "inclFuzzyPct": 90
+      }
+    },
+    "networkMatched": {
+      "usfs": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "nps": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "blm": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "usgs": {
+        "namedM": 123997,
+        "matchedM": 81937,
+        "pct": 66,
+        "featureCounts": {
+          "named": 123,
+          "matchedUnique": 112
+        }
+      },
+      "cotrex": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "dec": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "osm": {
+        "namedM": 120617,
+        "matchedM": 91295,
+        "pct": 76,
+        "featureCounts": {
+          "named": 148,
+          "matchedUnique": 88
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1108 @@
+@import '../ui/phone-frame.css';
+
+/* Weather-on-route — leads with Concept A's map, keeps Concepts B and C as short
+   alternatives near the end. Long-form prose with phone frames inline, in the shape of
+   merge.html rather than scope.html: nothing is sticky, because a reader comparing the
+   demoted alternatives against the primary screen needs to see more than one frame.
+
+   The device frame USED to be a smaller copy of scope.css's, sitting in this file. It is
+   now `src/ui/phone-frame.css`, imported above, because the digest's Week and Day screens
+   would have made it a third copy. Same rules, same 366x792, same 390x844 proportions:
+   nothing about this page's frames changed, they just stopped being local. What is still
+   local, and correctly so, is everything inside the screen (`.ph-app` down). */
+
+:root {
+  /* Storm bands. THE SAME FOUR COLOURS as phone.css .st-cell.lv-*, so the two pages
+     cannot drift. Duplicated for the same reason the thresholds are: phone.css is the
+     discovery app's stylesheet and this page is not the discovery app. Unify on
+     graduation. */
+  --lv-0: #eef3ee;
+  --lv-1: #fdf0dc;
+  --lv-2: #f6cf8f;
+  --lv-3: #d98d72;
+  /* THE FIFTH FILL THAT IS NOT A FIFTH BAND. Past a cached run's hourly reach there is no
+     band to paint, because a band IS a storm probability at an hour at a point and that is
+     exactly what the run has run out of the right to state. This sits deliberately OFF the
+     four-step warm ramp — a cool neutral, no hue any of the four carries — so it can never be
+     read as "the calm one" or as a step below `--lv-0`. It is the colour of nothing having
+     been measured. `mapconcept.ts`'s `LV_OUTLOOK_COLOR` is the same decision in the hex a
+     MapLibre paint expression needs. */
+  --lv-out: #e6e5df;
+}
+
+body.cx-page {
+  overflow: auto;
+  background: var(--chrome);
+}
+
+.cx-doc {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px 90px;
+}
+
+.cx-over {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin-bottom: 7px;
+}
+
+.cx-head {
+  padding: 34px 0 22px;
+  border-bottom: 1px solid var(--line);
+}
+.cx-head h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+}
+.cx-lede {
+  margin: 12px 0 0;
+  max-width: 68ch;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.cx-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-top: 18px;
+}
+.cx-meta span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: var(--panel);
+}
+
+/* THE ONE DOC-CHROME CONTROL THIS PAGE HAS. `route.ts`'s `connectionRail` carries the §6
+   argument for why the cache age is out here while the anchor and the traversal are in the
+   phone: a walker does not decide to be offline. Styled as a plain segmented control in the
+   same register `src/scope/doc.ts` uses for the discovery page's chrome, and placed under the
+   meta chips rather than beside them so it reads as a switch and not as another fact about
+   the render. */
+.cx-chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+.cx-chrome-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.cx-seg {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--panel);
+}
+.cx-seg button {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 5px 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+.cx-seg button + button {
+  border-left: 1px solid var(--line);
+}
+.cx-seg button:hover {
+  color: var(--text);
+}
+.cx-seg button.is-on {
+  background: var(--accent);
+  color: var(--ink);
+  font-weight: 700;
+}
+.cx-seg button:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: -2px;
+}
+
+.cx-sec {
+  padding: 44px 0 6px;
+  scroll-margin-top: 60px;
+}
+.cx-sec h2 {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.cx-sec p {
+  margin: 0 0 15px;
+  max-width: 74ch;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.cx-list {
+  margin: 0;
+  padding-left: 20px;
+  max-width: 78ch;
+}
+.cx-list li {
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 13px;
+}
+
+/* ---- frame + annotations, side by side ---- */
+.cx-pair {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 34px;
+  align-items: start;
+  margin: 22px 0 20px;
+}
+
+.cx-frame {
+  flex: 0 0 auto;
+}
+.cx-frame-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 9px;
+}
+
+/* ---- the app inside the frame ---- */
+.ph-app {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.ph-head {
+  padding: 10px 15px 9px;
+  border-bottom: 1px solid var(--line-soft);
+}
+/* THE TITLE ROW, once the anchor toggle joined it. `route.ts`'s `anchorControl` has the
+   measurement behind putting it here rather than in the control bar (three pills already
+   spend 290 px of a 320 px row that clips rather than wraps). Two things keep the head's own
+   height where it was, which matters because Concept C's `C_CHROME_PX` reads 59 for it:
+   the title is clamped to one line rather than allowed to wrap, and the pill is sized under
+   the title's own 23 px line box so it can never be the taller of the two. */
+.ph-head-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ph-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+}
+/* Written as `.ph-pill.cx-pill-anchor` rather than `.cx-pill-anchor` on purpose: `.ph-pill`
+   is defined further down this file, so a single-class rule here loses to it on source order
+   and the pill silently keeps the bar's own 10 px / 5 px sizing. Measured before and after —
+   at the bar's size the pill is the taller item in the flex row and the head grows from 59 px
+   to 61 px, which is a 2 px change to a screen that has to be unchanged and a 2 px lie in
+   Concept C's `C_CHROME_PX`. At this size the pill sits inside the title's own 23 px line box
+   and the head's height does not move at all. */
+/* The anchor toggle shows BOTH states, so the reader can see that a Walking mode exists
+   rather than having to discover it by tapping. Sized to the same 2 px / 8 px / 9.5 px box
+   the single pill occupied, for the reason the comment above gives: at this size the control
+   sits inside the title's own 23 px line box and the head's height does not move, which
+   keeps Concept C's `C_CHROME_PX` honest. Measured after the change: head still 59 px. */
+.cx-anchor-seg {
+  flex: 0 0 auto;
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--panel);
+}
+.cx-anchor-opt {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.cx-anchor-opt.is-on {
+  background: var(--accent);
+  color: var(--ink);
+  font-weight: 700;
+  cursor: default;
+}
+.cx-anchor-opt:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: -2px;
+}
+.ph-sub {
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.ph-bar {
+  display: flex;
+  gap: 6px;
+  padding: 9px 15px;
+  border-bottom: 1px solid var(--line-soft);
+  overflow: hidden;
+}
+.ph-pill {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 10px;
+  white-space: nowrap;
+  background: var(--panel);
+}
+.ph-pill.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--ink);
+  font-weight: 700;
+}
+.ph-pill.is-quiet {
+  border-style: dashed;
+  color: var(--faint);
+  font-size: 9px;
+}
+
+.ph-block {
+  position: relative;
+  padding: 13px 15px 11px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.ph-block-tight {
+  padding: 11px 15px 10px;
+}
+.ph-block-flush {
+  padding: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * THE ON-ROUTE STRIP — three lines, one fact each, none of them present unless it has
+ * something to say. `route.ts`'s own block comment has the editorial argument (there is no
+ * "you are offline" banner here, because that is a status LED and not a finding); this is the
+ * size argument.
+ *
+ * IT IS QUIET ON PURPOSE, AND NOTHING IN IT IS RED. Being offline is the normal condition on
+ * a US trail rather than a fault, which is the reasoning `scope/phone/app.ts`'s data-age chip
+ * already carries and the reason its online and offline forms are the same chip at the same
+ * weight. The one line that carries any emphasis is the reach, in `--accent-ink`, which is
+ * the same ink the page uses for every other active-but-not-alarming thing on it. No warning
+ * hue, no rule, no icon beyond the wifi mark itself.
+ *
+ * MEASURED HEIGHT is what `route.ts`'s `C_STRIP_PX` has to agree with, because Concept C's
+ * row budget subtracts it: the padding here plus three lines comes to the number recorded
+ * there, and a change to either has to move both.
+ */
+.cx-now {
+  padding: 9px 15px 9px;
+}
+.cx-now-at {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.cx-now-run {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.cx-now-run.is-offline {
+  color: var(--muted);
+}
+.cx-now-glyph {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+.cx-now-reach {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* WHERE THE READER IS. Not a `.cx-mbtn`, and it must not look like one: every dot on this
+   page is a place the journey names and a reading the dock can answer for, and this is the one
+   mark that is about the reader instead. So it inverts — dark disc, light glyph — where every
+   marker is a light disc with dark ink, which separates them at a glance and at any zoom
+   without needing a second colour scale. Same 30 px box as a dot, because it is subject to the
+   same overlap arithmetic (`ONROUTE_ELAPSED_H` records the 704 m of clearance measured for
+   it). */
+.cx-me {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  line-height: 0;
+  pointer-events: none;
+}
+.cx-me-ic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 1.4px solid #fffdf7;
+  box-shadow: 0 0 0 1.5px rgba(31, 42, 36, 0.4);
+}
+/* The light core, which is what makes this read as a location puck rather than as a very dark
+   marker. No glyph inside it: see `positionMarker` for why the arrow that used to be here was
+   claiming a heading nothing on this page knows. */
+.cx-me-core {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fffdf7;
+}
+
+/* ---- concept B: the chart ---- */
+.cx-chart-wrap {
+  position: relative;
+}
+.cx-chart {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+.cx-tl {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  fill: var(--muted);
+}
+.cx-axis {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  fill: var(--muted);
+}
+.cx-axis-dim {
+  fill: var(--faint);
+  font-size: 7.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* THE TWO VERTICAL RULES the walking anchor and the cached run add to the chart. Deliberately
+   different marks, because they say different kinds of thing: NOW is where the reader is, so
+   it is solid and in the ink the page uses for the reader's own position (the same `--ink` the
+   position disc on the map is filled with); OUTLOOK is where a claim stops, so it is dashed,
+   which is already this page's mark for "a boundary rather than a thing" (the treeline rule
+   and the map key's dash use it too). Neither is red and neither carries a symbol: they mark
+   a place and a limit, not a hazard. */
+.cx-nowrule {
+  stroke: var(--ink);
+  stroke-width: 1.4;
+  fill: var(--ink);
+}
+.cx-wall {
+  stroke: var(--accent-ink);
+  stroke-width: 1.2;
+  fill: var(--accent-ink);
+}
+.cx-rulelab {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  stroke: none;
+}
+
+/* Concept B's marker row: a slim strip inset within the chart's own top margin (the
+   y-scale never draws the curve above CH_TOP, so this row can never sit on the line).
+   `pointer-events: none` on the row, `auto` on each button, same rule as the map's
+   markers and for the same reason: a label must never be able to block anything, but the
+   button itself has to be genuinely tappable.
+
+   GROWN UPWARD, NOT DOWNWARD, for the 1.5x weather glyph. The dot's box is 34 px tall now
+   (a 28 px disc plus 3 px padding each side), against the 22 px this row used to reserve, and
+   the 12 px has to come from somewhere. It comes from `.ph-block`'s own 13 px top padding via
+   a negative `top`, NOT from the plot: pushing the row down instead would put a glyph over the
+   profile curve, which is the same complaint the map's own redesign exists to fix, and raising
+   the chart's CH_TOP instead would shrink the plot and change `chartExaggeration` — a printed
+   number on the page — to buy space for an icon. Measured at `top: -4px`: the row's buttons end
+   26 px below the chart's top edge, against a CH_TOP that lands at 24.5 CSS px (26 SVG units
+   scaled by the chart's 320/340 fit). So the buttons reach 1.5 px into the plot's own top
+   margin, where nothing is drawn — the curve's peak sits ~40 px down on this trail, and cannot
+   rise above ~32 px on any relief, because `chartElevRange` always leaves 60 m of headroom over
+   the journey's maximum. */
+.cx-bflags {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -4px;
+  height: 34px;
+  pointer-events: none;
+}
+.cx-bflags .cx-mbtn {
+  position: absolute;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+/* ---- concept B: the facts ---- */
+.ph-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px 14px;
+}
+.ph-fact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 9px;
+}
+.ph-fact .k {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.ph-fact .v {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- concept C: the table ---- */
+.ph-thead,
+.ph-trow {
+  display: grid;
+    /* A SEVENTH TRACK for the per-row SKY glyph (route.ts's `skyCell`, Björn's call that the
+     tabular readout needs weather icons on its rows). Its 26 px, plus the 4 px column gap it
+     brings, are paid for by tightening TIME/KM/ELEV against their own widest CONTENT rather
+     than by taking it out of STORM: the widest strings those three ever print are a clock
+     ("15:21"), one decimal ("13.0") and a thousands-separated metre figure ("3,714"), which at
+     11.5 px IBM Plex Mono's 0.6 em advance need about 35, 28 and 35 px. Everything here is
+     measured in the browser rather than reasoned, because this row has already been wrong once
+     in exactly this way: Fix 2 (TRAIL_PLAN's polish pass) found the TEMP header's icon+word
+     pair WIDER than its own track, so the icon painted outside it and read as jammed against
+     ELEV. Same `grid-template-columns` for `.ph-thead` and `.ph-trow`, so a track can never
+     move for the header without moving for its data column. */
+  grid-template-columns: 42px 32px 44px 50px 46px 1fr 26px;
+  align-items: center;
+  gap: 0 4px;
+  padding: 0 15px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.ph-thead {
+  height: 26px;
+  border-bottom: 1px solid var(--line);
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  color: var(--faint);
+  background: var(--panel);
+  flex: 0 0 auto;
+}
+.ph-tbody {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+.ph-trow {
+  height: 30px;
+  font-size: 11.5px;
+  color: var(--text);
+  border-bottom: 1px solid var(--line-soft);
+}
+.ph-trow.lv-0 { background: var(--lv-0); }
+.ph-trow.lv-1 { background: var(--lv-1); }
+.ph-trow.lv-2 { background: var(--lv-2); }
+.ph-trow.lv-3 { background: var(--lv-3); }
+.ph-trow .c-time { font-weight: 600; }
+.ph-trow .c-km,
+.ph-trow .c-el,
+.ph-trow .c-t,
+.ph-trow .c-w,
+.ph-trow .c-s { text-align: right; }
+.ph-thead .c-km,
+.ph-thead .c-el,
+.ph-thead .c-t,
+.ph-thead .c-w,
+.ph-thead .c-s,
+.ph-thead .c-sky { text-align: right; }
+/* A gap ahead of TEMP, on the shared `.c-t` selector so the header and every data row
+   shift by the same amount and stay column-aligned. Fix 2: the header used to read as one
+   run of characters, "TIME KM ELEV🌡TEMP💨GUST ⛈STORM", because nothing distinguished the
+   position group (TIME/KM/ELEV) from the weather group (TEMP/GUST/STORM) beyond the same
+   4px column-gap every pair of columns already gets. This is the one place that grouping
+   is stated, so it only has to be tuned once. */
+.c-t { margin-left: 5px; }
+/* TEMP/GUST/STORM headers carry a weather icon before the word (thermometer, wind,
+   cloud-lightning — the same glyphs the dock uses), so the column reads without the
+   header text at all; the icon per ROW was deliberately skipped, see route.ts's comment,
+   because it would either grow `.ph-trow` or shrink `fitRowCount`'s row budget, and the
+   table's whole argument is its density.
+   Icon-to-word gap widened from 3px to 5px (Fix 2): at 3px the icon read as glued to its
+   own label, not merely close to it, on top of the wider column fix above (which was the
+   overlap onto the PREVIOUS column; this is the icon's relationship to its OWN word). */
+.ph-thead .c-t,
+.ph-thead .c-w,
+.ph-thead .c-s {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+}
+.ph-thead .c-t svg,
+.ph-thead .c-w svg,
+.ph-thead .c-s svg {
+  flex: 0 0 auto;
+}
+.ph-trow .c-s { font-weight: 600; }
+/* THE PER-ROW SKY GLYPH, trailing the row rather than leading it. The glyph is DERIVED from
+   the three numbers to its left (`weatherGlyph` reads storm probability, then precipitation,
+   then cloud), so trailing reads as their summary; leading would put a conclusion before its
+   own evidence and would displace the clock time, which is what a reader scans this table
+   down. It also keeps the weather group (TEMP/GUST/STORM/SKY) contiguous on the right of the
+   position group (TIME/KM/ELEV) that `.c-t`'s margin above already separates. */
+.c-sky {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.ph-trow .c-sky {
+  color: var(--ink);
+}
+.ph-trow .c-sky svg {
+  flex: 0 0 auto;
+}
+
+/* PAST THE CACHED RUN'S REACH the row loses its band and takes the neutral fill, and every
+   such row prints the SAME three figures — see route.ts's `conceptC`, where the repetition is
+   the point rather than a fault. BEHIND THE WALKER the row keeps its band and fades: what you
+   walked through is still true, it just is not a decision any more. Fading rather than
+   hiding, because the table's whole argument is that it cannot be misread, and a table that
+   drops its own first rows loses the shape of the walk. */
+.ph-trow.is-outlook { background: var(--lv-out); }
+.ph-trow.is-passed { opacity: 0.45; }
+
+.ph-trow.is-marker {
+  display: flex;
+  align-items: center;
+  height: 22px;
+  background: var(--ink);
+  border-bottom: none;
+}
+/* The two synthetic bands, distinguished from a marker band because they are not places the
+   journey names: NOW is the reader, OUTLOOK is a limit. Both keep the band's own height and
+   type so the row rhythm `fitRowCount` budgets for is unchanged. */
+.ph-trow.is-marker.is-now {
+  background: var(--accent);
+}
+.ph-trow.is-marker.is-now .ph-tband {
+  color: var(--ink);
+}
+.ph-trow.is-marker.is-outlook {
+  background: var(--panel-2);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.ph-trow.is-marker.is-outlook .ph-tband {
+  color: var(--accent-ink);
+}
+.ph-tband {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #f4efe2;
+}
+
+.ph-tfoot {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 15px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+}
+
+/* ---- concept A: the map ---- */
+/* .cx-mapwrap fills the remaining screen height the same way .ph-block-flush does for
+   concept C's table (flex: 1 1 auto in a column flex parent), but needs its own
+   position: relative rather than ph-block-flush's, because .cx-maphost is positioned
+   absolutely inside it: MapLibre stamps `maplibregl-map { position: relative }` onto
+   whatever element it is given, and relying on that element's OWN box for sizing (rather
+   than an explicit 100% width/height leaf under an absolutely-positioned wrapper) is what
+   left the discovery phone's map collapsed to the 300 px canvas default once already
+   (SCOPE_PLAN feedback round 1). This mirrors that fix. */
+.cx-mapwrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.cx-maphost {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * MARKERS, shared by Concept A's map and Concept B's chart (`trail/markerui.ts` builds
+ * every `.cx-mbtn`; this is the one place both are styled, so the two frames cannot drift
+ * into two different marker languages).
+ *
+ * Real `<button>`s, not divs: on the map they go through maplibregl.Marker as plain HTML
+ * (pmap.ts's style carries no `glyphs` source, so a MapLibre text-field layer would
+ * silently draw no text at all — see mapconcept.ts's header), on the chart they are
+ * absolutely positioned by percentage inside `.cx-bflags`. Both are real DOM, which is
+ * what makes keyboard focus and `aria-label`/`aria-pressed` possible without a canvas
+ * readback.
+ *
+ * A DOT ON THE POINT, AND ONE CARD OFF THE LINE (TRAIL_PLAN §13). Two earlier versions of
+ * this block each solved half the problem: one pushed the marker's label clear of the route
+ * until the marker no longer marked anything, the other put a full badge back on its own point
+ * and covered a measured 69% of the route line's rendered pixels with three of them. The rule
+ * now separates the two jobs into two elements, so neither has to compromise for the other:
+ *
+ *   `.cx-mbtn`   THE ANCHOR. A 28 px disc carrying the hour's weather glyph, centred exactly on
+ *                its point, drawn for EVERY marker. Its box never changes with selection — only
+ *                a ring does — which is what stops it dragging its own anchor sideways, the bug
+ *                §11 spent a pass on.
+ *   `.cx-mcard`  THE READING. Time and temperature, drawn for the SELECTED marker only, offset
+ *                off the line by `mapconcept.ts`'s `placeOpenCard` and absolutely positioned so
+ *                it contributes nothing to the box the anchor is centred by.
+ *   `.cx-mlead`  THE LINK. A short rule from the dot to the card, so which dot a card belongs to
+ *                is never in question. Short on purpose: past a certain length a leader stops
+ *                connecting two things and starts separating them.
+ *
+ * ONE ELEMENT IN BOTH FRAMES NOW. `.cx-mbtn.has-detail` is gone: it was the map's three-row
+ * badge, and with its two text rows moved to `.cx-mcard` the map's marker and the chart row's
+ * marker are the same 28 px disc at the same size, which is the strongest form of the
+ * one-vocabulary claim markerui.ts's header makes.
+ *
+ * THE 30 PX BOX IS A MEASURED NUMBER, not a rounding of the 28 px tap-target minimum. A 26 px
+ * disc plus 2 px of padding each side clears the minimum and fits inside the 31.1 px that
+ * Flattop's high point and its turnaround project to at this page's own fitted camera — which
+ * is what lets those two stay SEPARATE markers rather than merging into one. `MERGE_RADIUS_M`
+ * has the full account, including how little slack that leaves. Anything larger here re-merges
+ * them; anything smaller stops being a 28 px target.
+ */
+.cx-mk {
+  /* MapLibre stamps `position: absolute` on whatever element it is handed, which is also what
+     makes this a containing block for the card and the leader — so this rule is about the
+     wrapper's SIZE, not its position: it must be exactly the dot's box and nothing more, or
+     `anchor: 'center'` would centre the dot-plus-card on the point instead of the dot. */
+  line-height: 0;
+}
+.cx-mk > .cx-mbtn {
+  /* Raised above the leader, which starts at the wrapper's centre and would otherwise paint a
+     rule straight across the disc: absolutely positioned siblings sit in a higher stacking
+     layer than in-flow content regardless of DOM order, so the dot has to opt in to win. */
+  position: relative;
+  z-index: 2;
+}
+.cx-mbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 2px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.cx-mbtn-ic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 26 px for the 20 px glyph `markerui.ts`'s `GLYPH_PX.marker` draws (~1.5x its old 15/13 px,
+     on Björn's call). 3 px of disc either side of the glyph, which the glyph's own viewBox
+     padding widens to a real margin inside the white casing. This number is load-bearing beyond
+     the drawing: it sets the 30 px tap target and, through it, whether two markers 560 m apart
+     on the ground stay two markers — see `MERGE_RADIUS_M`. */
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: var(--ink);
+  border: 1.4px solid #fffdf7;
+  box-shadow: 0 0 0 1px rgba(31, 42, 36, 0.35);
+}
+.cx-mbtn.lv-0 .cx-mbtn-ic { background: var(--lv-0); }
+.cx-mbtn.lv-1 .cx-mbtn-ic { background: var(--lv-1); }
+.cx-mbtn.lv-2 .cx-mbtn-ic { background: var(--lv-2); }
+.cx-mbtn.lv-3 .cx-mbtn-ic { background: var(--lv-3); }
+/* THE DOT'S TWO EXTRA STATES, both of which are about what may be CLAIMED and neither of
+   which is about risk. `is-outlook` takes the off-ramp neutral because the run cannot name a
+   band that far ahead; `is-passed` keeps its band and drops to 55%, because what you walked
+   through is still true and simply is not a decision any longer. Neither hides the marker: it
+   is still a real button with a real reading, still focusable and still in the dock's
+   rotation, which is the difference between degrading a claim and removing a fact. */
+.cx-mbtn.is-outlook .cx-mbtn-ic {
+  background: var(--lv-out);
+  color: var(--muted);
+}
+.cx-mbtn.is-passed {
+  opacity: 0.55;
+}
+/* Selected reads as a heavier ring on the DOT, not as a colour change and not only as the
+   presence of a card — the level colour is the storm-band scale and has to stay legible whether
+   or not this marker is the one currently open, and a reader looking at the dots has to be able
+   to tell which one the dock is answering for without tracing a leader. */
+.cx-mbtn.is-selected .cx-mbtn-ic {
+  border-color: var(--accent-ink);
+  border-width: 2.4px;
+  box-shadow: 0 0 0 1.8px rgba(31, 42, 36, 0.5);
+}
+.cx-mbtn:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+/* THE LEADER. Drawn from the wrapper's centre — the anchor point itself — outward, so its first
+   17 px sit under the disc and only the remainder reads as a gap; `mapconcept.ts` sets the width
+   and the angle, this sets everything that does not depend on the geometry. The white casing is
+   the same trick the route line itself uses (pmap.ts's halo): a 1.6 px dark rule over hillshaded
+   terrain is not reliably visible on its own at either brightness. */
+.cx-mlead {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 1.6px;
+  margin-top: -0.8px;
+  transform-origin: 0 50%;
+  background: var(--accent-ink);
+  box-shadow: 0 0 0 1px rgba(255, 253, 247, 0.85);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+/* THE OPEN CARD. Time above, temperature below — the order Björn asked for on the badge this
+   replaces, minus the weather glyph, which stayed on the dot and is the one part of that stack
+   every marker still carries. Positioned by `left/top: 50%` plus a transform `placeOpenCard`
+   writes, so its offset is measured from the anchor point and it contributes nothing to the
+   wrapper's own box. `pointer-events: none`: the dot is the button, and a card that could
+   swallow a tap meant for the map would be furniture behaving like a control. */
+.cx-mcard {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 3px 6px;
+  background: #fffdf7f2;
+  border: 1px solid var(--accent-ink);
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(31, 42, 36, 0.24);
+  font-family: var(--font-mono);
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.cx-mcard-time,
+.cx-mcard-temp {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.cx-mcard-temp {
+  font-weight: 700;
+  color: var(--accent-ink);
+}
+/* An open card on a marker past the run's reach: the same box in the neutral, so the card and
+   the dot it leads back to agree about what kind of claim this is. */
+.cx-mcard.is-outlook {
+  background: #f6f5f0f2;
+  border-color: var(--faint);
+}
+.cx-mcard.is-outlook .cx-mcard-temp {
+  color: var(--muted);
+}
+/* ONE CARD OPEN AT A TIME is enforced here rather than by building cards on demand: every
+   marker owns a hidden card, and `mapconcept.ts` toggles `.is-open` on exactly the selected
+   one. That means opening a card costs a class toggle and a transform, with no measurement or
+   layout at the moment of the tap — which is the moment a reader would see it. */
+.cx-mk:not(.is-open) > .cx-mcard,
+.cx-mk:not(.is-open) > .cx-mlead {
+  display: none;
+}
+
+/*
+ * THE DOCK. Anchored to the bottom edge of the map (Concept A) or sitting directly under
+ * the chart (Concept B), never a popover over a point — see markerui.ts's header comment
+ * for the two reasons: a floating card cannot be guaranteed clear of the route on a frame
+ * this narrow, and the air/ground pair is the page's strongest claim, so it has to be
+ * visible without a tap, not only after one.
+ */
+.cx-dock {
+  font-family: var(--font-mono);
+  padding: 14px 12px 15px;
+  background: #fffdf7f2;
+  border-top: 1px solid var(--line);
+}
+.cx-mapwrap > .cx-dock {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  /* Fully opaque over the map specifically (Concept B's dock keeps the translucent card
+     tint above): the map's own attribution control pins to the same bottom-left corner
+     the dock now covers, and a merely translucent fill let its text bleed faintly through
+     at the ~5% the shared `#fffdf7f2` card tint leaves open elsewhere on the page. */
+  background: #fffdf7;
+  border-top: 1px solid rgba(31, 42, 36, 0.14);
+  box-shadow: 0 -4px 10px rgba(31, 42, 36, 0.12);
+}
+/* The dock's own title carries the one word that says which granularity the three figures
+   under it are at. Not a colour change on the figures: they are still real numbers, they are
+   just the stretch's rather than the hour's. */
+.cx-dock-t.is-outlook {
+  color: var(--accent-ink);
+}
+.cx-dock-t {
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 7px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cx-dock-row {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.cx-dock-row + .cx-dock-row {
+  margin-top: 3px;
+}
+.cx-dock-fig {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+.cx-dock-fig svg {
+  color: var(--accent-ink);
+  flex: 0 0 auto;
+}
+
+/* ---- concept A: the compact key ---- */
+.cx-mapkey-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.cx-mapkey-chip {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: var(--ink);
+}
+.cx-mapkey-chip.lv-0 { background: var(--lv-0); }
+.cx-mapkey-chip.lv-1 { background: var(--lv-1); }
+.cx-mapkey-chip.lv-2 { background: var(--lv-2); }
+.cx-mapkey-chip.lv-3 { background: var(--lv-3); }
+/* The treeline key. NOT a filled chip: the four band chips encode a CONDITION with a
+   colour, and a fifth coloured pill beside them would read as a fifth band. The dash
+   sample is the mark itself at the width the map draws it, and it is the same dash the
+   `.cx-tl` rule on Concept B's chart uses, so one mark means treeline on both frames. */
+.cx-mapkey-tl {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 2px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.cx-mapkey-dash {
+  width: 16px;
+  height: 0;
+  border-top: 2px dashed var(--muted);
+}
+
+/* ---- tab bar ---- */
+.ph-tabs {
+  flex: 0 0 auto;
+  /* Pins the tab bar to the bottom of the frame regardless of how much the blocks above
+     it fill: Concept A's map and Concept C's table both grow (`flex: 1 1 auto`) to the
+     full 732 px budget on their own, so this was invisible there, but Concept B's blocks
+     are all content-height and, once the profile chart's height dropped for the reduced
+     exaggeration, stopped filling the frame — a real phone's tab bar does not float mid
+     screen with blank space under it. */
+  margin-top: auto;
+  display: flex;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+}
+.ph-tab {
+  flex: 1 1 0;
+  text-align: center;
+  padding: 9px 0 8px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  color: var(--faint);
+}
+.ph-tab.is-on {
+  color: var(--accent-ink);
+  font-weight: 700;
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+
+/* ---- callout marks + annotation list ---- */
+.cx-mark {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-ink);
+  color: #fffdf7;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.cx-notes {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: cxn;
+}
+.cx-notes li {
+  counter-increment: cxn;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 17px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--text);
+  max-width: 62ch;
+}
+.cx-notes li::before {
+  content: counter(cxn);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--accent-ink);
+  color: #fffdf7;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cx-notes strong {
+  font-weight: 600;
+}
+
+.cx-foot {
+  margin-top: 46px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.8;
+  color: var(--faint);
+  max-width: 90ch;
+}
+
+/* ---- responsive: stack the annotations under the frame ---- */
+@media (max-width: 1020px) {
+  .cx-pair {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+  .cx-doc {
+    padding: 0 18px 70px;
+  }
+  .cx-head h1 {
+    font-size: 32px;
+  }
+}

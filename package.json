@@ -1,0 +1,31 @@
+{
+  "name": "trailscope",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "TrailScope — evaluate open US trail data sources on a 3D terrain map",
+  "scripts": {
+    "dev": "vite",
+    "dev:server": "node server.js",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@fontsource/barlow": "^5.2.5",
+    "@fontsource/barlow-condensed": "^5.2.5",
+    "@fontsource/ibm-plex-mono": "^5.2.5",
+    "express": "^4.21.2",
+    "maplibre-gl": "5.24.0"
+  },
+  "devDependencies": {
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^22.10.7",
+    "playwright": "^1.61.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.11"
+  }
+}

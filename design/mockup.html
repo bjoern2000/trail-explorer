@@ -1,0 +1,997 @@
+<title>TrailScope — design mockup</title>
+<style>
+  :root {
+    --ink: #0e1b16;
+    --panel: #13251d;
+    --panel-2: #182e24;
+    --line: #23402f;
+    --line-soft: #1b3325;
+    --text: #e6f0e4;
+    --muted: #8ca795;
+    --faint: #5d7a68;
+    --accent: #ffb454;
+    --paper: #ece5d3;
+    --paper-line: #c7bb9c;
+
+    --c-osm: #d93a52;
+    --c-usfs: #1f8f55;
+    --c-nps: #7757e0;
+    --c-blm: #d07e00;
+    --c-usgs: #2277cc;
+    --c-cotrex: #0e9c97;
+
+    --font-display: "Avenir Next Condensed", "Helvetica Neue Condensed", "Arial Narrow", sans-serif;
+    --font-body: "Avenir Next", "Helvetica Neue", system-ui, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    overflow: hidden;
+  }
+  * { box-sizing: border-box; }
+
+  .app { display: flex; height: 100vh; min-width: 900px; }
+
+  /* ============ SIDEBAR ============ */
+  .sidebar {
+    width: 332px; flex: 0 0 332px;
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .brand {
+    padding: 18px 18px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 27px; font-weight: 700;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+  }
+  .brand h1 .thin { color: var(--accent); font-weight: 500; }
+  .brand .sub {
+    margin-top: 3px;
+    color: var(--muted); font-size: 12px;
+  }
+  .viewtabs { display: flex; gap: 6px; margin-top: 12px; }
+  .vt {
+    flex: 1;
+    background: none; border: 1px solid var(--line); border-radius: 3px;
+    color: var(--muted);
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+    padding: 6px 0; cursor: pointer;
+  }
+  .vt:hover { border-color: var(--faint); color: var(--text); }
+  .vt.on { background: var(--accent); border-color: var(--accent); color: var(--ink); font-weight: 700; }
+
+  /* search */
+  .search-block { padding: 14px 18px 4px; }
+  .search-box {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 8px 10px;
+  }
+  .search-box:focus-within { border-color: var(--accent); }
+  .search-box svg { flex: 0 0 auto; opacity: 0.55; }
+  .search-box input {
+    background: none; border: none; outline: none;
+    color: var(--text); font-family: var(--font-mono); font-size: 12.5px;
+    width: 100%;
+  }
+
+  .results { margin-top: 6px; border: 1px solid var(--line-soft); border-radius: 3px; overflow: hidden; }
+  .result {
+    display: flex; align-items: center; gap: 9px;
+    padding: 7px 10px;
+    background: var(--panel-2);
+    border-bottom: 1px solid var(--line-soft);
+    cursor: pointer;
+  }
+  .result:last-child { border-bottom: none; }
+  .result:hover { background: #1e3a2c; }
+  .result.sel { background: #1e3a2c; box-shadow: inset 2px 0 0 var(--accent); }
+  .result .swatch { width: 8px; height: 8px; border-radius: 2px; flex: 0 0 auto; }
+  .result .r-name { font-size: 12.5px; }
+  .result .r-meta { font-family: var(--font-mono); font-size: 10px; color: var(--faint); margin-left: auto; white-space: nowrap; }
+
+  /* section headers */
+  section { padding: 16px 18px 6px; }
+  .sec-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 9px;
+  }
+  .sec-head h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 13.5px; font-weight: 600;
+    letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .sec-head .count { font-family: var(--font-mono); font-size: 10px; color: var(--faint); }
+
+  /* source rows */
+  .source {
+    display: grid;
+    grid-template-columns: 14px 10px 1fr auto 16px;
+    grid-template-rows: auto auto;
+    column-gap: 9px; row-gap: 2px;
+    align-items: center;
+    padding: 8px 9px;
+    margin: 0 -9px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .source:hover { background: var(--panel-2); }
+  .source.active { background: var(--panel-2); box-shadow: inset 2px 0 0 var(--accent); }
+  .info-btn {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: none; border: 1px solid var(--line); color: var(--faint);
+    font-family: var(--font-mono); font-size: 9px; line-height: 1;
+    cursor: pointer; padding: 0;
+  }
+  .source:hover .info-btn, .source.active .info-btn { border-color: var(--faint); color: var(--text); }
+  .source.active .info-btn { background: var(--accent); border-color: var(--accent); color: var(--ink); font-weight: 700; }
+  .source input[type="checkbox"] {
+    appearance: none; width: 13px; height: 13px; margin: 0;
+    border: 1px solid var(--faint); border-radius: 2px;
+    display: grid; place-content: center;
+    cursor: pointer;
+  }
+  .source input[type="checkbox"]:checked { background: var(--accent); border-color: var(--accent); }
+  .source input[type="checkbox"]:checked::after {
+    content: ""; width: 7px; height: 4px;
+    border-left: 2px solid var(--ink); border-bottom: 2px solid var(--ink);
+    transform: translateY(-1px) rotate(-45deg);
+  }
+  .source .swatch { width: 10px; height: 10px; border-radius: 2px; }
+  .source .name { font-size: 13px; font-weight: 500; white-space: nowrap; }
+  .source .lic {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em;
+    padding: 2px 6px; border-radius: 2px;
+    justify-self: end;
+  }
+  .lic.pd { color: #7fd6a0; border: 1px solid #2c5a41; }
+  .lic.odbl { color: var(--accent); border: 1px solid #6b4d22; }
+  .lic.state { color: #9db8e8; border: 1px solid #33507a; }
+  .source .stats {
+    grid-column: 3 / 6;
+    font-family: var(--font-mono); font-size: 10px; color: var(--faint);
+    display: flex; gap: 10px; align-items: center;
+  }
+  .source .stats .cap { color: var(--accent); }
+  .source .stats .zoom-req { color: var(--faint); font-style: italic; }
+  .source.off .name, .source.off .stats { opacity: 0.42; }
+
+  /* controls */
+  .ctl-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; }
+  .ctl-row label { color: var(--muted); font-size: 12.5px; }
+  .seg {
+    display: flex; border: 1px solid var(--line); border-radius: 3px; overflow: hidden;
+  }
+  .seg button {
+    background: none; border: none; color: var(--muted);
+    font-family: var(--font-mono); font-size: 10.5px;
+    padding: 5px 9px; cursor: pointer;
+    border-right: 1px solid var(--line);
+  }
+  .seg button:last-child { border-right: none; }
+  .seg button.on { background: var(--accent); color: var(--ink); font-weight: 700; }
+
+  .toggle {
+    width: 34px; height: 18px; border-radius: 10px;
+    background: var(--line); position: relative; cursor: pointer;
+    border: none;
+  }
+  .toggle.on { background: var(--accent); }
+  .toggle::after {
+    content: ""; position: absolute; top: 2px; left: 2px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--ink);
+    transition: left 0.15s;
+  }
+  .toggle.on::after { left: 18px; }
+
+  .slider-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; }
+  .slider-row label { color: var(--muted); font-size: 12.5px; white-space: nowrap; }
+  .slider { flex: 1; height: 2px; background: var(--line); position: relative; border-radius: 2px; }
+  .slider .fill { position: absolute; inset: 0 55% 0 0; background: var(--accent); border-radius: 2px; }
+  .slider .knob {
+    position: absolute; left: 45%; top: 50%;
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--accent); transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 3px #ffb45426;
+  }
+  .slider-row .val { font-family: var(--font-mono); font-size: 10.5px; color: var(--accent); }
+
+  .sidebar footer {
+    margin-top: auto;
+    padding: 12px 18px 14px;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono); font-size: 9.5px; line-height: 1.7;
+    color: var(--faint);
+  }
+
+  /* ============ MAP ============ */
+  .map { position: relative; flex: 1; background: var(--paper); overflow: hidden; }
+  canvas#topo { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  .tag-mockup {
+    position: absolute; top: 12px; left: 14px;
+    font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+    color: #7a6f52; background: #ffffffb8;
+    border: 1px dashed #a89a74;
+    padding: 3px 8px; border-radius: 2px;
+  }
+
+  /* inspector */
+  .inspector {
+    position: absolute; top: 14px; right: 14px;
+    width: 316px; max-height: calc(100% - 76px);
+    overflow-y: auto;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    box-shadow: 0 14px 40px #0e1b1666;
+  }
+  .insp-head {
+    padding: 13px 15px 11px;
+    border-bottom: 1px solid var(--line);
+  }
+  .insp-head .row1 { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .badge {
+    font-family: var(--font-mono); font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ink); background: var(--c-usfs);
+    padding: 2.5px 7px; border-radius: 2px;
+  }
+  .insp-head .lic-inline { font-family: var(--font-mono); font-size: 9.5px; color: #7fd6a0; }
+  .insp-head .close { margin-left: auto; color: var(--faint); background: none; border: none; font-size: 14px; cursor: pointer; }
+  .insp-head h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 20px; font-weight: 600; letter-spacing: 0.02em;
+  }
+  .insp-head h3 .tno { color: var(--faint); font-weight: 400; }
+  .insp-head .meta {
+    margin-top: 4px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+    display: flex; gap: 12px;
+  }
+
+  .profile { padding: 12px 15px 4px; }
+  .profile svg { display: block; width: 100%; }
+  .profile .pf-meta {
+    display: flex; justify-content: space-between;
+    font-family: var(--font-mono); font-size: 9.5px; color: var(--faint);
+    margin-top: 3px;
+  }
+
+  .attrs { padding: 10px 15px; }
+  .attrs h4, .xsource h4, .lic-note h4 {
+    margin: 0 0 7px;
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 11.5px; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--faint);
+  }
+  table.kv { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 11px; }
+  table.kv td { padding: 4px 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  table.kv td.k { color: var(--faint); padding-right: 12px; white-space: nowrap; }
+  table.kv td.v { color: var(--text); text-align: right; }
+  table.kv td.v .ok { color: #7fd6a0; }
+  table.kv td.v .no { color: #d98a8a; }
+
+  .xsource { padding: 6px 15px 10px; }
+  .xchips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .xchip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono); font-size: 10px;
+    border: 1px solid var(--line); border-radius: 3px;
+    padding: 3.5px 8px; color: var(--muted);
+    cursor: pointer;
+  }
+  .xchip:hover { border-color: var(--faint); color: var(--text); }
+  .xchip .dot { width: 7px; height: 7px; border-radius: 2px; }
+
+  .lic-note {
+    margin: 6px 15px 13px;
+    padding: 9px 11px;
+    background: var(--ink);
+    border: 1px solid var(--line-soft); border-radius: 4px;
+    font-size: 11.5px; line-height: 1.55; color: var(--muted);
+  }
+  .lic-note .ep {
+    font-family: var(--font-mono); font-size: 9.5px; color: var(--faint);
+    word-break: break-all; margin-top: 6px;
+  }
+
+  .insp-actions { display: flex; gap: 8px; padding: 0 15px 14px; }
+  .btn {
+    flex: 1;
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em;
+    padding: 7px 0; border-radius: 3px; cursor: pointer;
+    background: none; border: 1px solid var(--line); color: var(--muted);
+  }
+  .btn:hover { border-color: var(--faint); color: var(--text); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--ink); font-weight: 700; }
+
+  /* source dossier */
+  .dossier {
+    position: absolute; top: 14px; left: 14px;
+    width: 312px; max-height: calc(100% - 76px);
+    overflow-y: auto;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    box-shadow: 0 14px 40px #0e1b1666;
+  }
+  .dos-head {
+    display: flex; align-items: center; gap: 9px;
+    padding: 13px 15px 11px;
+    border-bottom: 1px solid var(--line);
+  }
+  .dos-head .swatch { width: 11px; height: 11px; border-radius: 2px; flex: 0 0 auto; }
+  .dos-head h3 {
+    margin: 0; flex: 1;
+    font-family: var(--font-display);
+    font-size: 16.5px; font-weight: 600; letter-spacing: 0.02em;
+    line-height: 1.15;
+  }
+  .dos-head .close { color: var(--faint); background: none; border: none; font-size: 14px; cursor: pointer; }
+  .dos-lede {
+    margin: 0; padding: 11px 15px 3px;
+    font-size: 12.5px; line-height: 1.55; color: var(--muted);
+  }
+  .dos-facts { margin: 8px 15px 4px; padding: 0; }
+  .dos-facts > div {
+    display: grid; grid-template-columns: 76px 1fr; column-gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .dos-facts dt {
+    font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--faint);
+    padding-top: 1px;
+  }
+  .dos-facts dd { margin: 0; font-size: 12px; line-height: 1.5; }
+  .dos-verdict { padding: 10px 15px 4px; font-size: 12px; line-height: 1.5; }
+  .dos-verdict > div { padding: 3px 0; }
+  .dos-verdict .good { color: #7fd6a0; }
+  .dos-verdict .bad { color: #d9a08a; }
+  .dossier .ep {
+    font-family: var(--font-mono); font-size: 9.5px; color: var(--faint);
+    word-break: break-all;
+    margin: 8px 15px 14px;
+  }
+
+  /* status bar */
+  .statusbar {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 30px;
+    background: #0e1b16ee;
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; gap: 18px;
+    padding: 0 14px;
+    font-family: var(--font-mono); font-size: 10px; color: var(--faint);
+    white-space: nowrap; overflow: hidden;
+  }
+  .statusbar .chip { display: inline-flex; align-items: center; gap: 5px; }
+  .statusbar .chip .dot { width: 6px; height: 6px; border-radius: 2px; }
+  .statusbar .spacer { flex: 1; }
+  .statusbar .pos { color: var(--muted); }
+
+  /* ============ SOURCE MATRIX PAGE ============ */
+  .matrix { display: none; height: 100vh; overflow-y: auto; background: var(--ink); }
+  .matrix.on { display: block; }
+  .app.hide { display: none; }
+
+  .mx-head {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 26px 34px 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .mx-head h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 24px; font-weight: 700; letter-spacing: 0.045em; text-transform: uppercase;
+  }
+  .mx-head h1 .thin { color: var(--accent); font-weight: 500; }
+  .mx-head .mx-sub { color: var(--muted); font-size: 12.5px; }
+  .mx-head .back {
+    margin-left: auto;
+    background: none; border: 1px solid var(--line); border-radius: 3px;
+    color: var(--muted); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
+    padding: 6px 12px; cursor: pointer;
+  }
+  .mx-head .back:hover { border-color: var(--faint); color: var(--text); }
+
+  .mx-wrap { padding: 20px 34px 40px; overflow-x: auto; }
+  table.mx { border-collapse: collapse; width: 100%; min-width: 1150px; font-size: 12px; }
+  table.mx th {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--faint);
+    text-align: left; padding: 8px 14px 8px 0;
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--ink);
+  }
+  table.mx td {
+    padding: 12px 14px 12px 0;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top; line-height: 1.5;
+    color: var(--text);
+  }
+  table.mx td.src { white-space: nowrap; font-weight: 600; }
+  table.mx td.src .swatch { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 8px; }
+  table.mx td .mono { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); }
+  table.mx td .dim { color: var(--muted); }
+  table.mx tr.bench td { opacity: 0.62; }
+  table.mx tr.bench td.src { opacity: 0.8; }
+  .mx-band td {
+    padding: 20px 0 6px !important;
+    border-bottom: 1px solid var(--line) !important;
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 11.5px; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--faint);
+  }
+  .chip-not {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em;
+    color: #d98a8a; border: 1px solid #6b3232; border-radius: 2px;
+    padding: 2px 6px; margin-left: 8px;
+  }
+  .fit-a { color: #7fd6a0; font-weight: 600; }
+  .fit-b { color: var(--accent); font-weight: 600; }
+  .fit-c { color: #d9a08a; font-weight: 600; }
+
+  ::-webkit-scrollbar { width: 9px; }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+
+<div class="matrix" id="matrixView">
+  <div class="mx-head">
+    <h1>Trail<span class="thin">Scope</span></h1>
+    <span class="mx-sub">Source matrix · US hiking &amp; mountain-bike trail data · July 2026</span>
+    <button class="back" data-view="map">← BACK TO MAP</button>
+  </div>
+  <div class="mx-wrap">
+    <table class="mx">
+      <thead>
+        <tr>
+          <th>Source</th><th>Coverage</th><th>Volume</th><th>Attributes for hiking / MTB</th>
+          <th>Conditions</th><th>License</th><th>Access</th><th>Updated</th><th>Product fit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="mx-band"><td colspan="9">Open · usable in product</td></tr>
+        <tr>
+          <td class="src"><span class="swatch" style="background:var(--c-osm)"></span>OpenStreetMap</td>
+          <td>Nationwide, best overall trail coverage incl. informal &amp; social trails</td>
+          <td class="mono">~60k path ways in CO alone</td>
+          <td>Geometry + names strong. Surface 56%, difficulty (sac_scale / mtb:scale) only 3–4% even in CO</td>
+          <td class="dim">None</td>
+          <td>ODbL: attribution + share-alike on derived trail data</td>
+          <td class="mono">Overpass API live · daily bulk extracts</td>
+          <td class="mono">Continuous</td>
+          <td><span class="fit-a">Geometry backbone.</span> Don't rely on its attributes</td>
+        </tr>
+        <tr>
+          <td class="src"><span class="swatch" style="background:var(--c-usfs)"></span>USFS · NFS Trails</td>
+          <td>Forest Service lands, CONUS + AK (~160k mi)</td>
+          <td class="mono">86,073 segments</td>
+          <td>Richest official schema: trail class, surface, grade, width, per-use mgmt incl. bicycle + e-bike</td>
+          <td class="dim">None in layer</td>
+          <td>Public domain</td>
+          <td class="mono">ArcGIS REST live · bulk GDB/SHP</td>
+          <td class="mono">Extract 06-28</td>
+          <td><span class="fit-a">Authoritative</span> on NFS land; tiers vary by forest</td>
+        </tr>
+        <tr>
+          <td class="src"><span class="swatch" style="background:var(--c-nps)"></span>NPS · Park Trails</td>
+          <td>National parks; completeness varies park to park</td>
+          <td class="mono">31,358 segments</td>
+          <td>Thin: name, allowed uses, surface, maintainer</td>
+          <td class="dim">Closures via separate NPS API</td>
+          <td>Public domain</td>
+          <td class="mono">ArcGIS REST live · open data portal</td>
+          <td class="mono">Varies by park</td>
+          <td><span class="fit-b">Needed for parks;</span> attributes thin</td>
+        </tr>
+        <tr>
+          <td class="src"><span class="swatch" style="background:var(--c-blm)"></span>BLM · GTLF</td>
+          <td>BLM lands; strongest where travel planning is done (e.g. Moab)</td>
+          <td class="mono">2,830 non-motorized segments</td>
+          <td>Allowed transport modes, surface, OHV designation. No class/grade</td>
+          <td class="dim">None</td>
+          <td>Public domain</td>
+          <td class="mono">ArcGIS REST live</td>
+          <td class="mono">Varies by field office</td>
+          <td><span class="fit-c">Patchy;</span> matters for desert MTB</td>
+        </tr>
+        <tr>
+          <td class="src"><span class="swatch" style="background:var(--c-usgs)"></span>USGS · Natl Digital Trails</td>
+          <td>National aggregate of federal + state + local public-domain trails</td>
+          <td class="mono">591,392 segments</td>
+          <td>FTDS schema + maintainer (23 agencies) + source lineage + per-use flags incl. e-bike</td>
+          <td class="dim">None</td>
+          <td>Public domain</td>
+          <td class="mono">ArcGIS REST live · bulk by state</td>
+          <td class="mono">Refreshed Jul 2026</td>
+          <td><span class="fit-a">Best single national layer;</span> lags upstream</td>
+        </tr>
+        <tr>
+          <td class="src"><span class="swatch" style="background:var(--c-cotrex)"></span>COTREX</td>
+          <td>Colorado only: all managers merged (fed + county + city)</td>
+          <td class="mono">96,897 segments (~40k mi)</td>
+          <td>Per-activity designation: hike, bike, horse, ski, snowshoe, moto; oneway; elevation</td>
+          <td class="dim">Seasonal closures partial</td>
+          <td>State open data (verify redistribution)</td>
+          <td class="mono">ArcGIS REST live · full export</td>
+          <td class="mono">Snapshot republishes</td>
+          <td><span class="fit-a">Model state aggregate;</span> one state</td>
+        </tr>
+        <tr class="mx-band"><td colspan="9">Restricted · benchmark only</td></tr>
+        <tr class="bench">
+          <td class="src"><span class="swatch" style="background:#888"></span>Trailforks<span class="chip-not">NOT LICENSABLE BY DEFAULT</span></td>
+          <td>Global MTB, moderated crowd data</td>
+          <td class="mono">~361k trails</td>
+          <td>Best MTB depth: difficulty, direction, features, popularity</td>
+          <td>Live status + condition reports (the differentiator)</td>
+          <td>API gated; share-alike, non-commercial default; bespoke deal via Outside</td>
+          <td class="mono">JSON API on approval</td>
+          <td class="mono">Continuous</td>
+          <td>Quality bar for MTB + conditions</td>
+        </tr>
+        <tr class="bench">
+          <td class="src"><span class="swatch" style="background:#888"></span>AllTrails<span class="chip-not">CLOSED</span></td>
+          <td>Largest consumer route catalog, US-strong</td>
+          <td class="mono">~450k+ curated routes</td>
+          <td>Curated routes, difficulty, reviews; geometry substrate is largely OSM</td>
+          <td>Crowd signal via recent reviews</td>
+          <td>No API, no licensing program</td>
+          <td class="mono">None</td>
+          <td class="mono">Continuous</td>
+          <td>Consumer UX bar; proves OSM base is viable</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>Trail<span class="thin">Scope</span></h1>
+      <div class="sub">US trail data sources on one 3D map</div>
+      <div class="viewtabs">
+        <button class="vt on" data-view="map">MAP</button>
+        <button class="vt" data-view="matrix">SOURCE MATRIX</button>
+      </div>
+    </div>
+
+    <div class="search-block">
+      <div class="search-box">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="5" cy="5" r="4" stroke="#8ca795" stroke-width="1.5"/><path d="M8.5 8.5 11 11" stroke="#8ca795" stroke-width="1.5"/></svg>
+        <input value="bear lake" aria-label="Search trails across enabled sources">
+      </div>
+      <div class="results">
+        <div class="result sel">
+          <span class="swatch" style="background:var(--c-usfs)"></span>
+          <span class="r-name">Bear Lake Trail <span style="color:var(--faint)">#942</span></span>
+          <span class="r-meta">USFS · 3.2 mi</span>
+        </div>
+        <div class="result">
+          <span class="swatch" style="background:var(--c-osm)"></span>
+          <span class="r-name">Bear Lake Trail</span>
+          <span class="r-meta">OSM · way</span>
+        </div>
+        <div class="result">
+          <span class="swatch" style="background:var(--c-cotrex)"></span>
+          <span class="r-name">Bear Lake Trail</span>
+          <span class="r-meta">COTREX · 3.1 mi</span>
+        </div>
+        <div class="result">
+          <span class="swatch" style="background:var(--c-nps)"></span>
+          <span class="r-name">Bear Lake Nature Trail</span>
+          <span class="r-meta">NPS · 0.8 mi</span>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <div class="sec-head"><h2>Data sources</h2></div>
+
+      <div class="source">
+        <input type="checkbox" checked aria-label="Toggle OpenStreetMap"><span class="swatch" style="background:var(--c-osm)"></span>
+        <span class="name">OpenStreetMap</span><span class="lic odbl">ODbL</span>
+        <button class="info-btn" aria-label="About OpenStreetMap">i</button>
+        <span class="stats"><span>1,847 in view</span></span>
+      </div>
+
+      <div class="source active">
+        <input type="checkbox" checked aria-label="Toggle USFS"><span class="swatch" style="background:var(--c-usfs)"></span>
+        <span class="name">USFS · NFS Trails</span><span class="lic pd">PUB DOM</span>
+        <button class="info-btn" aria-label="About USFS trails">i</button>
+        <span class="stats"><span>612 in view</span></span>
+      </div>
+
+      <div class="source">
+        <input type="checkbox" checked aria-label="Toggle NPS"><span class="swatch" style="background:var(--c-nps)"></span>
+        <span class="name">NPS · Park Trails</span><span class="lic pd">PUB DOM</span>
+        <button class="info-btn" aria-label="About NPS trails">i</button>
+        <span class="stats"><span>188 in view</span></span>
+      </div>
+
+      <div class="source">
+        <input type="checkbox" checked aria-label="Toggle BLM"><span class="swatch" style="background:var(--c-blm)"></span>
+        <span class="name">BLM · GTLF Trails</span><span class="lic pd">PUB DOM</span>
+        <button class="info-btn" aria-label="About BLM trails">i</button>
+        <span class="stats"><span>0 in view</span></span>
+      </div>
+
+      <div class="source">
+        <input type="checkbox" checked aria-label="Toggle USGS"><span class="swatch" style="background:var(--c-usgs)"></span>
+        <span class="name">USGS · Natl Digital Trails</span><span class="lic pd">PUB DOM</span>
+        <button class="info-btn" aria-label="About USGS trails">i</button>
+        <span class="stats"><span>2,000 in view</span><span class="cap">▲ capped</span></span>
+      </div>
+
+      <div class="source off">
+        <input type="checkbox" aria-label="Toggle COTREX"><span class="swatch" style="background:var(--c-cotrex)"></span>
+        <span class="name">COTREX (CO only)</span><span class="lic state">STATE</span>
+        <button class="info-btn" aria-label="About COTREX">i</button>
+        <span class="stats"><span class="zoom-req">enable to load</span></span>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Basemap &amp; Terrain</h2></div>
+      <div class="ctl-row">
+        <label>Basemap</label>
+        <div class="seg">
+          <button class="on">USGS TOPO</button><button>IMAGERY</button><button>OPENTOPO</button>
+        </div>
+      </div>
+      <div class="ctl-row">
+        <label>3D terrain</label>
+        <button class="toggle on" aria-label="3D terrain on"></button>
+      </div>
+      <div class="slider-row">
+        <label>Exaggeration</label>
+        <div class="slider"><div class="fill"></div><div class="knob"></div></div>
+        <span class="val">1.4×</span>
+      </div>
+      <div class="ctl-row">
+        <label>Hillshade</label>
+        <button class="toggle on" aria-label="Hillshade on"></button>
+      </div>
+    </section>
+
+    <footer>
+      TERRAIN © AWS TERRARIUM / MAPZEN · BASEMAP USGS TNM<br>
+      TRAILS © OPENSTREETMAP CONTRIB. (ODbL) · USDA FS · NPS · BLM · USGS · CPW
+    </footer>
+  </aside>
+
+  <main class="map">
+    <canvas id="topo"></canvas>
+    <div class="tag-mockup">DESIGN MOCKUP · STATIC DATA</div>
+
+    <div class="dossier">
+      <div class="dos-head">
+        <span class="swatch" style="background:var(--c-usfs)"></span>
+        <h3>USFS · National Forest System Trails</h3>
+        <button class="close" aria-label="Close source details">✕</button>
+      </div>
+      <p class="dos-lede">The Forest Service's authoritative trail inventory, published from its Enterprise Data Warehouse. The attribute-richest federal source.</p>
+      <dl class="dos-facts">
+        <div><dt>Scope</dt><dd>USFS-managed lands, CONUS + Alaska. 86,073 segments, ~160,000 miles.</dd></div>
+        <div><dt>License</dt><dd>US Government work, public domain. No use restrictions; courtesy attribution to USDA Forest Service.</dd></div>
+        <div><dt>Access</dt><dd>ArcGIS REST query API, GeoJSON, no key. 2,000 features per request. Bulk download as FileGDB / Shapefile.</dd></div>
+        <div><dt>Updated</dt><dd>Rolling, forest by forest. National extract refreshed 2026-06-28.</dd></div>
+        <div><dt>Attributes</dt><dd>Federal Trail Data Standards: trail class TC1–5, surface, typical grade, tread width, and per-use management status incl. bicycle and e-bike classes 1–3.</dd></div>
+      </dl>
+      <div class="dos-verdict">
+        <div class="good">+ Authoritative geometry and management attributes</div>
+        <div class="good">+ Cleanest license of any source</div>
+        <div class="bad">− Forest Service land only; attribute depth varies by forest</div>
+        <div class="bad">− No live conditions or closures in this layer</div>
+      </div>
+      <div class="ep">apps.fs.usda.gov/arcx/rest/…/EDW_TrailNFSPublish_01/MapServer/0</div>
+    </div>
+
+    <div class="inspector">
+      <div class="insp-head">
+        <div class="row1">
+          <span class="badge">USFS</span>
+          <span class="lic-inline">PUBLIC DOMAIN</span>
+          <button class="close" aria-label="Close inspector">✕</button>
+        </div>
+        <h3>Bear Lake Trail <span class="tno">#942</span></h3>
+        <div class="meta"><span>3.2 MI</span><span>+748 FT</span><span>9,475–10,223 FT</span></div>
+      </div>
+
+      <div class="profile">
+        <svg id="pf" viewBox="0 0 286 64" height="64" role="img" aria-label="Elevation profile"></svg>
+        <div class="pf-meta"><span>0 MI</span><span>ELEV FROM TERRAIN TILES (Z13)</span><span>3.2 MI</span></div>
+      </div>
+
+      <div class="attrs">
+        <h4>Attributes · 14 of 38 populated</h4>
+        <table class="kv">
+          <tr><td class="k">TRAIL_CLASS</td><td class="v">TC2 · MODERATELY DEVELOPED</td></tr>
+          <tr><td class="k">TRAIL_SURFACE</td><td class="v">NATIVE MATERIAL</td></tr>
+          <tr><td class="k">TYPICAL_TRAIL_GRADE</td><td class="v">8–12%</td></tr>
+          <tr><td class="k">TYPICAL_TREAD_WIDTH</td><td class="v">18 IN</td></tr>
+          <tr><td class="k">HIKER_PEDESTRIAN</td><td class="v"><span class="ok">MANAGED</span></td></tr>
+          <tr><td class="k">BICYCLE</td><td class="v"><span class="no">RESTRICTED</span></td></tr>
+          <tr><td class="k">PACK_SADDLE</td><td class="v"><span class="ok">ACCEPTED</span></td></tr>
+          <tr><td class="k">ATTRIBUTESUBSET</td><td class="v">TRAILNFS_MGMT</td></tr>
+        </table>
+      </div>
+
+      <div class="xsource">
+        <h4>Same corridor in</h4>
+        <div class="xchips">
+          <span class="xchip"><span class="dot" style="background:var(--c-osm)"></span>OSM · name match</span>
+          <span class="xchip"><span class="dot" style="background:var(--c-cotrex)"></span>COTREX</span>
+          <span class="xchip"><span class="dot" style="background:var(--c-usgs)"></span>USGS · lineage: USFS</span>
+        </div>
+      </div>
+
+      <div class="lic-note">
+        <h4>Source &amp; license</h4>
+        US Government work, public domain. No use restrictions.
+        Refreshed 2026-06-28 · CONUS + AK · attribute tiers vary by forest.
+        <div class="ep">apps.fs.usda.gov/arcx/rest/…/EDW_TrailNFSPublish_01/MapServer/0</div>
+      </div>
+
+      <div class="insp-actions">
+        <button class="btn primary">FLY TO 3D</button>
+        <button class="btn">RAW JSON</button>
+        <button class="btn">GPX</button>
+      </div>
+    </div>
+
+    <div class="statusbar">
+      <span class="pos">40.3128°N 105.6459°W</span>
+      <span>Z 12.4 · PITCH 55°</span>
+      <span class="spacer"></span>
+      <span class="chip"><span class="dot" style="background:var(--c-osm)"></span>1,847</span>
+      <span class="chip"><span class="dot" style="background:var(--c-usfs)"></span>612</span>
+      <span class="chip"><span class="dot" style="background:var(--c-nps)"></span>188</span>
+      <span class="chip"><span class="dot" style="background:var(--c-blm)"></span>0</span>
+      <span class="chip"><span class="dot" style="background:var(--c-usgs)"></span>2,000▲</span>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  var canvas = document.getElementById('topo');
+  var ctx = canvas.getContext('2d');
+
+  // heightfield: sum of gaussian peaks
+  var peaks = [
+    { x: 0.30, y: 0.38, a: 1.00, s: 0.16 },
+    { x: 0.62, y: 0.62, a: 0.85, s: 0.20 },
+    { x: 0.80, y: 0.22, a: 0.70, s: 0.13 },
+    { x: 0.12, y: 0.80, a: 0.55, s: 0.15 },
+    { x: 0.48, y: 0.12, a: 0.45, s: 0.11 }
+  ];
+  function H(x, y) {
+    var h = 0;
+    for (var i = 0; i < peaks.length; i++) {
+      var p = peaks[i], dx = x - p.x, dy = y - p.y;
+      h += p.a * Math.exp(-(dx * dx + dy * dy) / (2 * p.s * p.s));
+    }
+    h += 0.045 * Math.sin(x * 21) * Math.cos(y * 17); // gentle ridging
+    return h;
+  }
+
+  // trails in normalized coords
+  function wobble(pts, amp, freq, phase) {
+    // resample a polyline with perpendicular sinusoidal offset, so paired
+    // sources disagree slightly like real data does
+    var out = [];
+    for (var i = 0; i < pts.length - 1; i++) {
+      var a = pts[i], b = pts[i + 1];
+      var segLen = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      var n = Math.max(2, Math.round(segLen * 60));
+      for (var j = 0; j < n; j++) {
+        var t = j / n, x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t;
+        var dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1;
+        var o = amp * Math.sin((i + t) * freq + phase);
+        out.push([x + (-dy / L) * o, y + (dx / L) * o]);
+      }
+    }
+    out.push(pts[pts.length - 1]);
+    return out;
+  }
+
+  var bearLake = [[0.07, 0.62], [0.18, 0.55], [0.26, 0.50], [0.33, 0.46], [0.38, 0.38], [0.42, 0.30], [0.50, 0.26]];
+  var trails = [
+    // same corridor, three sources, slight disagreement
+    { pts: wobble(bearLake, 0.004, 5.1, 0.4), color: getVar('--c-cotrex'), w: 1.6, alpha: 0.95 },
+    { pts: wobble(bearLake, 0.005, 4.2, 2.2), color: getVar('--c-osm'),    w: 1.6, alpha: 0.95 },
+    { pts: wobble(bearLake, 0.002, 3.0, 0.0), color: getVar('--c-usfs'),   w: 2.6, alpha: 1, selected: true },
+    // OSM-only informal spur (dashed)
+    { pts: [[0.42, 0.30], [0.47, 0.34], [0.53, 0.40], [0.55, 0.47]], color: getVar('--c-osm'), w: 1.4, dash: [5, 4], alpha: 0.9 },
+    // NPS loop
+    { pts: [[0.68, 0.70], [0.74, 0.64], [0.80, 0.66], [0.82, 0.74], [0.76, 0.79], [0.69, 0.77], [0.68, 0.70]], color: getVar('--c-nps'), w: 1.8, alpha: 0.95 },
+    // USGS long-distance
+    { pts: [[0.30, 0.97], [0.36, 0.84], [0.46, 0.72], [0.58, 0.60], [0.70, 0.46], [0.79, 0.34], [0.86, 0.18], [0.90, 0.04]], color: getVar('--c-usgs'), w: 1.5, alpha: 0.85 },
+    // BLM segment low corner
+    { pts: [[0.88, 0.88], [0.93, 0.80], [0.97, 0.75]], color: getVar('--c-blm'), w: 1.7, alpha: 0.95 }
+  ];
+
+  function getVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  function draw() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var W = canvas.clientWidth, Hh = canvas.clientHeight;
+    if (!W || !Hh) return;
+    canvas.width = W * dpr; canvas.height = Hh * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // paper
+    ctx.fillStyle = getVar('--paper');
+    ctx.fillRect(0, 0, W, Hh);
+
+    // hillshade: light NW illumination
+    var cell = 14;
+    for (var gx = 0; gx < W; gx += cell) {
+      for (var gy = 0; gy < Hh; gy += cell) {
+        var x = gx / W, y = gy / Hh, e = 0.004;
+        var ddx = H(x + e, y) - H(x - e, y);
+        var ddy = H(x, y + e) - H(x, y - e);
+        var shade = (ddx + ddy) * 6; // >0 faces SE = shadow
+        if (shade > 0.02) {
+          ctx.fillStyle = 'rgba(96,84,58,' + Math.min(0.16, shade * 0.5).toFixed(3) + ')';
+          ctx.fillRect(gx, gy, cell, cell);
+        } else if (shade < -0.03) {
+          ctx.fillStyle = 'rgba(255,252,240,' + Math.min(0.30, -shade * 0.8).toFixed(3) + ')';
+          ctx.fillRect(gx, gy, cell, cell);
+        }
+      }
+    }
+
+    // contours via marching squares
+    var res = 3;
+    var cols = Math.ceil(W / res) + 1, rows = Math.ceil(Hh / res) + 1;
+    var field = new Float32Array(cols * rows);
+    for (var iy = 0; iy < rows; iy++)
+      for (var ix = 0; ix < cols; ix++)
+        field[iy * cols + ix] = H(ix * res / W, iy * res / Hh);
+
+    var levels = 22;
+    for (var li = 1; li <= levels; li++) {
+      var lv = li / (levels + 1) * 1.35;
+      var major = li % 5 === 0;
+      ctx.strokeStyle = getVar('--paper-line');
+      ctx.globalAlpha = major ? 0.85 : 0.45;
+      ctx.lineWidth = major ? 1.1 : 0.55;
+      ctx.beginPath();
+      for (var cy = 0; cy < rows - 1; cy++) {
+        for (var cx = 0; cx < cols - 1; cx++) {
+          var tl = field[cy * cols + cx], tr = field[cy * cols + cx + 1];
+          var bl = field[(cy + 1) * cols + cx], br = field[(cy + 1) * cols + cx + 1];
+          var x0 = cx * res, y0 = cy * res;
+          segs(tl, tr, bl, br, lv, x0, y0, res);
+        }
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    function lerp(a, b, v) { return (v - a) / (b - a); }
+    function segs(tl, tr, bl, br, v, x, y, s) {
+      var pts = [];
+      if ((tl < v) !== (tr < v)) pts.push([x + s * lerp(tl, tr, v), y]);
+      if ((tr < v) !== (br < v)) pts.push([x + s, y + s * lerp(tr, br, v)]);
+      if ((bl < v) !== (br < v)) pts.push([x + s * lerp(bl, br, v), y + s]);
+      if ((tl < v) !== (bl < v)) pts.push([x, y + s * lerp(tl, bl, v)]);
+      if (pts.length >= 2) { ctx.moveTo(pts[0][0], pts[0][1]); ctx.lineTo(pts[1][0], pts[1][1]); }
+    }
+
+    // faint PLSS-style grid
+    ctx.strokeStyle = 'rgba(120,105,70,0.13)';
+    ctx.lineWidth = 0.5;
+    for (var gxl = 0; gxl < W; gxl += 160) { ctx.beginPath(); ctx.moveTo(gxl, 0); ctx.lineTo(gxl, Hh); ctx.stroke(); }
+    for (var gyl = 0; gyl < Hh; gyl += 160) { ctx.beginPath(); ctx.moveTo(0, gyl); ctx.lineTo(W, gyl); ctx.stroke(); }
+
+    // trails
+    trails.forEach(function (t) {
+      if (t.selected) { // halo
+        strokeTrail(t.pts, '#ffffff', t.w + 5, 0.9, null);
+        strokeTrail(t.pts, '#10201b', t.w + 2.6, 0.85, null);
+      }
+      strokeTrail(t.pts, t.color, t.w, t.alpha, t.dash || null);
+      if (t.selected) {
+        endMarker(t.pts[0], t.color);
+        endMarker(t.pts[t.pts.length - 1], t.color);
+      }
+    });
+
+    function strokeTrail(pts, color, w, alpha, dash) {
+      ctx.strokeStyle = color; ctx.lineWidth = w; ctx.globalAlpha = alpha;
+      ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+      ctx.setLineDash(dash || []);
+      ctx.beginPath();
+      pts.forEach(function (p, i) {
+        var x = p[0] * W, y = p[1] * Hh;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]); ctx.globalAlpha = 1;
+    }
+    function endMarker(p, color) {
+      ctx.fillStyle = '#ffffff'; ctx.strokeStyle = color; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(p[0] * W, p[1] * Hh, 4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    }
+
+    // labels
+    label('BEAR LAKE TRAIL #942', 0.24, 0.435, -14);
+    label('informal spur (OSM)', 0.50, 0.345, 38, true);
+    function label(text, x, y, angle, small) {
+      ctx.save();
+      ctx.translate(x * W, y * Hh);
+      ctx.rotate(angle * Math.PI / 180);
+      ctx.font = (small ? 'italic 9.5px ' : '600 10.5px ') + 'ui-monospace, Menlo, monospace';
+      ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(236,229,211,0.9)';
+      ctx.fillStyle = small ? '#8a6f4d' : '#4a4634';
+      ctx.strokeText(text, 0, 0); ctx.fillText(text, 0, 0);
+      ctx.restore();
+    }
+  }
+
+  // elevation profile sparkline
+  (function profile() {
+    var svg = document.getElementById('pf');
+    var Wp = 286, Hp = 64, n = 90, pts = [];
+    for (var i = 0; i <= n; i++) {
+      var t = i / n;
+      var e = 0.15 + 0.62 * t + 0.14 * Math.sin(t * 9) * (1 - t) + 0.09 * Math.sin(t * 23 + 2) * t;
+      pts.push([t * Wp, Hp - 8 - e * (Hp - 18)]);
+    }
+    var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('');
+    var area = d + 'L' + Wp + ' ' + (Hp - 2) + 'L0 ' + (Hp - 2) + 'Z';
+    svg.innerHTML =
+      '<path d="' + area + '" fill="rgba(31,143,85,0.18)"/>' +
+      '<path d="' + d + '" fill="none" stroke="#1f8f55" stroke-width="1.6"/>' +
+      '<line x1="0" y1="' + (Hp - 2) + '" x2="' + Wp + '" y2="' + (Hp - 2) + '" stroke="#23402f"/>' +
+      '<circle cx="' + pts[n][0] + '" cy="' + pts[n][1] + '" r="2.6" fill="#ffb454"/>';
+  })();
+
+  // view switching: MAP <-> SOURCE MATRIX
+  var appEl = document.querySelector('.app');
+  var mxEl = document.getElementById('matrixView');
+  document.querySelectorAll('[data-view]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var v = btn.getAttribute('data-view');
+      appEl.classList.toggle('hide', v === 'matrix');
+      mxEl.classList.toggle('on', v === 'matrix');
+      document.querySelectorAll('.vt').forEach(function (t) {
+        t.classList.toggle('on', t.getAttribute('data-view') === v);
+      });
+      if (v === 'map') draw();
+    });
+  });
+
+  window.addEventListener('resize', draw);
+  draw();
+})();
+</script>

@@ -1,0 +1,707 @@
+/* The device chrome for the Week and Day screens (src/ui/phone-frame.css), and the discovery
+   app's own stylesheet for what goes inside them (src/scope/phone/phone.css).
+
+   IMPORTING phone.css IS A REVERSAL OF WHAT THIS FILE SAID BELOW, and the reasoning has
+   changed with the page rather than been forgotten. The old note (still there, under the level
+   colours) says that pulling a whole app's stylesheet in to borrow four hues would be the worse
+   trade, and that was right when the page's only borrowing was four hex values on a pill. It is
+   the wrong trade now: `src/digest/screens.ts` draws the results list's OWN card, pill,
+   conditions row and elevation profile inside a phone frame, and restating those by hand would
+   be a third copy of the most-copied component in this repo. Verified before importing: none of
+   phone.css's 279 selectors collides with anything in merge.css or below in this file except
+   the modifier classes `.on`, `.is-outlook`, `.is-prime/mixed/poor`, `.lv-prime/mixed/poor` and
+   `.is-empty`, and phone.css never uses any of those as a standalone selector, only compounded
+   onto a class of its own. It also has no element, `body` or `:root` rules, so nothing leaks
+   onto the document around the frames.
+
+   The four level colours below stay duplicated: they style `.dg-pill` and the matrix, which are
+   document objects and not phone ones, and the drift note on them still applies. */
+@import '../ui/phone-frame.css';
+@import '../scope/phone/phone.css';
+
+/* Regional conditions digest — the four objects this page adds.
+
+   Everything else it draws (the document shell, sections, notes, the footer) comes from
+   src/merge/merge.css, which digest.ts imports first. This file owns only the chrome bar,
+   the day-by-band matrix, the window strips and the pick cards. If a rule here could have
+   been a merge.css rule, it belongs there instead. */
+
+:root {
+  /* THE THREE LEVEL COLOURS, and the outlook treatment, taken from phone.css's
+     `.cond-pill.is-*` and `.cond-pill.is-outlook.lv-*`.
+
+     STILL DUPLICATED EVEN THOUGH phone.css IS NOW IMPORTED ABOVE, because what phone.css
+     exports is a styled `.cond-pill`, not a palette: these values are consumed by the
+     matrix's bars, the window strips, the legend and `.dg-pill`, none of which is a phone
+     object and none of which could take `.cond-pill`'s rule without taking its shape too.
+     The right fix is a level palette in tokens.css that both files read, and it is not this
+     change. The risk until then is drift, and the mitigation is this comment: retune a level
+     colour in phone.css and retune it here. */
+  --dg-good: #1a7a45;
+  --dg-good-bg: #e7f4ec;
+  --dg-good-line: #b6d9c4;
+  --dg-good-ink: #14603a;
+
+  --dg-mixed: #e09216;
+  --dg-mixed-bg: #fdf0dc;
+  --dg-mixed-line: #e2c79a;
+  --dg-mixed-ink: #7d4d00;
+
+  --dg-poor: #b23a2e;
+  --dg-poor-bg: #f8e7e4;
+  --dg-poor-line: #dcb3ad;
+  --dg-poor-ink: #8f2c22;
+
+  /* The weight an outlook mark is drawn at, as a fraction of a route-specific one. The
+     same 0.34 `phone/ui.ts`'s `outlookPaint` fades an outlook elevation profile by, so the
+     two surfaces degrade by the same amount rather than each picking a value. */
+  --dg-outlook-alpha: 0.34;
+}
+
+/* ============ VERTICAL RHYTHM ============
+
+   merge.css sets this genre's spacing for a page that is mostly prose, where a 44 px gap
+   above a section head and a 56 px page header are the right rests between long runs of
+   reading. This page is now four figures with one line of copy over each, and at that
+   density the same rests read as gaps rather than as structure.
+
+   TYPE IS UNTOUCHED. Every size is merge.css's own; only the space around it moves. Scoped
+   to `.dg-page` so the merge page keeps its own rhythm. */
+.dg-page .doc-head { padding: 12px 0 10px; }
+.dg-page .doc-head h1 { margin-bottom: 8px; }
+.dg-page .lede { margin-bottom: 0; }
+/* A section head is a kicker, a 30 px title and the air around them. At four sections on a
+   400-word page that was 350 px of heading, so every gap in it is at its minimum and none of
+   the type moved. */
+.dg-page .sec { padding: 10px 0 0; }
+.dg-page .sec-kicker { margin-bottom: 4px; }
+.dg-page .sec h2 { margin-bottom: 8px; }
+.dg-page .sec p.sec-lede { margin-bottom: 10px; }
+/* merge.css reserves 96 px under the last object for a page whose reader is still scrolling
+   at the end of a long argument. Four figures do not need a screen of runway. */
+.dg-page .doc-shell { padding-bottom: 12px; }
+.dg-page .doc-foot { margin-top: 10px; padding-top: 10px; }
+.dg-page .doc-foot p { line-height: 1.55; }
+
+/* ============ CHROME ============
+   Sticky under the 44 px top bar, because the whole point of the page is comparing two
+   regions or two scenarios and a control that scrolls away makes that a memory test. */
+.dg-chrome {
+  position: sticky;
+  top: 44px;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 14px 32px;
+  margin: 10px 0 0;
+  padding: 10px 16px 11px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  max-width: 1080px;
+}
+.dg-ctl { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.dg-ctl-label {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
+}
+/* The scenario blurb that used to sit under its own control, at a reserved two-line height
+   so switching scenarios did not shift the matrix, is gone from the markup: it restated the
+   button beside it. digest.ts's `chrome` records why. */
+
+.dg-loading {
+  display: flex; align-items: center; gap: 10px;
+  padding: 60px 0;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--faint);
+}
+
+/* A boxed finding or definition. merge.css has no equivalent (the merge page uses figures
+   and captions instead), and this is the Trail Explorer page's `.sec-note`, brought over
+   rather than reinvented so a reader meets the same object on both. No accent bar down the
+   left edge, for the reason scope.css records: a coloured rule beside a boxed paragraph is
+   the house style of generated text and made that page read as machine output. */
+.sec-note {
+  max-width: 720px;
+  margin: 0 0 8px;
+  padding: 10px 14px 11px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 12px;
+}
+.sec-note .note-label {
+  display: block;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--info); margin-bottom: 4px;
+}
+.sec-note p { margin: 0; font-size: 14.5px; line-height: 1.5; }
+.sec-note p + p { margin-top: 9px; }
+
+/* ============ SECTION 1: the generated claims ============ */
+.dg-claims {
+  margin: 0 0 8px;
+  max-width: 720px;
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line-soft);
+}
+.dg-claims dt {
+  grid-column: 1;
+  /* 8px, down from 13. Five rows at 13 put 130 px of gutter into a block whose longest
+     entry is two lines; the rule between rows is what separates them, not the air. */
+  padding: 6px 16px 6px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
+  line-height: 1.5;
+}
+.dg-claims dd {
+  grid-column: 2;
+  margin: 0;
+  padding: 5px 0 6px;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 15px; line-height: 1.5; color: var(--text);
+  /* Every claim is mostly counts and clock times; tabular figures keep them from jittering
+     between days without putting the whole sentence in a mono face. */
+  font-variant-numeric: tabular-nums;
+}
+/* At this width the label column would take more than half the line. */
+@media (max-width: 700px) {
+  .dg-claims { grid-template-columns: minmax(0, 1fr); }
+  .dg-claims dt { border-bottom: none; padding: 12px 0 0; }
+  .dg-claims dd { grid-column: 1; padding-top: 4px; }
+}
+
+/* ============ SECTION 2: the matrix ============
+   THE WRAPPER SCROLLS, THE PAGE NEVER DOES. Seven day columns at a legible minimum plus
+   the band labels exceed a phone viewport by design, and `overflow-x: auto` here is what
+   keeps that inside the figure instead of putting a sideways scrollbar on the document. */
+.dg-matrix-wrap {
+  max-width: 1080px;
+  margin: 0 0 8px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+}
+.dg-matrix {
+  display: grid;
+  /* --dg-days is set from the day count in digest.ts, so a scrubber of a different length
+     needs no change here. */
+  grid-template-columns: 150px repeat(var(--dg-days, 7), minmax(104px, 1fr));
+  min-width: 828px;
+}
+
+/* The corner names what the numeral in every cell is, which is what let the cells stop
+   saying "of 12 Good" twenty-one times. Bottom-aligned against the day headers' baseline and
+   set at the band-total scale, so it reads as a column label and not as a first band. */
+.dg-corner {
+  /* Bottom-right, hard against the first day column: the label points at the numerals in
+     the cells to its right, and left-aligned over the band names it read as a header for
+     those instead. */
+  display: flex; align-items: flex-end; justify-content: flex-end;
+  padding: 0 12px 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--faint); line-height: 1.3;
+}
+
+.dg-day {
+  display: flex; flex-direction: column; gap: 1px;
+  position: relative;
+  /* The extra top padding is a reserved strip for the horizon label, which straddles the
+     column border and would otherwise sit on top of two weekday names. Every header pays
+     for it so the row stays aligned. */
+  padding: 14px 10px 5px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line-soft);
+  cursor: pointer;
+  text-align: left;
+  color: var(--text);
+  font: inherit;
+}
+.dg-day:hover { background: var(--panel-2); }
+.dg-day-name {
+  font-family: var(--font-display); font-size: 15px; font-weight: 600; letter-spacing: 0.02em;
+}
+/* `.dg-day-date` is gone with the date line under each weekday; digest.ts says why. */
+.dg-day-mode {
+  margin-top: 2px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
+}
+/* Selected day: an amber cap on the column head plus a bolder name, matching the day
+   scrubber's own selected state rather than inventing a second one. */
+.dg-day.on { background: var(--panel-2); box-shadow: inset 0 3px 0 var(--accent); }
+.dg-day.on .dg-day-name { font-weight: 700; }
+.dg-day:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
+
+/* ---- the horizon, drawn three ways ----
+   1. the mode label above already reads OUTLOOK rather than HOURLY;
+   2. the column is washed and its bar drawn at --dg-outlook-alpha (below);
+   3. this wall, carrying the horizon, exactly as the day scrubber draws it. */
+.dg-day.is-wall, .dg-cell.is-wall { border-left: 1px dashed var(--faint); }
+.dg-wall-label {
+  position: absolute; top: 3px; left: -1px;
+  transform: translateX(-50%);
+  padding: 1px 5px;
+  background: var(--chrome);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.06em; color: var(--faint);
+  white-space: nowrap;
+}
+.dg-day.is-outlook, .dg-cell.is-outlook { background: var(--panel-2); }
+.dg-day.is-outlook.on { background: var(--panel-2); }
+.dg-day.is-outlook .dg-day-name { color: var(--muted); font-weight: 500; }
+
+.dg-band {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 14px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.dg-band-name { font-size: 13.5px; font-weight: 600; color: var(--text); }
+.dg-band-n { font-family: var(--font-mono); font-size: 10px; color: var(--faint); }
+
+.dg-cell {
+  display: flex; flex-direction: column; justify-content: center; gap: 5px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--line-soft);
+  border-left: 1px solid var(--line-soft);
+}
+.dg-cell.on { background: rgba(255, 180, 84, 0.09); }
+.dg-cell.is-outlook.on { background: rgba(255, 180, 84, 0.13); }
+/* The figure's own border closes the grid, so the final band's row must not draw a second
+   line under itself. `nth-last-child` cannot count a custom property, so the last row is
+   marked in digest.ts where the band count is known. */
+.dg-matrix .is-lastrow { border-bottom: none; }
+
+.dg-bar {
+  display: flex;
+  height: 9px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: var(--line-soft);
+}
+.dg-seg { display: block; height: 100%; }
+.dg-seg.lv-prime { background: var(--dg-good); }
+.dg-seg.lv-mixed { background: var(--dg-mixed); }
+.dg-seg.lv-poor { background: var(--dg-poor); }
+/* The outlook wash: the level's own hue at a third of the weight, which is the treatment
+   an outlook elevation profile already gets. A settled Saturday and a stormy one must not
+   render identically, so the hue stays and only the weight drops. */
+.dg-cell.is-outlook .dg-bar { opacity: var(--dg-outlook-alpha); }
+
+.dg-cell-n { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.dg-cell-good { font-size: 15px; font-weight: 600; color: var(--text); }
+.dg-cell.is-outlook .dg-cell-good { color: var(--muted); font-weight: 500; }
+.dg-cell.is-empty { justify-content: center; }
+.dg-cell-none { font-family: var(--font-mono); font-size: 10px; color: var(--faint); }
+
+.dg-legend {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px;
+  max-width: 1080px;
+  margin: 0 0 6px;
+  font-size: 12px; color: var(--muted);
+}
+.dg-leg { display: inline-flex; align-items: center; gap: 7px; }
+.dg-swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.dg-swatch.lv-prime { background: var(--dg-good); }
+.dg-swatch.lv-mixed { background: var(--dg-mixed); }
+.dg-swatch.lv-poor { background: var(--dg-poor); }
+.dg-leg-note { font-family: var(--font-mono); font-size: 10px; color: var(--faint); }
+
+/* ============ SECTION 3: the window strips ============ */
+.dg-strips {
+  max-width: 1080px;
+  margin: 0 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  overflow: hidden;
+}
+.dg-strip-row {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr) 118px;
+  align-items: center;
+  gap: 16px;
+  padding: 7px 16px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.dg-strip-row:last-child { border-bottom: none; }
+.dg-strip-head { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+/* One column per hour, all bands on one axis so the three rows can be read against each
+   other. Height is the share of the band carrying a window in that hour, so a flat row and
+   a row that stops at noon are the same picture at two elevations. */
+.dg-strip {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 30px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.dg-hour {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 5px;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  background: var(--panel-2);
+  border-radius: 2px 2px 0 0;
+}
+.dg-hour-fill {
+  display: block;
+  width: 100%;
+  min-height: 1px;
+  background: var(--dg-good);
+  opacity: 0.42;
+  border-radius: 2px 2px 0 0;
+}
+/* The band's own peak: full weight, so "where the windows agree" is the part that reads
+   first. Not a different colour, because it is not a different thing. */
+.dg-hour.is-peak .dg-hour-fill { opacity: 1; }
+.dg-hour-tick {
+  position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
+  padding-top: 3px;
+  font-family: var(--font-mono); font-size: 8.5px; color: var(--faint);
+}
+.dg-strip-foot { text-align: right; }
+.dg-strip-win {
+  font-family: var(--font-mono); font-size: 11.5px; color: var(--dg-good-ink);
+  font-variant-numeric: tabular-nums;
+}
+.dg-strip-none { font-family: var(--font-mono); font-size: 11px; color: var(--faint); }
+
+.dg-caption {
+  max-width: 1080px;
+  margin: 0 0 22px;
+  font-size: 12.5px; line-height: 1.6; color: var(--muted);
+}
+
+/* A section that keeps its heading and loses its content, because that is what the horizon
+   does to it. Deliberately not styled as an error or an empty state. */
+.dg-void {
+  max-width: 720px;
+  margin: 0 0 20px;
+  padding: 16px 18px 6px;
+  background: var(--panel-2);
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+}
+.dg-void-head {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+  font-family: var(--font-display); font-size: 16px; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--text);
+}
+.dg-void p { font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+
+/* ============ SECTION 4: the picks ============ */
+.dg-picks {
+  max-width: 1080px;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(302px, 1fr));
+  gap: 12px;
+}
+.dg-pick {
+  display: flex; flex-direction: column; gap: 7px;
+  padding: 11px 13px 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  min-width: 0;
+}
+.dg-pick-name {
+  margin: 0;
+  font-family: var(--font-display); font-size: 18px; font-weight: 600; line-height: 1.18;
+  letter-spacing: 0.01em; color: var(--text);
+  /* Merged OSM name-clusters run long ("North Inlet Trail to Lake Nanita"); wrap rather
+     than truncate, because a name is the one thing on this card a reader came for. */
+  overflow-wrap: anywhere;
+}
+.dg-pick-meta {
+  display: flex; flex-wrap: wrap; gap: 4px 14px;
+  font-size: 13px; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.dg-oneway { font-family: var(--font-mono); font-size: 10px; color: var(--faint); }
+.dg-pick-window {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The conditions pill, restated. Same hues, same shape, same rule: a route-specific grade
+   is filled, an outlook grade keeps the level's border and text on a neutral inset with a
+   dashed edge. See digest.ts's `pickCard` for why it is not imported. */
+.dg-pill {
+  display: flex; align-items: center; gap: 7px;
+  padding: 6px 11px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  font-size: 13px; line-height: 1.3;
+  min-width: 0;
+}
+.dg-pill-glyph { flex: 0 0 auto; }
+.dg-pill-level {
+  flex: 0 0 auto;
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.dg-pill-text { min-width: 0; overflow-wrap: anywhere; }
+.dg-pill.is-prime { background: var(--dg-good-bg); border-color: var(--dg-good-line); color: var(--dg-good-ink); }
+.dg-pill.is-mixed { background: var(--dg-mixed-bg); border-color: var(--dg-mixed-line); color: var(--dg-mixed-ink); }
+.dg-pill.is-poor { background: var(--dg-poor-bg); border-color: var(--dg-poor-line); color: var(--dg-poor-ink); }
+.dg-pill.is-outlook {
+  background: var(--panel-2); border-color: var(--line); border-style: dashed; color: var(--muted);
+}
+.dg-pill.is-outlook.lv-prime { border-color: #a9cfba; color: #2c6a49; }
+.dg-pill.is-outlook.lv-mixed { border-color: #ddc094; color: var(--dg-mixed-ink); }
+.dg-pill.is-outlook.lv-poor { border-color: #d6ada7; color: var(--dg-poor-ink); }
+
+/* ============ SECTION 3: the Week and Day screens ============
+
+   The device chrome is src/ui/phone-frame.css and everything INSIDE the screen that also
+   exists in the discovery app (the card, its hero, the pill, the conditions row, the area
+   strip) is phone.css's, both imported at the top of this file. What is here is only what
+   the two screens add: their head, the week grid, and the day screen's blocks.
+
+   Everything is scoped under `.dg-ph`, which sits on the screen root alongside phone.css's
+   own `.phone-app`. That pairing is deliberate: `.phone-app` gives the app its type scale,
+   its background and its button reset, so these screens inherit the same base every screen
+   in the discovery prototype does, and `.dg-ph` adds only what is new. */
+
+.dg-ph-frames {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px 26px;
+  max-width: 1080px;
+  margin: 0 0 10px;
+}
+.dg-ph-frame { flex: 0 0 auto; min-width: 0; }
+/* 390 x 844, NOT phone-frame.css's 366 x 792.
+   The two are the same device at two scales, and weather-on-route uses the smaller one
+   because its frames sit beside an annotation column. These frames hold the discovery app's
+   OWN card, whose every measurement (the 320 px hero, the one-line conditions row, the
+   four-item meta row) was tuned against a 342 px card box, and 366 gives it 326: the
+   conditions row lost its last field to a clip and the meta row wrapped after a separator.
+   Rendering the product's card at anything but the product's width is measuring the mock
+   rather than the design. */
+.dg-ph-frame .phone { width: 390px; height: 844px; border-radius: 46px; }
+.dg-ph-label {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--faint);
+  margin-bottom: 8px;
+}
+
+.dg-ph { min-width: 0; }
+
+/* ---- the head, shared by both screens ---- */
+.dg-ph-head {
+  flex: 0 0 auto;
+  padding: 11px 14px 10px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+.dg-ph-head-top { display: flex; align-items: center; gap: 8px; }
+.dg-ph-title {
+  flex: 1 1 auto; min-width: 0;
+  font-family: var(--font-display); font-size: 19px; font-weight: 700; letter-spacing: 0.01em;
+  line-height: 1.15; color: var(--text);
+  /* Region names run long ("Adirondack High Peaks"); one line, clipped, because a title that
+     wraps pushes the week grid down by a row's worth of height on one region only. */
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dg-ph-sub {
+  margin-top: 3px;
+  font-size: 12.5px; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* HOURLY / OUTLOOK on the day screen, in the day scrubber's own vocabulary. */
+.dg-ph-mode {
+  flex: 0 0 auto;
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel-2);
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.dg-ph-mode.is-outlook { border-style: dashed; }
+.dg-ph-sky { color: var(--muted); }
+
+.dg-ph-body {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  display: flex; flex-direction: column;
+  padding: 8px 10px 10px;
+}
+/* The day screen scrolls, and it is meant to: three cards plus a windows block is more than
+   a phone shows at once, which is what a list on a phone looks like. Nothing is clipped, and
+   the frame's own `overflow: hidden` is not what is holding the content in. */
+.dg-ph-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+
+/* ---- WEEK: seven days down, the region's bands across ----
+
+   The matrix stood on its side. `--dg-bands` is set from the scheme's own length in
+   screens.ts, so a fourth band would need no change here. The day column is wide enough for
+   "Today"; the Good column for two digits at the display face. */
+/* The seven rows SHARE the screen's leftover height rather than stacking at their natural
+   one. Seven 34 px rows left the bottom 40 percent of the frame empty, which reads as a
+   screen with nothing on it rather than as a week; growing them fills it, and the row height
+   then follows the frame instead of being a number to retune when the bezel changes. */
+.dg-wk { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.dg-wk-row {
+  display: grid;
+  grid-template-columns: 52px 17px repeat(var(--dg-bands, 3), minmax(0, 1fr)) 24px;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 7px 6px;
+  border: none;
+  border-bottom: 1px solid var(--line-soft);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+.dg-wk-row:not(.is-head) { flex: 1 1 0; min-height: 34px; }
+.dg-wk-row:last-child { border-bottom: none; }
+.dg-wk-row:hover { background: var(--panel-2); }
+.dg-wk-row.is-head {
+  cursor: default;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+  align-items: flex-end;
+}
+.dg-wk-row.is-head:hover { background: none; }
+/* Selected: the amber cap the matrix's own selected column carries, on the leading edge
+   rather than the top edge because the axis turned. */
+.dg-wk-row.on { background: var(--panel-2); box-shadow: inset 3px 0 0 var(--accent); }
+.dg-wk-row:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
+
+.dg-wk-day { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.dg-wk-dayname {
+  font-family: var(--font-display); font-size: 13.5px; font-weight: 600; letter-spacing: 0.01em;
+  color: var(--text);
+}
+.dg-wk-daymode {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--faint);
+}
+.dg-wk-sky { display: flex; align-items: center; justify-content: center; }
+
+.dg-wk-band { min-width: 0; }
+.dg-wk-bandname {
+  display: block;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--faint); line-height: 1.35;
+}
+.dg-wk-bandn {
+  display: block;
+  font-family: var(--font-mono); font-size: 9.5px; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+/* The matrix's own bar, one notch thinner: the same 9 px in a 64 px column reads as a block
+   rather than as a distribution. */
+.dg-wk-band .dg-bar { height: 7px; border-radius: 4px; }
+.dg-wk-row.is-outlook .dg-bar { opacity: var(--dg-outlook-alpha); }
+.dg-wk-row.is-outlook .dg-wk-dayname { color: var(--muted); font-weight: 500; }
+.dg-wk-row.is-outlook .dg-wk-good { color: var(--muted); font-weight: 500; }
+
+.dg-wk-good {
+  text-align: right;
+  font-size: 14px; font-weight: 600; color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.dg-wk-row.is-head .dg-wk-good {
+  font-family: var(--font-mono); font-size: 8px; font-weight: 400; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--faint);
+}
+
+/* The horizon: the same dashed wall the matrix draws between its two halves and the day
+   scrubber draws on its day bar, turned with the axes. */
+.dg-wk-wall {
+  display: flex; align-items: center; gap: 7px;
+  margin: 2px 6px 3px;
+  border-top: 1px dashed var(--faint);
+}
+.dg-wk-wall span {
+  margin-top: -7px;
+  padding: 1px 6px;
+  background: var(--chrome);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.06em; color: var(--faint);
+}
+
+/* ---- DAY: the area readout, the windows, the picks ---- */
+.dg-dy-area { padding: 9px 12px 8px; border-bottom: 1px solid var(--line-soft); background: var(--panel); }
+
+.dg-dy-block { padding: 9px 12px 10px; border-bottom: 1px solid var(--line-soft); }
+.dg-dy-blockhead {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  margin-bottom: 7px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+}
+.dg-dy-strips { display: flex; flex-direction: column; gap: 7px; }
+/* ONE LINE PER BAND. At an 84 px label column "Crossing treeline" wrapped, which made every
+   row as tall as the tallest label and the block 300 px of a 730 px screen: the picks under
+   it were pushed off the frame by a chart legend. 102 px and a clipped single line holds all
+   six band names in both schemes. */
+.dg-dy-strip { display: grid; grid-template-columns: 102px minmax(0, 1fr); align-items: end; gap: 9px; }
+.dg-dy-striphead { display: flex; flex-direction: column; gap: 0; min-width: 0; padding-bottom: 13px; }
+.dg-dy-band {
+  font-size: 11.5px; color: var(--text); line-height: 1.25;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dg-dy-bandn {
+  font-family: var(--font-mono); font-size: 9.5px; color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+/* The strip itself is the windows figure's `.dg-strip`; only its height is dropped, because
+   30 px of bar beside an 84 px label reads as a chart where 22 px reads as a row. */
+.dg-dy-strip .dg-strip { height: 22px; }
+.dg-dy-nowin {
+  display: flex; align-items: flex-start; gap: 7px;
+  font-size: 12.5px; line-height: 1.4; color: var(--muted);
+}
+.dg-dy-nowin svg { flex: 0 0 auto; margin-top: 1px; color: var(--faint); }
+
+/* phone.css's own card list, with the floating list/map toggle's clearance removed: that
+   toggle is not on this screen, so 74 px of bottom padding would be 74 px of nothing. */
+.dg-dy-picks { padding: 10px 12px 14px; gap: 10px; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .dg-chrome { top: 44px; gap: 16px 24px; padding: 12px 13px; }
+  .dg-strip-row { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .dg-strip-foot { text-align: left; }
+  .dg-picks { grid-template-columns: minmax(0, 1fr); }
+}
+/* Below the two frames' combined width they wrap to one column on their own (the row is a
+   wrapping flexbox). This is the narrower case, where a single 366 px frame no longer fits
+   the prose column either: phone-frame.css drops the bezel to 100% of its container at
+   420 px, and the frame wrapper has to be allowed to fill the row for that to mean anything. */
+@media (max-width: 420px) {
+  .dg-ph-frames { gap: 18px; }
+  .dg-ph-frame { flex: 1 1 100%; }
+  /* The size override above is more specific than phone-frame.css's own narrow-width rule,
+     so it has to be restated here or the bezel would stay 390 px wide in a 339 px column. */
+  .dg-ph-frame .phone { width: 100%; height: auto; aspect-ratio: 390 / 844; }
+  /* THE ONE THING THAT BREAKS WHEN THE BEZEL SHRINKS. `.cond-row` is one line by design
+     (phone.css says so, and says why: five fields in a card's ~342 px content box), and it
+     clips rather than wraps. Below 420 px the mock's card box is narrower than the phone it
+     stands for, so the last field is cut mid-word, which reads as a bug rather than as a
+     small screen. A second line is the honest degradation of a measurement row; a severed
+     word is not. Scoped to `.dg-ph` so the discovery app's own cards are untouched. */
+  .dg-ph .cond-row { flex-wrap: wrap; white-space: normal; row-gap: 2px; }
+}

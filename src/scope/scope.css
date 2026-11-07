@@ -1,0 +1,378 @@
+/* Trail Scope page — document layout only.
+   Modelled on src/merge/merge.css (long-form prose, sticky rail, measured text
+   column), mirrored: merge pins a contents rail left of the prose, this page pins
+   the phone prototype left of the prose instead, with the contents rail moved to
+   the far side. Same tokens, same document genre, different anchor.
+
+   The phone's OWN internal styling (the app that mounts inside .phone-screen) is
+   src/scope/phone/phone.css, owned by another workstream. This file only owns the
+   frame: bezel, status strip, home indicator, sizing, and where it sits on the page. */
+
+body.scope-page {
+  overflow: auto;
+  background: var(--chrome);
+}
+
+/* THE PHONE IS THE PAGE. It runs the full height of the viewport and nothing is
+   stacked above or below it: the chrome controls sit in a narrow rail to its LEFT,
+   and the prose is commentary to its RIGHT. Anything that would push the phone down
+   shrinks it, so it goes beside instead. */
+.scope-shell {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 58px;
+  align-items: start;
+  padding: 0 30px 80px;
+}
+
+/* ONE sticky element, not two.
+   Two separate sticky grid items (controls and phone) reliably triggered a Chromium
+   compositing bug: the prose column repainted at the sticky items' x-offset, ghosting
+   the whole document behind the rail. Wrapping both in a single sticky flex row fixes
+   it and is the simpler structure anyway. */
+.scope-side {
+  grid-column: 1;
+  position: sticky;
+  top: 56px;
+  align-self: start;
+  padding-top: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 46px;
+}
+
+/* ---- chrome controls: beside the phone, never above or below it ---- */
+.scope-rail {
+  flex: 0 0 auto;
+  width: 208px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: calc(100vh - 86px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.phone-frame {
+  position: relative;
+  /* 90% of the viewport, capped so it does not become absurd on a tall display.
+     Nothing shares its vertical space, so the only limits are the viewport and
+     the cap. 390x844 keeps true iPhone proportions. */
+  height: min(90vh, 920px);
+  min-height: 520px;
+  aspect-ratio: 390 / 844;
+  background: var(--ink);
+  border-radius: 46px;
+  padding: 9px;
+  box-shadow: 0 18px 40px rgba(31, 42, 36, 0.28);
+  flex: 0 0 auto;
+}
+.phone-inner {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: var(--panel);
+  border-radius: 36px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.phone-status {
+  flex: 0 0 auto;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  color: var(--faint);
+}
+.phone-status .ps-time { font-weight: 600; color: var(--muted); }
+.phone-status .ps-glyphs { display: flex; gap: 5px; align-items: center; }
+.phone-status .ps-glyphs span {
+  display: inline-block;
+  width: 10px; height: 6px;
+  border: 1px solid var(--faint);
+  border-radius: 1px;
+}
+.phone-screen {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  background: var(--chrome);
+}
+.phone-home {
+  flex: 0 0 auto;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.phone-home::after {
+  content: '';
+  width: 96px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--faint);
+}
+
+/* ---- chrome control rail ---- */
+.ctl-rail {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px 11px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.ctl-group { display: flex; flex-direction: column; gap: 5px; }
+.ctl-label {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
+}
+/* Stacked, not side by side. At rail width a horizontal segmented control wraps
+   "Lake of the Ozarks" onto three lines and clips "Heat"; one option per row reads
+   cleanly and leaves room for the longest label. */
+.ctl-group .seg {
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+}
+.ctl-group .seg button {
+  flex: 0 0 auto;
+  text-align: left;
+  padding: 6px 9px;
+  white-space: nowrap;
+}
+/* Base .seg divides with border-right; stacked, the divider must be border-top. */
+.ctl-group .seg button { border-right: none; }
+.ctl-group .seg button + button { border-top: 1px solid var(--line); }
+.scenario-blurb {
+  font-size: 11px; line-height: 1.4; color: var(--muted);
+  min-height: 2.4em;
+}
+.auto-advance-note {
+  font-family: var(--font-mono); font-size: 9.5px; line-height: 1.6;
+  color: var(--faint); padding-top: 2px; border-top: 1px solid var(--line-soft);
+}
+.auto-advance-note[hidden] { display: none; }
+
+/* ---- prose column: commentary beside the prototype, not the main event ---- */
+.scope-doc {
+  grid-column: 2;
+  min-width: 0;
+  padding-top: 26px;
+}
+.scope-doc > * { max-width: 560px; }
+
+.doc-head { padding: 4px 0 22px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.doc-head > * { max-width: 560px; }
+.doc-kicker {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent-ink); margin-bottom: 14px;
+}
+.doc-head h1 {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-size: 42px; line-height: 1.05; font-weight: 700; letter-spacing: 0.005em;
+  color: var(--text);
+}
+.lede { margin: 0; font-size: 17px; line-height: 1.62; color: var(--muted); }
+
+/* TL;DR under the page lede. Not a .sec, so it stays out of the contents rail. */
+.doc-tldr {
+  margin: 22px 0 4px;
+  padding: 16px 18px 17px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  border-radius: 12px;
+}
+.doc-tldr .note-label {
+  display: block;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent-ink); margin-bottom: 9px;
+}
+.doc-tldr ul { margin: 0; padding-left: 18px; font-size: 14.5px; line-height: 1.5; }
+.doc-tldr li { margin-bottom: 7px; }
+.doc-tldr li:last-child { margin-bottom: 0; }
+.doc-tldr li::marker { color: var(--accent-ink); }
+
+.sec { padding: 40px 0 8px; scroll-margin-top: 64px; }
+.sec-head-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.sec-kicker {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent-ink); margin-bottom: 8px;
+}
+.sec h2 {
+  margin: 0 0 18px;
+  font-family: var(--font-display);
+  font-size: 28px; line-height: 1.14; font-weight: 700; letter-spacing: 0.01em;
+  color: var(--text);
+}
+.sec p { margin: 0 0 17px; font-size: 15px; line-height: 1.68; color: var(--text); }
+.sec p strong { font-weight: 600; font-style: normal; }
+
+/* The one-line lede under a section head. Sets up the bullets that follow. */
+.sec p.sec-lede { font-size: 16px; line-height: 1.55; color: var(--text); margin-bottom: 14px; }
+
+/* Sub-head. Only the conditions-model section uses one, and it is deliberately much
+   quieter than h2: the same mono uppercase idiom as the section kicker rather than a
+   second display face, so a dense section reads as one section with parts and not as
+   three short sections that lost their kickers. */
+.sec h3 {
+  margin: 26px 0 12px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; font-weight: 400; color: var(--muted);
+  padding-bottom: 7px; border-bottom: 1px solid var(--line-soft);
+}
+
+.sec ul { margin: 0 0 18px; padding-left: 18px; font-size: 15px; line-height: 1.55; color: var(--text); }
+.sec li { margin-bottom: 9px; }
+.sec li:last-child { margin-bottom: 0; }
+.sec li::marker { color: var(--accent-ink); }
+.sec li strong { font-weight: 600; }
+
+/* Pull quote: the one sentence the whole page argues for. */
+.sec-quote {
+  margin: 0 0 20px;
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel-2);
+  font-family: var(--font-display);
+  font-size: 19px; line-height: 1.32; font-weight: 600;
+  color: var(--text);
+}
+
+/* Callout for a finding or a caveat: the things a reader must not skim past.
+   No accent bar down the left edge. A coloured rule beside a boxed paragraph is the
+   house style of generated text, and it made the page read as machine output. The
+   label carries the colour instead, and the box is simply rounded. */
+.sec-note {
+  margin: 0 0 18px;
+  padding: 14px 18px 15px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 12px;
+}
+.sec-note .note-label {
+  display: block;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--info); margin-bottom: 6px;
+}
+.sec-note.is-caveat .note-label { color: var(--bad); }
+.sec-note ul { margin: 0; }
+.sec-note p { margin: 0; font-size: 14.5px; line-height: 1.6; }
+.sec-note p + p { margin-top: 9px; }
+
+/* ---- parameter tables ----
+   The `.tbl` idiom from src/merge/merge.css, narrowed to this page's prose column. Two
+   differences from that page's copy, both forced by the column: cells WRAP here (merge's
+   tables are wide figures beside a wider column, these sit inside 560 px of prose), and the
+   table carries a min-width so the description column stays readable once the layout stacks.
+
+   THE WRAPPER SCROLLS, THE PROSE COLUMN NEVER DOES. Below about 440 px of column the
+   min-width exceeds the space, and `overflow-x: auto` on the wrapper is what keeps that
+   inside the table instead of putting a sideways scrollbar on the document. */
+.sec .tbl-wrap {
+  margin: 0 0 18px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+}
+.sec table.tbl { border-collapse: collapse; width: 100%; min-width: 420px; font-size: 13.5px; }
+.sec table.tbl th {
+  text-align: left;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint); font-weight: 400;
+  white-space: nowrap;
+}
+.sec table.tbl td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--text); line-height: 1.5; vertical-align: top;
+}
+/* First column is the parameter name: it labels the row, so it never wraps and never
+   competes with the description for width. */
+.sec table.tbl td:first-child { font-weight: 600; white-space: nowrap; }
+.sec table.tbl tbody tr:last-child td { border-bottom: none; }
+.sec table.tbl th.num, .sec table.tbl td.num {
+  text-align: right;
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sec table.tbl td.num { font-size: 12.5px; font-weight: 400; }
+
+/* Interpolated number: subtly marked so a reader can see what is computed. */
+.dyn { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.show-me {
+  flex: 0 0 auto;
+  background: var(--panel); border: 1px solid var(--accent-ink); border-radius: 12px;
+  color: var(--accent-ink); cursor: pointer;
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.09em;
+  padding: 4px 11px;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.show-me:hover { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+.show-me[hidden] { display: none; }
+
+.doc-foot {
+  margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line);
+  max-width: 720px;
+}
+.doc-foot p {
+  margin: 0 0 6px; font-family: var(--font-mono); font-size: 10px; line-height: 1.7; color: var(--faint);
+}
+
+/* Contents rail retired: the prose is now short enough that a rail for it would be
+   longer than the thing it indexes, and the width belongs to the phone. */
+.scope-toc { display: none; }
+.toc-head {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 7px;
+}
+.toc-link {
+  display: block; padding: 4px 0 4px 10px;
+  border-left: 2px solid var(--line);
+  color: var(--muted); text-decoration: none;
+  font-size: 12px; line-height: 1.35;
+}
+.toc-link:hover { color: var(--text); border-left-color: var(--faint); }
+.toc-link.on { color: var(--text); border-left-color: var(--accent-ink); font-weight: 600; }
+
+/* ---- responsive ---- */
+@media (max-width: 1439px) {
+  .scope-shell { column-gap: 42px; }
+  .scope-side { gap: 34px; }
+  .scope-rail { width: 186px; }
+}
+@media (max-width: 1279px) {
+  .phone-frame { height: min(86vh, 820px); }
+  .scope-shell { column-gap: 32px; }
+  .scope-side { gap: 26px; }
+  .scope-rail { width: 168px; }
+}
+/* Too tight for controls beside the phone: stack them under it, still one sticky block,
+   and let the phone give up some height so the pair fits the viewport. */
+@media (max-width: 1099px) {
+  .scope-side { flex-direction: column; align-items: center; gap: 12px; }
+  .scope-rail { width: 100%; max-width: 340px; max-height: none; overflow: visible; }
+  .phone-frame { height: min(64vh, 620px); order: -1; }
+}
+/* Genuinely narrow: single column, phone first, sticky off. */
+@media (max-width: 819px) {
+  .scope-shell { grid-template-columns: 1fr; padding: 0 16px 60px; }
+  .scope-side { grid-column: 1; position: static; }
+  .scope-doc { grid-column: 1; padding-top: 10px; }
+  .phone-frame { height: min(78vh, 640px); }
+  .doc-head h1 { font-size: 30px; }
+  .sec h2 { font-size: 22px; }
+}

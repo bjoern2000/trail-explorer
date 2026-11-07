@@ -1,0 +1,341 @@
+/* Segment-merge page — long-form document.
+   Unlike the app pages this one scrolls the body, uses a measured text column, and
+   lets figures bleed wider than the prose. Same tokens, different genre. */
+
+body.doc-page {
+  overflow: auto;
+  background: var(--chrome);
+}
+
+.doc-shell {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 1080px) 1fr;
+  gap: 0;
+  padding: 0 28px 96px;
+}
+
+/* ---- contents rail (wide viewports only) ---- */
+.doc-toc {
+  grid-column: 1;
+  position: sticky;
+  top: 72px;
+  align-self: start;
+  justify-self: end;
+  width: 190px;
+  margin-right: 28px;
+  padding-top: 64px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+}
+@media (min-width: 1400px) {
+  .doc-toc { display: flex; }
+}
+.toc-head {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--faint);
+  margin-bottom: 7px;
+}
+.toc-link {
+  display: block;
+  padding: 4px 0 4px 10px;
+  border-left: 2px solid var(--line);
+  color: var(--muted); text-decoration: none;
+  font-size: 12px; line-height: 1.35;
+}
+.toc-link:hover { color: var(--text); border-left-color: var(--faint); }
+.toc-link.on { color: var(--text); border-left-color: var(--accent-ink); font-weight: 600; }
+
+/* ---- document column ---- */
+.doc {
+  grid-column: 2;
+  min-width: 0;
+}
+.doc > * { max-width: 1080px; }
+/* Prose is measured; figures and tables are allowed to run wider than it. */
+.doc-head > *,
+.doc-foot p,
+.sec > p,
+.sec > h2,
+.sec > h3,
+.sec > .sec-kicker,
+.sec > .qblock,
+.sec > ul,
+.sec > ol { max-width: 720px; }
+
+/* ---- header ---- */
+.doc-head {
+  padding: 56px 0 34px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 8px;
+}
+.doc-kicker {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent-ink);
+  margin-bottom: 14px;
+}
+.doc-head h1 {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-size: 46px; line-height: 1.03; font-weight: 700;
+  letter-spacing: 0.005em;
+  color: var(--text);
+}
+.lede {
+  margin: 0 0 26px;
+  font-size: 17px; line-height: 1.62; color: var(--muted);
+}
+.doc-meta {
+  display: flex; flex-wrap: wrap; gap: 26px;
+  padding-top: 4px;
+}
+.doc-meta > div {
+  font-size: 12px; color: var(--text);
+  font-family: var(--font-mono);
+}
+.doc-meta span {
+  display: block;
+  font-size: 9.5px; letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--faint); margin-bottom: 3px;
+}
+
+/* ---- TL;DR ---- */
+.tldr {
+  max-width: 720px;
+  margin: 26px 0 8px;
+  padding: 16px 20px 8px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+}
+.tldr-head {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--faint);
+  margin-bottom: 9px;
+}
+.tldr ul {
+  margin: 0 0 8px; padding-left: 18px;
+  font-size: 14px; line-height: 1.55; color: var(--text);
+}
+.tldr li { margin-bottom: 7px; }
+.tldr li::marker { color: var(--accent-ink); }
+
+/* ---- sections ---- */
+.sec { padding: 44px 0 8px; scroll-margin-top: 64px; }
+.sec-kicker {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent-ink);
+  margin-bottom: 8px;
+}
+.sec h2 {
+  margin: 0 0 18px;
+  font-family: var(--font-display);
+  font-size: 30px; line-height: 1.12; font-weight: 700; letter-spacing: 0.01em;
+  color: var(--text);
+}
+.sec h3 {
+  margin: 34px 0 10px;
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 600; letter-spacing: 0.03em;
+  color: var(--text);
+}
+.sec p {
+  margin: 0 0 17px;
+  font-size: 15px; line-height: 1.68; color: var(--text);
+}
+.sec p strong { font-weight: 600; }
+.sec ul, .sec ol {
+  margin: 0 0 17px;
+  padding-left: 20px;
+  font-size: 15px; line-height: 1.6; color: var(--text);
+}
+.sec li { margin-bottom: 5px; }
+.sec li::marker { color: var(--accent-ink); }
+.sec p em { font-style: italic; }
+code {
+  font-family: var(--font-mono); font-size: 0.86em;
+  background: var(--panel-2); border: 1px solid var(--line-soft); border-radius: 2px;
+  padding: 1px 4px;
+}
+
+/* ---- code blocks + buttons ---- */
+.code {
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-soft); border-radius: 3px;
+  font-family: var(--font-mono); font-size: 11.5px; line-height: 1.6;
+  color: var(--text);
+  white-space: pre-wrap; word-break: break-word;
+}
+/* Namespaced: tokens.css already owns a shared `.btn` (flex: 1) for the map app's
+   inspector actions, and a page stylesheet should not redefine it. */
+.doc-btn {
+  flex: 0 0 auto;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 3px;
+  color: var(--muted); cursor: pointer;
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.11em;
+  padding: 5px 10px;
+}
+.doc-btn:hover:not(:disabled) { border-color: var(--faint); color: var(--text); }
+.doc-btn:disabled { opacity: 0.5; cursor: default; }
+
+.qblock { margin: 0 0 18px; }
+.q-actions { display: flex; align-items: center; gap: 8px; margin-top: 9px; flex-wrap: wrap; }
+.q-badge {
+  padding: 3px 8px; border-radius: 2px;
+  background: var(--panel-2); border: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.09em; color: var(--faint);
+}
+.q-badge.live { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+.q-note { margin-top: 9px; font-size: 13px; line-height: 1.55; color: var(--muted); }
+.q-note:empty { display: none; }
+
+/* ---- figures (wider than the prose column) ---- */
+.fig {
+  margin: 30px 0 34px;
+  max-width: 1080px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel);
+  overflow: hidden;
+}
+.fig-head {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.fig-ex {
+  font-family: var(--font-display); font-size: 14px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--text);
+}
+.fig-where { font-size: 12px; color: var(--muted); }
+.fig-src {
+  margin-left: auto;
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; color: var(--faint);
+}
+.fig-map { height: 460px; background: var(--paper); }
+.fig-map.tall { height: 560px; }
+.fig-legend {
+  display: flex; flex-wrap: wrap; gap: 6px 16px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 11.5px; color: var(--muted);
+}
+.leg-item { display: inline-flex; align-items: center; gap: 6px; }
+.leg-item.hoverable {
+  cursor: pointer;
+  padding: 1px 5px; margin: -1px -1px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+.leg-item.hoverable:hover,
+.leg-item.hoverable:focus-visible {
+  background: var(--panel-2); border-color: var(--line);
+  color: var(--text); outline: none;
+}
+.dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  display: inline-block; flex: 0 0 auto;
+  margin-right: 2px;
+  vertical-align: -1px;
+}
+
+.fig-stats-wrap { padding: 0 14px; }
+.fig-stats {
+  display: flex; flex-wrap: wrap; gap: 0;
+  border-top: 1px solid var(--line-soft);
+}
+.fs-item {
+  flex: 1 1 0; min-width: 130px;
+  padding: 11px 0 12px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.fs-k {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
+}
+.fs-v { font-family: var(--font-mono); font-size: 15px; color: var(--text); }
+
+.fig figcaption {
+  padding: 13px 14px 14px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 13px; line-height: 1.6; color: var(--muted);
+}
+
+.fig-gj { border-top: 1px solid var(--line-soft); }
+.fig-gj summary {
+  padding: 9px 14px;
+  cursor: pointer; user-select: none;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  display: flex; align-items: center; gap: 10px;
+}
+.fig-gj summary:hover { background: var(--panel-2); color: var(--text); }
+.gj-meta { color: var(--faint); letter-spacing: 0.06em; text-transform: none; }
+.gj-body { position: relative; padding: 0 14px 14px; }
+.gj-copy { position: absolute; right: 22px; top: 6px; z-index: 2; }
+.gj-body .code { max-height: 420px; overflow: auto; }
+
+/* ---- tables ---- */
+.tbl-wrap {
+  margin: 0 0 20px;
+  max-width: 1080px;
+  overflow-x: auto;
+  border: 1px solid var(--line); border-radius: 3px;
+  background: var(--panel);
+}
+.tbl { border-collapse: collapse; width: 100%; font-size: 13px; }
+.tbl th {
+  text-align: left;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint); font-weight: 400;
+  white-space: nowrap;
+}
+.tbl td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--text); vertical-align: baseline;
+}
+.tbl tbody tr:last-child td { border-bottom: none; }
+.tbl .num { text-align: right; font-family: var(--font-mono); font-size: 12.5px; white-space: nowrap; }
+.tbl .num.warn { color: var(--bad); }
+.tbl tr.is-target td { background: rgba(255, 180, 84, 0.13); font-weight: 600; }
+.tbl-tag {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--faint);
+  text-align: right; white-space: nowrap;
+}
+.tbl-name { font-weight: 600; margin-right: 8px; }
+.tbl-where { color: var(--muted); font-size: 12px; }
+
+/* ---- footer ---- */
+.doc-foot {
+  margin-top: 56px; padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.doc-foot p {
+  margin: 0 0 6px;
+  font-family: var(--font-mono); font-size: 10px; line-height: 1.7; color: var(--faint);
+}
+
+/* ---- copy toast ---- */
+.doc-flash {
+  position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
+  z-index: 90;
+  padding: 8px 14px;
+  background: var(--ink); color: #fff; border-radius: 3px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em;
+  opacity: 0; pointer-events: none; transition: opacity 0.18s;
+}
+.doc-flash.on { opacity: 1; }
+
+@media (max-width: 900px) {
+  .doc-shell { padding: 0 18px 64px; }
+  .doc-head h1 { font-size: 34px; }
+  .sec h2 { font-size: 24px; }
+  .fig-map { height: 340px; }
+  .fig-map.tall { height: 400px; }
+}

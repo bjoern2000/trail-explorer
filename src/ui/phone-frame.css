@@ -1,0 +1,96 @@
+/* The device chrome, and nothing else: bezel, status strip, screen box, home indicator.
+
+   WHY THIS FILE EXISTS. Three pages now draw an iPhone-proportioned frame and until this
+   file there was no shared one, only copies. `src/scope/scope.css` has `.phone-frame` /
+   `.phone-inner` / `.phone-status`, sized off the viewport for the discovery page's sticky
+   grid. `src/trail/route.css` had a second set under different names (`.phone` / `.phone-in`
+   / `.ph-*`), fixed at 366x792 for frames placed in a document flow, and its own header said
+   in as many words that it was "a SMALLER copy of scope.css's, not an import". The digest's
+   Week and Day screens would have been the third copy, which is the duplication this repo has
+   already paid for five times over (the level thresholds, the band colours, the pill hues, the
+   verdict's level word, the storm cuts). So the document-flow variant moved here verbatim and
+   route.css imports it.
+
+   NOTE ON THE NAME `.ph-*`. `src/scope/phone/phone.css` also has `.ph-strip`, `.ph-tile`,
+   `.ph-img`, `.ph-empty`, `.ph-tag` and `.ph-add`, and those are the peek sheet's PHOTO strip,
+   nothing to do with a device frame. The two families do not collide (no selector is shared)
+   but the prefix is doing double duty, and anyone reading `.ph-` in one file should not assume
+   it means the same thing in the other.
+
+   WHAT IS DELIBERATELY NOT HERE: everything inside the screen. A page owns its own app.
+   scope.css is deliberately left alone: its frame is viewport-sized and welded to the
+   discovery page's sticky two-column grid, so folding it in would be a refactor of that page
+   rather than a de-duplication of this one. */
+
+.phone {
+  width: 366px;
+  height: 792px;
+  background: var(--ink);
+  border-radius: 42px;
+  padding: 8px;
+  box-shadow: 0 16px 36px rgba(31, 42, 36, 0.26);
+}
+.phone-in {
+  height: 100%;
+  background: var(--panel);
+  border-radius: 34px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.ph-status {
+  flex: 0 0 auto;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 19px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.ph-glyphs {
+  display: flex;
+  gap: 4px;
+}
+.ph-glyphs i {
+  width: 9px;
+  height: 5px;
+  border: 1px solid var(--faint);
+  border-radius: 1px;
+}
+.ph-screen {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.ph-home {
+  flex: 0 0 auto;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ph-home::after {
+  content: '';
+  width: 116px;
+  height: 4px;
+  border-radius: 3px;
+  background: var(--ink);
+  opacity: 0.75;
+}
+
+/* Below the frame's own width the bezel stops being a device and becomes a horizontal
+   scrollbar on the document, so it gives up its fixed size and keeps only its proportions.
+   This rule was route.css's; it is the same answer for every page that puts a frame in a
+   prose column. */
+@media (max-width: 420px) {
+  .phone {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 390 / 844;
+  }
+}

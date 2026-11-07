@@ -1,0 +1,566 @@
+/* Region briefing — the objects this page adds.
+
+   The document shell, sections, notes, tables and footer come from src/merge/merge.css,
+   which briefing.ts imports first, exactly as the digest page does. This file owns the
+   sample marking, the plan figure, the hour strips and the pick cards. If a rule here
+   could have been a merge.css rule, it belongs there instead. */
+
+:root {
+  /* THE THREE LEVEL COLOURS, taken from src/digest/digest.css, which took them from
+     phone.css's `.cond-pill.is-*`. Copied a second time rather than imported for the
+     reason digest.css states about phone.css and route.css states about the storm bands:
+     a stylesheet belongs to its page, and importing one to borrow three hues drags a whole
+     page's styling into another. The mitigation is this comment. Retune a level colour in
+     phone.css and retune it in both copies.
+
+     The names differ from the grader's on purpose. `--dg-good` colours a computed grade;
+     `--bf-good` colours an invented one, and the page never lets those two words touch. */
+  --bf-good: #1a7a45;
+  --bf-good-bg: #e7f4ec;
+  --bf-good-line: #b6d9c4;
+  --bf-good-ink: #14603a;
+
+  --bf-mixed: #e09216;
+  --bf-mixed-bg: #fdf0dc;
+  --bf-mixed-line: #e2c79a;
+  --bf-mixed-ink: #7d4d00;
+
+  --bf-poor: #b23a2e;
+  --bf-poor-bg: #f8e7e4;
+  --bf-poor-line: #dcb3ad;
+  --bf-poor-ink: #8f2c22;
+}
+
+/* ============ VERTICAL RHYTHM ============
+
+   merge.css sets this document genre's spacing for a page that is mostly prose, where a
+   44 px gap above a section head and a 56 px page header are the right rests between long
+   runs of reading. This page is now mostly figures with one line of copy over each, and at
+   that density the same rests read as gaps rather than as structure: the page was 6,849 px
+   tall with about a fifth of that in whitespace between objects that belong together.
+
+   TYPE IS UNTOUCHED. Every size here is merge.css's own; only the space around it moves,
+   which is the compaction that costs a reader nothing. Scoped to `.brief-page` so the merge
+   page and the digest keep their own rhythm. */
+.brief-page .doc-head { padding: 30px 0 20px; }
+.brief-page .doc-head h1 { margin-bottom: 10px; }
+.brief-page .lede { margin-bottom: 0; }
+.brief-page .sec { padding: 26px 0 4px; }
+.brief-page .sec h2 { margin-bottom: 12px; }
+.brief-page .doc-foot { margin-top: 30px; padding-top: 14px; }
+
+/* ============ THE SAMPLE MARK ============
+
+   THE ACCEPTANCE TEST FOR THIS PAGE WAS A CROP, NOT THE DOM: assume every part of it will be
+   screenshotted into a deck without the sentence that explains it, because that is what
+   happens to prototype pages, and a briefing that reads as output is worse than no briefing.
+   That test drove three redundant marking layers, and this section is what is left of them.
+
+   WHAT WAS HERE. A tiled "SAMPLE / NOT A FORECAST" watermark on the page background and on a
+   named list of every opaque panel, at 0.075 opacity settled by looking at renders at 1440,
+   1024 and 375; a rule, written down rather than remembered, that no panel on this page may
+   use the `background` shorthand, because it resets `background-image` and would silently
+   strip the tile off that panel; and `.bf-tag`, a small mono badge that rode on every object
+   carrying an invented value (SAMPLE TEXT, SAMPLE CONDITIONS, SAMPLE) or a measured one
+   (REAL), in two variants and no third.
+
+   Björn removed the watermark, then the badges. The reasoning above is kept rather than
+   deleted because it is still the reasoning; what changed is the judgement about how much
+   marking a page can carry before the marking is what the page is about, and there is a real
+   cost on the other side of that trade. The tile sat under 15 px body copy and under every
+   figure, and the badges put a second uppercase mono object in the head of every panel, on a
+   page already asking a reader to hold a real/invented split in their head.
+
+   WHAT IS LEFT, and it is all page-level rather than value-level: the banner (`.bf-flag`),
+   sticky under the top bar and in frame for any crop taken from the top; the "(sample
+   mockup)" in the document title, which reaches a browser tab, a bookmark and a printed
+   header; the nav tab's own blurb; and the provenance section, which is now the only place
+   the split is stated in words.
+
+   THE CONSEQUENCE, so it is on the record here and not only in a report: a crop that does not
+   include the banner carries nothing to say anything on it is invented, and a pick card in
+   particular now puts a computed length and a typed window two rows apart with nothing
+   between them. */
+
+body.brief-page {
+  /* merge.css already paints `body.doc-page` with the same warm chrome. Restated here only
+     because the watermark used to need a `background-color` (never the shorthand) to sit
+     over, and dropping the declaration outright would make this page's background depend on
+     load order between two stylesheets rather than on anything stated. */
+  background-color: var(--chrome);
+}
+
+/* The banner. Sticky under the 44 px top bar so it is in frame for any crop taken from the
+   top of the page, which is most of them. */
+.bf-flag {
+  position: sticky;
+  top: 44px;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 0 0 4px;
+  padding: 9px 14px;
+  max-width: 1080px;
+  background: var(--accent);
+  border: 1px solid #e9a03c;
+  border-radius: 4px;
+  color: var(--ink);
+}
+.bf-flag-mark {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.bf-flag-text {
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+/* ============ CHROME ============
+   Not sticky. There is one region and one day here and nothing to compare against, so the
+   digest's argument for a sticky control bar does not apply; a second sticky object under
+   the banner would only eat the viewport. */
+.bf-chrome {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px 30px;
+  margin: 16px 0 0;
+  padding: 12px 16px 13px;
+  max-width: 1080px;
+  background-color: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.bf-ctl { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.bf-ctl-label {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
+}
+.bf-ctl-value { font-size: 14px; color: var(--text); }
+
+/* The section lede. It exists on the Trail Explorer and digest pages too, in scope.css and
+   digest.css, and is three lines in each. Restated here rather than importing either of
+   those stylesheets, for the reason the level colours are restated: a page's stylesheet
+   belongs to its page.
+
+   `.bf-caption` used to sit beside it, for the paragraph under the hour strips. That
+   paragraph explained the figure's own legend back to the reader; what a reader could not
+   infer (taller is better, the row order) is now four words in the figure's head. */
+.sec p.sec-lede {
+  font-size: 16px; line-height: 1.55; color: var(--text); margin-bottom: 14px;
+}
+
+
+/* Boxed claim, the same object the Trail Explorer and digest pages use. No accent bar down
+   the left edge, for the reason scope.css records: a coloured rule beside a boxed paragraph
+   is the house style of generated text and made that page read as machine output. */
+.sec-note {
+  max-width: 720px;
+  margin: 0 0 14px;
+  padding: 12px 16px 13px;
+  border: 1px solid var(--line);
+  background-color: var(--panel);
+  border-radius: 12px;
+}
+.sec-note .note-label {
+  display: block;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--info); margin-bottom: 6px;
+}
+.sec-note p { margin: 0; font-size: 14.5px; line-height: 1.6; }
+.sec-note p + p { margin-top: 9px; }
+
+/* ============ SECTION 1: the overview ============ */
+.bf-overview {
+  max-width: 720px;
+  margin: 0 0 14px;
+  padding: 12px 18px 13px;
+  background-color: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+/* `.bf-overview-head` and `.bf-overview-day` are gone with the head row: the panel is the
+   narrative and nothing else, so its top padding is the only rest it needs. */
+/* THE NARRATIVE. One line per phase of the day: glyph, claim, quiet measure.
+
+   A RESTATEMENT OF `.pv-brief` / `.pvb-*` FROM phone.css, which is the pattern this app
+   settled on for structured conditions copy one page earlier, and which briefing.ts's
+   `overviewRow` restates the markup of. Four rules rather than an import, for the reason
+   the level colours above are copied rather than imported: phone.css is the discovery app's
+   stylesheet and this is a document. The differences from the original are two, both
+   because this is a page and not a 375 px sheet: the claim is 16px rather than 14, since it
+   is the most important object on the page and the one a reader will quote, and the glyph
+   column is 17px rather than 15 to match it.
+
+   The glyph column is a FIXED WIDTH so the claims left-align down the list. An icon followed
+   by text at its natural width is a ragged left edge, which is exactly what makes a list
+   slower to scan than the paragraph it replaced, and the left edge is the whole point here:
+   it reads Park wide / Over the Divide / At the crest / West of the Divide / East moraines,
+   which is the where-is-it-good question answered by scanning a column. */
+.bf-brief { display: flex; flex-direction: column; gap: 1px; }
+.bf-brief-line {
+  display: flex; align-items: baseline; gap: 11px;
+  padding: 6px 0;
+  font-size: 16px; line-height: 1.4;
+}
+.bf-brief-glyph {
+  flex: 0 0 17px;
+  color: var(--faint);
+  /* Optically centred against the first line of text rather than sat on its baseline, which
+     for a 17px glyph beside 16px type reads as one pixel low. */
+  align-self: center; position: relative; top: 0.5px;
+}
+.bf-brief-text { flex: 1 1 auto; color: var(--text); }
+/* THE MEASURE COLUMN. The claim on the left, the clock on the right, and the clock quieter:
+   mono at the label scale in the faintest ink. `margin-left: auto` right-aligns every
+   measure to the block's own right edge, which is what makes a COLUMN a reader can run an
+   eye down rather than a ragged tail after each claim. Deliberately not a fixed-width
+   column, which would be the table this is not allowed to become. `flex: 0 0 auto` plus
+   nowrap means a long claim wraps and the measure stays whole on the first line, aligned to
+   it by the row's baseline: a broken "to 14:00," / "from 18:00" would be unreadable, a
+   two-line claim is not. */
+.bf-brief-measure {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding-left: 14px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.01em;
+  color: var(--faint);
+  white-space: nowrap;
+  text-align: right;
+}
+@media (max-width: 560px) {
+  /* At phone width the claim and its measure cannot share a line without the measure
+     stealing half of it, so the measure drops under the claim, still in the glyph column's
+     indent so the rows stay aligned. */
+  .bf-brief-line { flex-wrap: wrap; font-size: 15px; }
+  .bf-brief-measure { margin-left: 28px; padding-left: 0; text-align: left; }
+}
+
+.bf-figures {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0;
+  max-width: 720px;
+  margin: 0 0 4px;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.bf-figure {
+  flex: 1 1 0; min-width: 132px;
+  padding: 9px 14px 10px 0;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.bf-figure-k {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
+}
+.bf-figure-v { font-family: var(--font-mono); font-size: 15px; color: var(--text); }
+
+/* ============ SECTION 2: the plan ============ */
+.bf-fig {
+  margin: 0 0 14px;
+  max-width: 1080px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background-color: var(--panel);
+  overflow: hidden;
+}
+.bf-fig-head {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.bf-fig-title {
+  font-family: var(--font-display); font-size: 14px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--text);
+}
+/* One short line of figure notes, on the head rather than in a caption under the figure. A
+   caption is read after the figure and this is the sentence a reader needs before it.
+
+   `margin-left: auto` right-aligns it against the head's own edge. The badges used to take
+   that gutter and the note flowed after the title; with them gone the note would otherwise
+   sit against the title with a 10 px gap and read as a subtitle rather than as an aside. */
+.bf-fig-note {
+  margin-left: auto;
+  font-size: 12px; line-height: 1.4; color: var(--muted);
+  flex: 0 1 auto; min-width: 0;
+  text-align: right;
+}
+.bf-fig figcaption {
+  padding: 12px 14px 14px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 13px; line-height: 1.6; color: var(--muted);
+}
+
+/* THE PLAN. The SVG sets the height through its own viewBox ratio, so the box never has to
+   guess an aspect and the pins can be positioned as a percentage of it.
+
+   Capped at 900 px and centred rather than filling the 1080 px figure. The park is close to
+   square, so at full figure width the plan is nearly a thousand pixels tall and takes a
+   whole viewport on its own; 900 keeps it a figure rather than a page. */
+.bf-plan {
+  position: relative;
+  padding: 10px 14px 4px;
+  max-width: 928px;
+  margin: 0 auto;
+}
+.bf-plan-svg { display: block; width: 100%; height: auto; }
+
+.bf-line {
+  fill: none;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* Pin the weight to CSS pixels: the same viewBox renders at 1040 px and at 347 px on this
+     page, and a scaled stroke disappears at the small end. */
+  vector-effect: non-scaling-stroke;
+}
+.bf-line.lv-good { stroke: var(--bf-good); }
+.bf-line.lv-mixed { stroke: var(--bf-mixed); }
+.bf-line.lv-poor { stroke: var(--bf-poor); }
+
+.bf-divide {
+  fill: none;
+  stroke: var(--faint);
+  stroke-width: 1.6;
+  stroke-dasharray: 7 5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.75;
+}
+
+.bf-pins { position: absolute; inset: 10px 14px 4px; pointer-events: none; }
+.bf-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 21px; height: 21px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--panel);
+  box-shadow: 0 0 0 1px var(--line);
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 600;
+  color: #fff;
+}
+.bf-pin.lv-good { background: var(--bf-good); }
+.bf-pin.lv-mixed { background: var(--bf-mixed); color: var(--ink); }
+.bf-pin.lv-poor { background: var(--bf-poor); }
+
+.bf-legend {
+  display: flex; flex-wrap: wrap; gap: 6px 18px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 11.5px; color: var(--muted);
+}
+.bf-leg { display: inline-flex; align-items: center; gap: 6px; }
+.bf-swatch {
+  width: 18px; height: 3px; border-radius: 2px;
+  display: inline-block; flex: 0 0 auto;
+}
+.bf-swatch.lv-good { background: var(--bf-good); }
+.bf-swatch.lv-mixed { background: var(--bf-mixed); }
+.bf-swatch.lv-poor { background: var(--bf-poor); }
+.bf-swatch.divide {
+  height: 0; border-top: 2px dashed var(--faint);
+  border-radius: 0;
+}
+
+/* The pin disc, keyed to the plan. It is all that survives of what used to be a separate
+   five-row area list below the plan (name, where it sits, three example trail names, the
+   level at 14:00, a trail count) sitting 2,300 px above a second five-row figure that drew
+   the same five areas hour by hour. The list is folded into the strips; see briefing.ts
+   SECTION 2. */
+.bf-area-n {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  color: #fff;
+  width: 21px; height: 21px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  align-self: center;
+  flex: 0 0 auto;
+}
+.bf-area-n.lv-good { background: var(--bf-good); }
+.bf-area-n.lv-mixed { background: var(--bf-mixed); color: var(--ink); }
+.bf-area-n.lv-poor { background: var(--bf-poor); }
+
+/* ============ SECTION 2b: the hour strips ============
+   Now the second figure inside the geography section rather than a section of its own, so
+   the panel loses its own border and sits inside `.bf-fig`. */
+.bf-strips {
+  padding: 0 14px 10px;
+  /* Fifteen hour cells at a legible minimum plus the area names exceed a phone viewport by
+     design. The wrapper scrolls; the document never does. */
+  overflow-x: auto;
+}
+.bf-strip-grid {
+  display: grid;
+  grid-template-columns: 262px repeat(var(--bf-hours), minmax(26px, 1fr));
+  gap: 0 2px;
+  min-width: 700px;
+}
+.bf-strip-corner { grid-column: 1; }
+.bf-strip-hour {
+  font-family: var(--font-mono); font-size: 9.5px; color: var(--faint);
+  text-align: center;
+  padding: 10px 0 5px;
+  font-variant-numeric: tabular-nums;
+}
+/* Pin, name and trail count on one line: `.bf-area-n` is a flex box, so without this row the
+   disc would claim its own line and push every area name under it. The count is the one part
+   of the deleted area list that carried a claim rather than a description, which is that
+   real trails attach to invented areas, so it rides here. */
+.bf-strip-name {
+  grid-column: 1;
+  display: flex; align-items: center; gap: 9px;
+  padding: 4px 12px 4px 0;
+  font-size: 12.5px; color: var(--text);
+  min-width: 0;
+}
+.bf-strip-label {
+  min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* Right-aligned into its own quiet column so the five counts line up and can be compared,
+   which is the only reason to print them. The figure head says what the number is. */
+.bf-strip-count {
+  margin-left: auto; padding-left: 8px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.bf-cell {
+  height: 20px;
+  border-radius: 2px;
+  margin-bottom: 3px;
+}
+.bf-cell.lv-good { background: var(--bf-good-bg); box-shadow: inset 0 0 0 1px var(--bf-good-line); }
+.bf-cell.lv-mixed { background: var(--bf-mixed-bg); box-shadow: inset 0 0 0 1px var(--bf-mixed-line); }
+.bf-cell.lv-poor { background: var(--bf-poor-bg); box-shadow: inset 0 0 0 1px var(--bf-poor-line); }
+/* A solid core inside the wash, at a height that falls with the level.
+
+   TWO ENCODINGS, NOT ONE. Green, amber and red separate by hue but two of the three sit at
+   almost the same lightness, so a greyscale print or a colour-blind reader would lose the
+   distinction the whole figure rests on. Height carries it independently, and the legend
+   states the mapping rather than leaving it to be inferred. */
+.bf-cell::before {
+  content: "";
+  display: block;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.85;
+}
+.bf-cell.lv-good::before { color: var(--bf-good); height: 100%; }
+.bf-cell.lv-mixed::before { color: var(--bf-mixed); height: 62%; margin-top: 19%; }
+.bf-cell.lv-poor::before { color: var(--bf-poor); height: 30%; margin-top: 35%; }
+
+/* At phone width a 262 px name column leaves room for two hours of a fifteen-hour day
+   inside the scroller, which is not a figure. The column halves and the names ellipsis; the
+   pin numbers still key each row to the plan, so a truncated name is recoverable. */
+@media (max-width: 760px) {
+  .bf-strip-grid {
+    grid-template-columns: 122px repeat(var(--bf-hours), minmax(24px, 1fr));
+    min-width: 490px;
+  }
+  .bf-strip-name { font-size: 11.5px; gap: 6px; padding-right: 8px; }
+  .bf-strip-name .bf-area-n { width: 17px; height: 17px; font-size: 9.5px; }
+  .bf-strip-count { padding-left: 5px; }
+}
+
+/* ============ SECTION 3: the picks ============
+   Four cards, one per intent, each headed by the intent it answers. It used to be four
+   titled blocks each holding a row of two cards; briefing.ts's `PICKS_PER_INTENT` records
+   why there is one pick per intent now, and with one pick a block heading is a rule and
+   14 px of margin to introduce the single object under it. */
+.bf-picks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 12px;
+  max-width: 1080px;
+}
+/* Two columns, not three or four. Four cards over three columns leave an orphan on the
+   second row, and at four across the reason wraps to four lines in a 250 px column. */
+@media (min-width: 780px) {
+  .bf-picks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.bf-pick {
+  padding: 12px 14px 13px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background-color: var(--panel);
+  min-width: 0;
+}
+/* The intent, as the card's overline. */
+.bf-pick-intent {
+  display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 9px;
+}
+.bf-intent-label {
+  font-family: var(--font-display); font-size: 16px; font-weight: 700;
+  letter-spacing: 0.02em; color: var(--text);
+}
+.bf-intent-blurb { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.bf-pick-name {
+  margin: 0 0 6px;
+  font-family: var(--font-display); font-size: 19px; font-weight: 600;
+  letter-spacing: 0.02em; color: var(--text);
+}
+.bf-pick-meta {
+  display: flex; flex-wrap: wrap; gap: 4px 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-soft);
+  font-family: var(--font-mono); font-size: 11.5px; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+/* The area, in the measures row rather than on a line of its own under it. It takes the
+   row's right edge, which the REAL badge used to hold, because it is a cross-reference to the
+   plan and the strips rather than a measurement of the trail: the three measures group on the
+   left and the pointer sits apart from them. */
+.bf-pick-area { margin-left: auto; }
+.bf-pick-window {
+  display: flex; align-items: center; gap: 8px;
+  margin: 9px 0 0;
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-size: 13px; color: var(--text);
+}
+.bf-pick-window.lv-good { background: var(--bf-good-bg); border-color: var(--bf-good-line); }
+.bf-pick-window.lv-mixed { background: var(--bf-mixed-bg); border-color: var(--bf-mixed-line); }
+.bf-pick-window.lv-poor { background: var(--bf-poor-bg); border-color: var(--bf-poor-line); }
+.bf-pick-window svg { flex: 0 0 auto; }
+.bf-pick-reason {
+  margin: 8px 0 0;
+  font-size: 13.5px; line-height: 1.5; color: var(--text);
+}
+
+/* ============ SECTION 5: provenance ============ */
+.bf-split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+  max-width: 1080px;
+  margin: 0 0 14px;
+}
+.bf-split-col {
+  padding: 12px 16px 4px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background-color: var(--panel);
+}
+.bf-split-head {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 9px;
+}
+.bf-split-col.real .bf-split-head { color: var(--bf-good-ink); }
+.bf-split-col.invented .bf-split-head { color: var(--bf-poor-ink); }
+.bf-split-col ul {
+  margin: 0 0 10px; padding-left: 18px;
+  font-size: 14px; line-height: 1.55; color: var(--text);
+}
+.bf-split-col li { margin-bottom: 6px; }
+
+@media (max-width: 900px) {
+  .bf-intent-label { font-size: 15px; }
+}

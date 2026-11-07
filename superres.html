@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>TrailScope — Super Res API</title>
+  </head>
+  <body class="superres-page">
+    <div class="sr">
+      <div class="mx-head">
+        <h1>Super Res API</h1>
+        <span class="mx-sub">TWC super-resolution point forecast, read live through the proxy</span>
+      </div>
+
+      <div class="sr-wrap">
+        <p class="sr-intro">
+          A live probe of the TWC super-resolution point API (<code>megapoints-conus</code>), read
+          through this app's server-side proxy so the API key never reaches the browser. It is a
+          test harness for the data, not a product surface: it submits one coordinate and prints
+          what came back.
+        </p>
+        <p class="sr-intro">
+          Three constraints show up in every result. The model is tied to the HRRR domain, so
+          coverage is the contiguous US only. Output is hourly. And one run reaches only as far as
+          the timesteps it carries, so the horizon printed with each result is the real limit,
+          whatever number of hours you ask for.
+        </p>
+
+        <div class="sr-state" id="sr-state" hidden></div>
+
+        <section class="sr-section">
+          <h2 class="sr-h2">Point request</h2>
+          <form class="sr-form" id="sr-form">
+            <label class="sr-field">
+              <span class="sr-label">Latitude (degrees north)</span>
+              <input
+                class="sr-input"
+                id="sr-lat"
+                type="number"
+                step="any"
+                min="-90"
+                max="90"
+                value="40.2725"
+                inputmode="decimal"
+                autocomplete="off"
+              />
+            </label>
+            <label class="sr-field">
+              <span class="sr-label">Longitude (degrees east, negative in the US)</span>
+              <input
+                class="sr-input"
+                id="sr-lon"
+                type="number"
+                step="any"
+                min="-180"
+                max="180"
+                value="-105.5566"
+                inputmode="decimal"
+                autocomplete="off"
+              />
+            </label>
+            <label class="sr-field sr-field-narrow">
+              <span class="sr-label">Hours ahead</span>
+              <input class="sr-input" id="sr-hours" type="number" step="1" min="1" max="60" value="36" />
+            </label>
+            <label class="sr-field sr-field-narrow">
+              <span class="sr-label">Hours back</span>
+              <input class="sr-input" id="sr-back" type="number" step="1" min="0" max="24" value="3" />
+            </label>
+            <button class="sr-submit" id="sr-submit" type="submit">Request</button>
+          </form>
+          <p class="sr-order" id="sr-order"></p>
+          <p class="sr-hint">
+            Paste a "lat, lon" pair into either coordinate box and it splits into both fields in
+            that order. Hours back asks for times before now, which is where negative lead hours
+            come from.
+          </p>
+        </section>
+
+        <section class="sr-section">
+          <h2 class="sr-h2">Presets</h2>
+          <div class="sr-presets" id="sr-presets"></div>
+        </section>
+
+        <section class="sr-section" id="sr-result"></section>
+        <section class="sr-section" id="sr-raw"></section>
+      </div>
+    </div>
+
+    <script type="module" src="/src/superres/superres.ts"></script>
+  </body>
+</html>

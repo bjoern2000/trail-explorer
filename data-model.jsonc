@@ -1,0 +1,144 @@
+// TrailScope trail data model, 2026-08-31. Example values are real: Emerald Lake Trail
+// (rmnp/emerald-lake-trail) from the frozen RMNP snapshot, n=427 trails across three regions.
+//
+// Provenance tags on every field:
+//   [source]    published by an open data source as-is (OSM tag, USGS feature, GNIS)
+//   [computed]  derived by the pipeline from geometry, DEM, or polygons
+//   [gap]       nothing in open data provides it; editorial, licensing, or telemetry work
+//
+// Weather and conditions are deliberately absent from this revision; they attach per
+// waypoint per hour through a provider interface and will be added back later.
+{
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Trail: the named, merged unit the product ranks and displays. Built from OSM
+  // ways by name grouping, 2000 m spatial clustering, 35 m endpoint chaining.
+  // ─────────────────────────────────────────────────────────────────────────────
+  "Trail": {
+    // identity
+    "id": "rmnp/emerald-lake-trail",       // [computed] <region>/<slug>, stable across derive runs
+    "name": "Emerald Lake Trail",          // [source] OSM name tag, the merge key; a search target
+    "region": "rmnp",                      // [computed] -> Region, the snapshot this trail was derived in
+    "places": ["co", "rocky-mountain-np"], // [computed] -> Place[], every place whose scope holds this trail (state, park, town, lake, peak)
+    "osmWayIds": [110477596, 172527076],   // [source] -> Segment[15], the only link back to source data (15 ids, 2 shown)
+
+    // geometry (WGS84 lon/lat, 6 decimals)
+    "geometry": "MultiLineString",         // [source] LineString | MultiLineString, 185 coords here
+    "parts": 6,                            // [computed] disconnected chains; NOT a continuity signal (T-junctions and merge stubs also split)
+    "start": [-105.646169, 40.311728],     // [computed] first coord of longest part; the trailhead proxy
+    "bbox": [-105.666747, 40.308719, -105.646061, 40.311889], // [computed] w,s,e,n; the unit bbox filtering tests against
+    "centroid": [-105.655252, 40.309913],  // [computed] mean of vertices, not bbox center; anchors the "closest" sort
+
+    // elevation and terrain (SI; Terrarium z13 DEM, ~14 m/px, 5-point smoothed)
+    "lengthM": 2556.5,                     // [computed] haversine within parts, never bridging a gap
+    "gainM": 212.1,                        // [computed] positive deltas after low-end-first orientation (OSM way direction is arbitrary)
+    "descentM": 9,                         // [computed] mirror of gainM; NaN when absent in old snapshots, never 0
+    "minElevM": 2880.8,                    // [computed]
+    "maxElevM": 3087.8,                    // [computed] feeds the treeline / exposure term
+    "maxGradePct": 16.8,                   // [computed] steepest grade sustained over a 200 m window
+    "profile": [3055.4, 3026.5, 3082.5],   // [computed] number[48], fixed length, spacing lengthM/47 (54 m here); 3 of 48 shown
+    "seamIndices": [1, 2, 3, 4],           // [computed] profile indices that BEGIN a new part; gap is between i-1 and i
+
+    // classification
+    "routeType": "point-to-point",         // [computed] "loop" | "point-to-point", topological test; real loop share is 3 to 8%
+    "difficulty": "easy",                  // [computed] "easy" | "moderate" | "hard", binned on difficultyScore; not editorial
+    "difficultyScore": 47,                 // [computed] NPS/Shenandoah formula: sqrt(gain_ft * 2 * length_mi)
+    "estMinutes": 52,                      // [computed] Naismith, one-way; the return leg is the traversal choice, not the trail
+    "prominence": 0.723,                   // [computed] transparent proxy (length + way count + name recurrence); NOT popularity, open data has no crowd signal
+
+    // tags (OSM, as-is)
+    "surface": "dirt",                     // [source] dominant surface, length-weighted; null on 29% of trails
+    "likelyRoad": false,                   // [computed] conservative heuristic; 49% of named Ozarks features are subdivision streets
+    "activities": ["hike", "run"],         // [source] from OSM access tags; "hike" | "run" | "bike"; untagged defaults to hike+run
+
+    // canopy and aspect (48 samples, index-aligned with profile)
+    "canopy": [1, 1, 0],                   // [source] int[48], 1 = inside an OSM forest/wood polygon; 3 of 48 shown
+    "canopyShare": 0.625,                  // [computed] mean of canopy; ALWAYS read against Region.canopy.mappedShare (a 0 can mean "unmapped")
+    "aspectDeg": [163, 100, 84],           // [computed] int[48], downhill bearing from DEM (Horn 3x3); -1 where flat; self-shading only, no cast shadows
+    "slopeDeg": [23.6, 11.6, 19.1],        // [computed] number[48], slope of the ground crossed, not the trail's own gradient
+    "meanAspectDeg": 148.2,                // [computed] circular mean (arithmetic would flip north-facing to south)
+    "meanSlopeDeg": 15.9                   // [computed]
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Place: anything a user can pick to scope the map. Selecting a place sets the
+  // active bounding box; search and browse then filter to trails intersecting it.
+  // One entity, five kinds, so search treats them uniformly.
+  // ─────────────────────────────────────────────────────────────────────────────
+  "Place": {
+    "id": "rocky-mountain-np",             // [computed] slug, unique across kinds
+    "name": "Rocky Mountain National Park",// [source] boundaries: Census TIGER (states), PAD-US/NPS (parks); points: GNIS/OSM (towns, lakes, peaks)
+    "kind": "park",                        // [source] "state" | "park" | "town" | "lake" | "peak"
+    "bbox": [-105.91, 40.16, -105.49, 40.55], // [computed] area kinds: boundary envelope; point kinds: padded radius (town ~10 km, lake/peak ~5 km)
+    "center": [-105.70, 40.36],            // [source] label anchor and zoom target
+    "elevM": 4346,                         // [source] peaks only, from GNIS
+    "trails": "-> Trail[]",                // [computed] Trail.bbox intersects Place.bbox; area kinds can refine to true boundary containment later
+    "rules": null                          // [gap -> editorial] permits, closures, dogs; meaningful on park and state kinds
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Search: one box, two target types. No free-text relevance model needed yet;
+  // prefix and token match on names is enough at this scale.
+  // ─────────────────────────────────────────────────────────────────────────────
+  "Search": {
+    "query": "matches Trail.name and Place.name",     // [computed] one input, results grouped by type
+    "selectTrail": "opens the trail",                 // [computed]
+    "selectPlace": "activeBbox = Place.bbox",         // [computed] map reframes to the place
+    "browse": "trails where Trail.bbox intersects activeBbox", // [computed] all subsequent search, list, and filters scope to it
+    "clearPlace": "activeBbox = null, full corpus"    // [computed]
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Region: the data snapshot unit, not a browsing concept. Browsing is bbox-driven
+  // via Place; Region records which frozen fetch a trail came from.
+  // ─────────────────────────────────────────────────────────────────────────────
+  "Region": {
+    "region": "rmnp",                      // [computed] slug: "rmnp" | "adk" | "ozarks"
+    "bbox": [-105.75, 40.25, -105.55, 40.42], // [computed] the fetch window
+    "fetchedAt": "2026-07-30",             // [computed] snapshot date
+    "wayCount": 276,                       // [source] named OSM ways before merging
+    "trailCount": 112,                     // [computed] trails after merging (427 across all three regions)
+    "canopy": {
+      "polygonCount": 145,                 // [source] OSM forest/wood polygons in the bbox
+      "mappedShare": 0.532,                // [computed] share of bbox with any wooded polygon; the required qualifier for every canopyShare (ozarks: 0.092)
+      "fetchedAt": "2026-08-25"
+    },
+    "trails": "Trail[112]",
+    "treelineM": 3450                      // [computed] per-region constant; feeds the exposure term
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Related entities. Route is entirely editorial: no open source publishes
+  // composite routes, and no name-based merge can assemble them. This is the
+  // AllTrails curation layer seen from the data side.
+  // ─────────────────────────────────────────────────────────────────────────────
+  "Segment": {
+    "osmWayId": 110477596,                 // [source] the unit sources actually publish; geometry + tags, no product meaning alone
+    "tags": { "highway": "path", "surface": "dirt", "foot": "yes" } // [source]
+  },
+  "Trailhead": {
+    "location": [-105.646169, 40.311728],  // [computed] today just the start of the longest part
+    "servesTrails": "-> Trail[]",          // [computed] shared by many trails; anchors benchmark matching
+    "parking": null,                       // [gap -> editorial or licensing]
+    "facilities": null                     // [gap -> editorial]
+  },
+  "Route": {
+    "name": "Longs Peak via the Keyhole",  // [gap -> editorial] destination-shaped composite name
+    "legs": "-> Trail[] | Segment[]",      // [gap -> editorial] ordered; attributes inherited by concatenation
+    "description": null                    // [gap -> editorial or UGC]
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Gaps: what no open source provides. Fillable, but never fakeable from proxies.
+  // ─────────────────────────────────────────────────────────────────────────────
+  "Gaps": {
+    "photos": "UGC or licensing",          // [gap]
+    "starRating": "UGC",                   // [gap]
+    "reviews": "UGC",                      // [gap]
+    "popularity": "product telemetry",     // [gap] prominence is a stand-in, not a substitute
+    "curatedRoutes": "editorial",          // [gap] the Route entity above
+    "trailheadAmenities": "editorial or licensing", // [gap]
+    "rules": "editorial per land unit",    // [gap] permits, seasonal closures, dogs
+    "outAndBackDesignation": "product UX", // [gap] a traversal choice, asked, not assumed
+    "winter": "deferred"                   // [gap] snow state is an open research problem (science feasibility, 2026-06-15)
+  }
+}

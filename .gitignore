@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.cache/
+benchmark/raw/
+.env
+.env.*
+!.env.example
+.DS_Store
+.claude/
+*.log

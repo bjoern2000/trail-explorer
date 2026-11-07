@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>TrailScope — AllTrails Benchmark</title>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <h1>Benchmark</h1>
+          <div class="sub">AllTrails vs open-data coverage</div>
+        </div>
+
+        <section class="bm-view-section">
+          <div class="seg bm-view-seg" id="bm-view-seg">
+            <button data-view="map" aria-pressed="true">MAP</button
+            ><button data-view="table" aria-pressed="false">TABLE</button>
+          </div>
+        </section>
+
+        <section>
+          <div class="sec-head"><h2>Region</h2></div>
+          <select id="bm-region" class="bm-region-select" aria-label="Select region"></select>
+        </section>
+
+        <section id="bm-stats"></section>
+
+        <section>
+          <div class="sec-head"><h2>Open network matched</h2></div>
+          <div id="bm-netmatch"></div>
+        </section>
+
+        <section>
+          <div class="sec-head">
+            <h2>Routes</h2>
+            <span class="count" id="bm-list-count"></span>
+          </div>
+          <input
+            id="bm-filter"
+            class="bm-filter-input"
+            placeholder="Filter routes by name"
+            aria-label="Filter routes by name"
+          />
+          <div class="bm-list" id="bm-list"></div>
+        </section>
+
+        <section>
+          <div
+            class="sec-head bm-method-head"
+            id="bm-method-head"
+            role="button"
+            tabindex="0"
+            aria-expanded="false"
+          >
+            <h2>Methodology</h2>
+            <span class="disc-caret" aria-hidden="true">▸</span>
+          </div>
+          <div class="bm-method-body" id="bm-method-body" hidden></div>
+        </section>
+
+        <footer>
+          ALLTRAILS DATA · SCRAPED SNAPSHOT · RESTRICTED, BENCHMARK ONLY<br />
+          OPEN SOURCES © OSM CONTRIB. (ODbL) · USDA FS · NPS · BLM · USGS · CPW
+        </footer>
+      </aside>
+
+      <main class="map">
+        <div id="map"></div>
+        <div class="bm-legend" id="bm-legend"></div>
+        <div class="inspector bm-detail" id="bm-detail" hidden></div>
+        <div class="bm-table-wrap" id="bm-table-wrap" hidden></div>
+      </main>
+    </div>
+
+    <script type="module" src="/src/benchmark/benchmark.ts"></script>
+  </body>
+</html>

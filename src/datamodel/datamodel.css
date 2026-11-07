@@ -1,0 +1,247 @@
+/* Trail data model page — a rendered view of data-model.jsonc.
+
+   The page is one intro and then the model itself, so almost all of this file is spent on
+   one component: the field row. Everything else is chrome around it.
+
+   Decisions worth knowing before editing:
+
+   - NO CONTENTS RAIL. data-model.html still ships the `<nav class="doc-toc">` element and
+     this stylesheet is the only thing standing between it and the layout. Hidden rather
+     than removed, so the markup file stays untouched. That leaves one centred column.
+
+   - THE ROW IS A FOUR-COLUMN GRID: key, value, annotation, provenance chip. Fixed track
+     widths, so 30 fields line up into four columns the eye can run down instead of 30
+     ragged sentences. The value column carries the accent ink because it is where a reader
+     looking for "what does this actually hold" lands first.
+
+   - THE ANNOTATION TRUNCATES TO ONE LINE, on purpose, with the full sentence in the row's
+     `title`. That is the trade this page makes: density now, depth on hover. A row that
+     carries a sentence gets `cursor: help` and a dotted key underline so the affordance is
+     visible, and rows without one advertise nothing. The raw jsonc download is the
+     accessible way to read every sentence in full.
+
+   - NESTING IS A LEFT GUIDE LINE plus a `<details>` element, default open. The guide line
+     is what carries the hierarchy visually; the disclosure triangle only exists so a long
+     entity can be folded back onto one screen.
+
+   - GAP ENTITIES ARE DASHED, not red. A shouting treatment would read as a list of
+     failures, and the gaps are an inventory of work with an owner and a cost. */
+
+body.doc-page {
+  overflow: auto;
+  background: var(--chrome);
+}
+
+.doc-toc { display: none; }
+.doc-shell {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 28px 80px;
+}
+.doc { min-width: 0; }
+
+/* ---- header ---- */
+.doc-head {
+  padding: 40px 0 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 6px;
+}
+.doc-kicker {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent-ink);
+  margin-bottom: 12px;
+}
+.doc-head h1 {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-size: 40px; line-height: 1.05; font-weight: 700; letter-spacing: 0.005em;
+  color: var(--text);
+}
+.lede {
+  margin: 0 0 18px;
+  max-width: 840px;
+  font-size: 15px; line-height: 1.6; color: var(--muted);
+}
+.lede code {
+  font-family: var(--font-mono); font-size: 0.88em;
+  background: var(--panel-2); border: 1px solid var(--line-soft); border-radius: 2px;
+  padding: 1px 4px; color: var(--text);
+}
+
+/* Legend and download on one line, above the fold: both are chrome for the whole page. */
+.dm-bar {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 10px 14px;
+  background: var(--panel);
+  border: 1px solid var(--line); border-radius: 3px;
+}
+.dm-legend {
+  display: flex; align-items: center; gap: 7px 16px; flex-wrap: wrap;
+  flex: 1 1 auto; min-width: 0;
+}
+.dm-legend-lead {
+  font-size: 11.5px; color: var(--text); font-weight: 500;
+}
+.dm-legend-lead::after { content: ':'; color: var(--faint); }
+.dm-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.dm-legend-text { font-size: 11.5px; line-height: 1.35; color: var(--muted); }
+
+.dm-count {
+  margin-top: 9px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em;
+  color: var(--faint);
+}
+
+.doc-btn {
+  flex: 0 0 auto;
+  background: var(--accent); border: 1px solid var(--accent); border-radius: 3px;
+  color: var(--ink); cursor: pointer; font-weight: 700;
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em;
+  padding: 7px 13px;
+}
+.doc-btn:hover { filter: brightness(0.96); }
+.doc-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+/* ============ ENTITY CARDS ============ */
+.ent { margin: 26px 0 0; min-width: 0; }
+.ent-head {
+  display: flex; align-items: baseline; gap: 10px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}
+.ent-name {
+  font-family: var(--font-display); font-size: 19px; font-weight: 700;
+  letter-spacing: 0.04em; color: var(--text);
+}
+.ent-count {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--faint);
+  margin-left: auto; white-space: nowrap;
+}
+.ent-intro {
+  margin: 8px 0 10px;
+  max-width: 900px;
+  font-size: 13px; line-height: 1.55; color: var(--muted);
+}
+.ent-body {
+  margin-top: 10px;
+  background: var(--panel);
+  border: 1px solid var(--line); border-radius: 3px;
+  padding: 7px 0;
+  overflow-x: auto;
+}
+.ent-gap .ent-body {
+  background: var(--chrome);
+  border-style: dashed; border-color: var(--faint);
+}
+.ent-gap .ent-name { color: var(--muted); }
+
+/* A banner that introduces several entities rather than one. */
+.band {
+  margin: 34px 0 0;
+  max-width: 900px;
+  padding-left: 11px;
+  border-left: 2px solid var(--accent);
+  font-size: 13px; line-height: 1.55; color: var(--muted);
+}
+
+/* Small entities sit beside each other. */
+.ent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 22px 26px;
+  margin-top: 20px;
+}
+.ent-grid .ent { margin-top: 0; }
+
+/* ============ THE FIELD ROW ============ */
+.row {
+  display: grid;
+  grid-template-columns: minmax(112px, 168px) minmax(140px, 260px) minmax(0, 1fr) 68px;
+  align-items: baseline;
+  gap: 0 14px;
+  padding: 5px 16px;
+  font-family: var(--font-mono); font-size: 11.5px; line-height: 1.55;
+  min-width: 640px;
+}
+.row:hover { background: var(--panel-2); }
+.r-k {
+  color: var(--text); font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.r-k::after { content: ':'; color: var(--faint); font-weight: 400; }
+.r-v { overflow-wrap: anywhere; min-width: 0; }
+.r-lit { color: var(--accent-ink); }
+.r-rel { color: var(--info); }
+.r-lit + .r-rel { margin-left: 6px; }
+/* Full sentence, wrapping; the annotation is the documentation, not a teaser. */
+.r-note {
+  color: var(--muted);
+  font-family: var(--font-body); font-size: 11.5px;
+  min-width: 0;
+}
+.row .prov { justify-self: end; }
+
+/* Braces and group separators: the two things that make a long entity read as a file. */
+.row-brace {
+  padding: 2px 16px;
+  color: var(--faint);
+  font-family: var(--font-mono); font-size: 12px;
+}
+.row-comment {
+  padding: 11px 16px 3px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
+  color: var(--faint);
+}
+
+/* ---- nesting ---- */
+.nest { display: block; }
+.nest > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.nest > summary::-webkit-details-marker { display: none; }
+.nest > summary .r-k::before {
+  content: '▾';
+  display: inline-block; width: 11px; margin-left: -11px;
+  color: var(--faint); font-size: 8px; vertical-align: 1px;
+}
+.nest:not([open]) > summary .r-k::before { content: '▸'; }
+.nest:not([open]) .nest-close { display: none; }
+.nest-body {
+  margin-left: 30px;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+}
+.nest-body .row { padding-left: 4px; min-width: 0; }
+.nest-close { padding-left: 30px; }
+
+/* ============ PROVENANCE CHIPS ============ */
+.prov {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 8.5px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 2px 5px; border-radius: 2px;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+.prov-source   { color: var(--info);       border-color: #b7cbe6; background: #eef3fa; }
+.prov-computed { color: var(--accent-ink); border-color: #e2c79a; background: #fbf3e5; }
+.prov-gap      { color: var(--bad);        border-color: #dcb3ad; background: #fbeeec; }
+
+/* ---- footer ---- */
+.doc-foot {
+  margin-top: 40px; padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.doc-foot p {
+  margin: 0 0 5px;
+  max-width: 900px;
+  font-family: var(--font-mono); font-size: 10px; line-height: 1.65; color: var(--faint);
+}
+
+@media (max-width: 900px) {
+  .doc-shell { padding: 0 16px 56px; }
+  .doc-head h1 { font-size: 30px; }
+  .ent-grid { grid-template-columns: minmax(0, 1fr); }
+}

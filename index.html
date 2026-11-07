@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>TrailScope — US trail data sources on one 3D map</title>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <h1>Map</h1>
+          <div class="sub">US trail data sources on one 3D map</div>
+        </div>
+
+        <div class="search-block">
+          <div class="search-box">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <circle cx="5" cy="5" r="4" stroke="#5c6a60" stroke-width="1.5" />
+              <path d="M8.5 8.5 11 11" stroke="#5c6a60" stroke-width="1.5" />
+            </svg>
+            <input
+              id="search-input"
+              placeholder="Search trails across enabled sources"
+              aria-label="Search trails across enabled sources"
+            />
+          </div>
+          <div class="results" id="search-results"></div>
+        </div>
+
+        <section class="discover" id="discover">
+          <div class="sec-head disc-head" id="discover-head" role="button" tabindex="0" aria-expanded="true">
+            <h2>Discover</h2>
+            <span class="disc-caret" aria-hidden="true">▾</span>
+          </div>
+          <div class="disc-body" id="discover-body">
+            <div class="places-row" id="places-row"></div>
+            <div class="disc-sub">Quick picks</div>
+            <div class="xchips" id="region-chips"></div>
+            <div class="disc-sub disc-sub-toggle" id="peaks-head" role="button" tabindex="0" aria-expanded="false">
+              <span>Peaks in view</span>
+              <span class="disc-sub-caret" aria-hidden="true">▸</span>
+            </div>
+            <div class="peaks" id="peaks-list" hidden></div>
+            <div class="disc-sub" id="trails-head">Trails in view</div>
+            <div class="inview" id="inview-list"></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="sec-head"><h2>Data sources</h2></div>
+          <div class="source-rack" id="source-rack">
+            <div class="source" data-source="osm">
+              <input type="checkbox" checked aria-label="Toggle OpenStreetMap" />
+              <span class="swatch" style="background: var(--c-osm)"></span>
+              <span class="name">OpenStreetMap</span><span class="lic odbl">ODbL</span>
+              <button class="info-btn" aria-label="About OpenStreetMap">i</button>
+              <span class="stats"><span class="zoom-req">zoom to load</span></span>
+            </div>
+            <div class="source" data-source="usfs">
+              <input type="checkbox" checked aria-label="Toggle USFS" />
+              <span class="swatch" style="background: var(--c-usfs)"></span>
+              <span class="name">USFS · NFS Trails</span><span class="lic pd">PUB DOM</span>
+              <button class="info-btn" aria-label="About USFS trails">i</button>
+              <span class="stats"><span class="zoom-req">zoom to load</span></span>
+            </div>
+            <div class="source" data-source="nps">
+              <input type="checkbox" checked aria-label="Toggle NPS" />
+              <span class="swatch" style="background: var(--c-nps)"></span>
+              <span class="name">NPS · Park Trails</span><span class="lic pd">PUB DOM</span>
+              <button class="info-btn" aria-label="About NPS trails">i</button>
+              <span class="stats"><span class="zoom-req">zoom to load</span></span>
+            </div>
+            <div class="source" data-source="blm">
+              <input type="checkbox" checked aria-label="Toggle BLM" />
+              <span class="swatch" style="background: var(--c-blm)"></span>
+              <span class="name">BLM · GTLF Trails</span><span class="lic pd">PUB DOM</span>
+              <button class="info-btn" aria-label="About BLM trails">i</button>
+              <span class="stats"><span class="zoom-req">zoom to load</span></span>
+            </div>
+            <div class="source" data-source="usgs">
+              <input type="checkbox" checked aria-label="Toggle USGS" />
+              <span class="swatch" style="background: var(--c-usgs)"></span>
+              <span class="name">USGS · Natl Digital Trails</span><span class="lic pd">PUB DOM</span>
+              <button class="info-btn" aria-label="About USGS trails">i</button>
+              <span class="stats"><span class="zoom-req">zoom to load</span></span>
+            </div>
+            <div class="source off" data-source="cotrex">
+              <input type="checkbox" aria-label="Toggle COTREX" />
+              <span class="swatch" style="background: var(--c-cotrex)"></span>
+              <span class="name">COTREX (CO only)</span><span class="lic state">STATE</span>
+              <button class="info-btn" aria-label="About COTREX">i</button>
+              <span class="stats"><span class="zoom-req">enable to load</span></span>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="sec-head"><h2>Basemap &amp; Terrain</h2></div>
+          <div class="ctl-row">
+            <label>Basemap</label>
+            <div class="seg" id="basemap-seg">
+              <button class="on" data-basemap="usgs-topo">USGS TOPO</button
+              ><button data-basemap="usgs-imagery">IMAGERY</button
+              ><button data-basemap="opentopo">OPENTOPO</button>
+            </div>
+          </div>
+          <div class="ctl-row">
+            <label>Units</label>
+            <div class="seg" id="units-seg">
+              <button data-units="imperial">MI·FT</button
+              ><button data-units="metric">KM·M</button>
+            </div>
+          </div>
+          <div class="ctl-row">
+            <label>3D terrain</label>
+            <button class="toggle on" id="toggle-3d" aria-label="3D terrain on"></button>
+          </div>
+          <div class="slider-row">
+            <label>Exaggeration</label>
+            <input
+              class="slider"
+              id="exaggeration"
+              type="range"
+              min="1"
+              max="2.5"
+              step="0.1"
+              value="1.4"
+              aria-label="Terrain exaggeration"
+            />
+            <span class="val" id="exaggeration-val">1.4×</span>
+          </div>
+          <div class="ctl-row">
+            <label>Hillshade</label>
+            <button class="toggle on" id="toggle-hillshade" aria-label="Hillshade on"></button>
+          </div>
+        </section>
+
+        <footer>
+          TERRAIN © AWS TERRARIUM / MAPZEN · BASEMAP USGS TNM<br />
+          TRAILS © OPENSTREETMAP CONTRIB. (ODbL) · USDA FS · NPS · BLM · USGS · CPW
+        </footer>
+      </aside>
+
+      <main class="map">
+        <div id="map"></div>
+
+        <div class="dossier" id="dossier" hidden></div>
+        <div class="inspector" id="inspector" hidden></div>
+
+        <div class="statusbar" id="statusbar">
+          <span class="pos" id="sb-pos">—°N —°W</span>
+          <span id="sb-view">Z — · PITCH —°</span>
+          <span class="spacer"></span>
+          <span class="sb-counts" id="sb-counts"></span>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

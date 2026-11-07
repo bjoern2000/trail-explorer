@@ -1,0 +1,900 @@
+{
+  "meta": {
+    "schemaVersion": 4,
+    "region": "cullman",
+    "bbox": [
+      -86.95,
+      34.1,
+      -86.71,
+      34.31
+    ],
+    "scrapedAt": "2026-07-21",
+    "derivedAt": "2026-07-21T11:29:16.183Z",
+    "inBboxRoutes": 6,
+    "droppedRoutes": 3,
+    "droppedNoCoordRoutes": 0,
+    "sources": {
+      "usfs": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "nps": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "blm": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "usgs": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "cotrex": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "dec": {
+        "featureCount": 0,
+        "namedFeatureCount": 0,
+        "uniqueNormalizedNameCount": 0,
+        "capped": false,
+        "error": null
+      },
+      "osm": {
+        "featureCount": 178,
+        "namedFeatureCount": 6,
+        "uniqueNormalizedNameCount": 4,
+        "capped": false,
+        "error": null
+      }
+    }
+  },
+  "routes": [
+    {
+      "trailId": "10244848",
+      "name": "Sportsman Lake Trail",
+      "latitude": 34.19208,
+      "longitude": -86.8609,
+      "lengthMeters": 1770.274,
+      "routeType": "loop",
+      "difficulty": "easy",
+      "numReviews": 153,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": true,
+          "tier": "exact",
+          "rule": null,
+          "names": [
+            "Sportsman Lake trail"
+          ],
+          "featureIds": [
+            "osm:way/485613497",
+            "osm:way/1062778857",
+            "osm:way/1062778856"
+          ],
+          "distM": 3,
+          "matchedLenM": 2748
+        }
+      },
+      "anyMatch": true,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": null,
+        "cotrex": null,
+        "dec": null,
+        "osm": 3,
+        "overall": 3
+      }
+    },
+    {
+      "trailId": "11314826",
+      "name": "Sportsman Lake Park Trail",
+      "latitude": 34.19429,
+      "longitude": -86.86211,
+      "lengthMeters": 3540.548,
+      "routeType": "point-to-point",
+      "difficulty": "moderate",
+      "numReviews": 32,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        }
+      },
+      "anyMatch": false,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": null,
+        "cotrex": null,
+        "dec": null,
+        "osm": 10,
+        "overall": 10
+      }
+    },
+    {
+      "trailId": "10023418",
+      "name": "Ave Maria Grotto",
+      "latitude": 34.1752,
+      "longitude": -86.81678,
+      "lengthMeters": 160.934,
+      "routeType": "out-and-back",
+      "difficulty": "easy",
+      "numReviews": 33,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        }
+      },
+      "anyMatch": false,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": null,
+        "cotrex": null,
+        "dec": null,
+        "osm": 357,
+        "overall": 357
+      }
+    },
+    {
+      "trailId": "11199442",
+      "name": "The Forty Acre Wood",
+      "latitude": 34.22145,
+      "longitude": -86.88576,
+      "lengthMeters": 3862.416,
+      "routeType": "loop",
+      "difficulty": "easy",
+      "numReviews": 19,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        }
+      },
+      "anyMatch": false,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": null,
+        "cotrex": null,
+        "dec": null,
+        "osm": 1619,
+        "overall": 1619
+      }
+    },
+    {
+      "trailId": "11449774",
+      "name": "Heritage Park Loop",
+      "latitude": 34.15698,
+      "longitude": -86.84238,
+      "lengthMeters": 2092.142,
+      "routeType": "loop",
+      "difficulty": "easy",
+      "numReviews": 92,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        }
+      },
+      "anyMatch": false,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": null,
+        "cotrex": null,
+        "dec": null,
+        "osm": 2,
+        "overall": 2
+      }
+    },
+    {
+      "trailId": "10997393",
+      "name": "Twilight Tunnel and Hidden Valley Loop",
+      "latitude": 34.28682,
+      "longitude": -86.89506,
+      "lengthMeters": 1931.208,
+      "routeType": "loop",
+      "difficulty": "moderate",
+      "numReviews": 726,
+      "excluded": false,
+      "exclusionReason": null,
+      "matches": {
+        "usfs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "nps": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "blm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "usgs": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "cotrex": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "dec": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        },
+        "osm": {
+          "matched": false,
+          "tier": null,
+          "rule": null,
+          "names": [],
+          "featureIds": [],
+          "distM": null,
+          "matchedLenM": null
+        }
+      },
+      "anyMatch": false,
+      "nearestFeatureM": {
+        "usfs": null,
+        "nps": null,
+        "blm": null,
+        "usgs": null,
+        "cotrex": null,
+        "dec": null,
+        "osm": 1621,
+        "overall": 1621
+      }
+    }
+  ],
+  "summary": {
+    "bySource": {
+      "usfs": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "nps": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "blm": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "usgs": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "cotrex": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "dec": {
+        "exact": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "inclFuzzy": {
+          "matched": 0,
+          "coveragePct": 0,
+          "weightedCoveragePct": 0,
+          "top25Matched": 0,
+          "top25CoveragePct": 0
+        },
+        "distinctNamedTrails": 0,
+        "distinctNamesInAllTrails": 0,
+        "reverseCoveragePct": 0
+      },
+      "osm": {
+        "exact": {
+          "matched": 1,
+          "coveragePct": 17,
+          "weightedCoveragePct": 15,
+          "top25Matched": 1,
+          "top25CoveragePct": 17
+        },
+        "inclFuzzy": {
+          "matched": 1,
+          "coveragePct": 17,
+          "weightedCoveragePct": 15,
+          "top25Matched": 1,
+          "top25CoveragePct": 17
+        },
+        "distinctNamedTrails": 4,
+        "distinctNamesInAllTrails": 1,
+        "reverseCoveragePct": 25
+      }
+    },
+    "anySource": {
+      "exact": {
+        "matched": 1,
+        "coveragePct": 17,
+        "weightedCoveragePct": 15,
+        "top25Matched": 1,
+        "top25CoveragePct": 17
+      },
+      "inclFuzzy": {
+        "matched": 1,
+        "coveragePct": 17,
+        "weightedCoveragePct": 15,
+        "top25Matched": 1,
+        "top25CoveragePct": 17
+      }
+    },
+    "excluded": {
+      "count": 0,
+      "byReason": {},
+      "routes": []
+    },
+    "denominators": {
+      "raw": 6,
+      "adjusted": 6
+    },
+    "networkPresence": {
+      "within100m": {
+        "count": 3,
+        "pct": 50
+      },
+      "within250m": {
+        "count": 3,
+        "pct": 50
+      },
+      "within1000m": {
+        "count": 4,
+        "pct": 67
+      }
+    },
+    "lengthWeighted": {
+      "denomM": 13358,
+      "denomRoutes": 6,
+      "skippedNullLength": 0,
+      "perSource": {
+        "usfs": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "nps": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "blm": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "usgs": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "cotrex": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "dec": {
+          "exactM": 0,
+          "exactPct": 0,
+          "inclFuzzyM": 0,
+          "inclFuzzyPct": 0
+        },
+        "osm": {
+          "exactM": 1770,
+          "exactPct": 13,
+          "inclFuzzyM": 1770,
+          "inclFuzzyPct": 13
+        }
+      },
+      "anySource": {
+        "exactM": 1770,
+        "exactPct": 13,
+        "inclFuzzyM": 1770,
+        "inclFuzzyPct": 13
+      }
+    },
+    "networkMatched": {
+      "usfs": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "nps": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "blm": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "usgs": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "cotrex": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "dec": {
+        "namedM": 0,
+        "matchedM": 0,
+        "pct": null,
+        "featureCounts": {
+          "named": 0,
+          "matchedUnique": 0
+        }
+      },
+      "osm": {
+        "namedM": 7747,
+        "matchedM": 2748,
+        "pct": 35,
+        "featureCounts": {
+          "named": 6,
+          "matchedUnique": 3
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>TrailScope — Source Matrix</title>
+  </head>
+  <body class="matrix-page">
+    <div class="matrix">
+      <div class="mx-head">
+        <h1>Source matrix</h1>
+        <span class="mx-sub">US hiking &amp; mountain-bike trail data · July 2026</span>
+      </div>
+
+      <div class="mx-wrap">
+        <div class="mx-scroll">
+          <table class="mxm" id="mxm">
+            <thead id="mxm-head">
+              <!-- source columns rendered at runtime by matrix/matrix.ts -->
+            </thead>
+            <tbody id="mxm-reported">
+              <!-- REPORTED band + rows -->
+            </tbody>
+            <tbody id="mxm-measured">
+              <!-- MEASURED band + rows (fills after live/cached benchmark) -->
+            </tbody>
+          </table>
+        </div>
+        <p class="mm-foot" id="mm-foot" hidden></p>
+        <p class="mx-verified">Endpoints and counts verified 2026-07-08.</p>
+      </div>
+
+      <section class="mx-restricted">
+        <h2 class="mx-rtitle">
+          Restricted benchmarks
+          <span class="mx-rsub">· claims only, not measurable</span>
+        </h2>
+        <div class="mx-rgrid" id="mxm-restricted">
+          <!-- Trailforks + AllTrails cards rendered at runtime -->
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="/src/matrix/matrix.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,1354 @@
+/* Trail Scope — everything inside the phone screen.
+   The device frame (bezel, status strip, home indicator) is src/scope/scope.css and is
+   not this file's business; this file owns the app that mounts inside .phone-screen.
+
+   TrailScope's own token palette throughout: warm paper, amber accent, near-ink. NOT
+   AllTrails green. The structure and the interaction metaphors are borrowed on purpose
+   (they are learned, and there is no advantage in making a hiker relearn them) but the
+   surface must not read as an AllTrails clone in a deck.
+
+   TYPE SCALE, and why it is what it is.
+
+   The app renders at roughly 400 x 800 CSS pixels inside the frame, which is a phone, not
+   a dense desktop table. The first build treated it as a document and set 13px body with a
+   lot of 8 to 9.5px mono; against a real AllTrails screen that reads as a shrunken
+   dashboard. iOS body text is 17pt. The scale here is:
+
+     17 to 19  card and sheet titles
+     15 to 15.5  body, rows, measures, option labels
+     13 to 13.5  secondary and supporting text
+     10.5 to 11  MONO, AND ONLY FOR LABELS: a level tag, a unit caption, a section eyebrow
+
+   Nothing is smaller than 10.5px, and nothing is mono unless it is a label. A sentence in
+   9px mono is a sentence nobody reads. Row padding and vertical rhythm are set to match,
+   so the outcome is fewer things per screen, each of them legible. */
+
+.phone-app {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  /* The device frame in scope.css sizes itself from `aspect-ratio: 390 / 844`, but it is
+     a shrink-to-fit box, so a horizontally scrolling row inside the app (the filter chips
+     are the obvious one) would otherwise raise the frame's min-content width and stretch
+     the phone into a tablet. `overflow: hidden` does not prevent that: it only zeroes the
+     automatic minimum size of a flex item, not the intrinsic inline size a scroll
+     container reports to its ancestors. Inline-size containment does, and it is the right
+     statement anyway: the app is sized by the screen, never the other way round. */
+  contain: inline-size;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--chrome);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+/* Button reset. Wrapped in :where() so it carries the specificity of .phone-app alone
+   and never outranks a component's own colour. Without this, `color: inherit` beat
+   .view-toggle's explicit colour and rendered ink text on an ink pill. */
+.phone-app :where(button) { font-family: inherit; color: inherit; }
+.phone-app :focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 1px; border-radius: 3px; }
+
+/* ============================ HEADER ============================
+
+   Three strips and no more: the field, one chip row, the day scrubber. Two mono notes
+   used to hang under the scrubber explaining the provider grid and the +36 h horizon;
+   both were narrative and both are now carried by the prose column beside the phone. The
+   scrubber already labels every day HOURLY or OUTLOOK and draws the wall between them. */
+
+.app-head {
+  flex: 0 0 auto;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 3;
+}
+
+/* ---- search field ---- */
+.sfield {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--chrome);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 9px 14px;
+  min-height: 44px;
+}
+.sfield.is-active { border-color: var(--accent-ink); background: var(--panel); }
+.sf-glyph { color: var(--faint); flex: 0 0 auto; }
+.sf-back, .sf-clear {
+  flex: 0 0 auto;
+  background: none; border: none; padding: 0; cursor: pointer;
+  color: var(--muted); display: flex; align-items: center;
+}
+.sf-input {
+  flex: 1 1 auto; min-width: 0;
+  background: none; border: none; outline: none;
+  font-size: 15.5px; color: var(--text);
+}
+.sf-input::placeholder { color: var(--faint); }
+.sf-fake {
+  flex: 1 1 auto; min-width: 0;
+  background: none; border: none; padding: 0; cursor: pointer;
+  text-align: left; font-size: 15.5px; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* Nothing has been searched and no place has been chosen, so the field is empty and has to
+   look empty. It used to print the region name, which reads as text the reader entered and
+   as a scope they cannot clear. Same grey as the real input's placeholder, so tapping the
+   field changes the caret and nothing else. */
+.sf-fake.is-placeholder { color: var(--faint); }
+
+/* ---- drag to scroll ----
+   Applied by dragScroll() in ui.ts to the three horizontal rows (.chip-row, .s-shortcuts,
+   .dayscrub). `touch-action: pan-x` is the important line: it keeps native touch scrolling
+   and momentum intact while telling the browser the pointer stream is ours horizontally, so
+   a mouse drag never starts a text selection or an element drag. */
+.drag-scroll { cursor: grab; touch-action: pan-x; }
+.drag-scroll.is-dragging { cursor: grabbing; user-select: none; }
+.drag-scroll.is-dragging * { pointer-events: none; }
+
+/* ---- filter chip row ---- */
+.chip-row {
+  display: flex; gap: 8px; align-items: stretch;
+  overflow-x: auto; overflow-y: hidden;
+  margin: 0 -12px; padding: 1px 12px 3px;
+  scrollbar-width: none;
+}
+.chip-row::-webkit-scrollbar { display: none; }
+
+.f-chip {
+  flex: 0 0 auto;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 18px;
+  padding: 8px 14px; cursor: pointer;
+  font-size: 14px; line-height: 1.15; color: var(--muted);
+  white-space: nowrap; max-width: 210px;
+}
+.f-chip:hover { border-color: var(--faint); color: var(--text); }
+.f-chip.on {
+  background: var(--accent); border-color: var(--accent); color: var(--ink); font-weight: 600;
+}
+.f-chip.fc-lead { background: var(--panel-2); }
+.f-chip.fc-lead.on { background: var(--accent); }
+.fc-glyph { flex: 0 0 auto; opacity: 0.75; }
+.f-chip.on .fc-glyph { opacity: 1; }
+.fc-label { flex: 0 0 auto; }
+.fc-value {
+  flex: 1 1 auto; min-width: 0;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.01em;
+  opacity: 0.85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.fc-badge {
+  flex: 0 0 auto;
+  min-width: 19px; height: 19px; border-radius: 10px;
+  background: var(--ink); color: var(--panel);
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0 5px;
+}
+.f-chip.on .fc-badge { background: var(--ink); color: var(--accent); }
+.fc-caret { flex: 0 0 auto; opacity: 0.6; }
+.f-chip.is-clear { color: var(--accent-ink); border-color: var(--accent-ink); }
+
+/* ---- the day bar ---- */
+/* Titled, dated, and still the place the +36 h horizon is met.
+
+   "Today / Tomorrow / Mon" on its own drew the review question "what does that mean?", and
+   fairly: an untitled row of weekdays above a list of trails could be a filter, a departure
+   day or a history, and a bare weekday three days out makes the reader count forward from
+   today. The row now carries an overline naming its job and every button prints the real
+   calendar date under the day name.
+
+   Five days plus the horizon wall have to fit across ~366px of content, so the button is
+   tight on horizontal padding while staying comfortably tall. It scrolls (and drags, see
+   .drag-scroll) if a longer name pushes it over. */
+.dayblock { display: flex; flex-direction: column; gap: 5px; }
+/* The overline and the data age share one line. The age is pushed to the right edge rather
+   than trailing the title, so it holds the same position whatever it says and a reader who
+   has learned where to look does not have to re-find it when the words change length. */
+.dayblock-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+}
+.dayblock-title {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
+}
+/* WHEN THIS FORECAST WAS FETCHED. Deliberately the quietest thing in the header: same mono
+   label scale as the overline it sits beside, no fill, no border, no red. Being offline is
+   the normal condition on a US trail and must not read as a fault, so the offline form is
+   the same chip at the same weight — it gains a glyph and a duration, and nothing else. */
+.data-age {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em;
+  color: var(--faint); white-space: nowrap;
+}
+/* One step darker offline, not a different colour: enough that the state is visibly
+   distinct at a glance, not so much that it reads as an alert. */
+.data-age.is-offline { color: var(--muted); }
+.da-glyph { flex: 0 0 auto; }
+.dayscrub {
+  display: flex; align-items: stretch; gap: 4px;
+  overflow-x: auto; scrollbar-width: none;
+  margin: 0 -12px; padding: 1px 12px 2px;
+}
+.dayscrub::-webkit-scrollbar { display: none; }
+.day {
+  flex: 1 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 7px;
+  padding: 6px 5px 5px; cursor: pointer; min-width: 58px;
+}
+.day:hover { border-color: var(--faint); }
+.day .d-name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; }
+.day .d-date { font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+.day .d-mode {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.03em;
+  text-transform: uppercase; color: var(--faint); margin-top: 1px;
+}
+/* The selected day competes with a row of amber filter chips directly above it, so an
+   amber fill alone is not enough to be unmistakable: it also takes a dark ring and a
+   heavier name. */
+.day.on {
+  background: var(--accent); border-color: var(--ink);
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+.day.on .d-name { color: var(--ink); font-weight: 700; }
+.day.on .d-date { color: var(--ink); }
+.day.on .d-mode { color: var(--ink); opacity: 0.8; }
+.day.is-outlook { background: var(--panel-2); border-style: dashed; }
+.day.is-outlook .d-name { color: var(--muted); font-weight: 500; }
+.day.is-outlook .d-date { color: var(--faint); }
+.day.is-outlook.on { background: var(--accent); border-style: solid; }
+/* Both of these need the doubled class: `.day.is-outlook .d-date` and `.day.on .d-date`
+   tie on specificity, and the outlook rule is written later, so a selected outlook day
+   would otherwise print its date in the faint colour on an amber fill. */
+.day.is-outlook.on .d-name { color: var(--ink); font-weight: 700; }
+.day.is-outlook.on .d-date { color: var(--ink); }
+
+/* The +36 h wall. The whole horizon argument now rests on this mark plus the per-day
+   HOURLY / OUTLOOK label, so it has to be visible rather than hairline. */
+.day-wall {
+  flex: 0 0 auto;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; padding: 0 1px;
+}
+.dw-line { width: 2px; flex: 1 1 auto; background: var(--bad); opacity: 0.6; min-height: 16px; border-radius: 1px; }
+.dw-label {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0;
+  color: var(--bad); white-space: nowrap;
+}
+/* THE GHOST WALL: where a forecast fetched right now would have reached, left standing when
+   the cached one no longer reaches that far. Drawn only in the offline state and only when
+   it is a different boundary from the live wall (app.ts's dayScrubber).
+
+   Dashed and faded, which is the same "real, but not a claim you can act on" treatment the
+   outlook days, the outlook pill and the muted map lines already use, plus a strikethrough
+   on the number. The pair reads in one glance without a word of copy: +36h struck out,
+   +20h live, and the days in between have gone dashed. */
+.day-wall.is-ghost .dw-line {
+  width: 0; background: none;
+  border-left: 2px dashed var(--faint); opacity: 0.8;
+}
+.day-wall.is-ghost .dw-label { color: var(--faint); text-decoration: line-through; }
+
+/* ---- the area conditions strip, and the conditions row it shares with every card ----
+
+   ONE VISUAL VOCABULARY IN TWO PLACES, and that is the whole point: the strip under the day
+   bar and the row at the bottom of every card carry the same fields in the same order in the
+   same type, so a reader compares them without being told to (see src/scope/phone/area.ts and
+   conditions.ts). If these two ever drift apart typographically the comparison stops working,
+   so `.cond-row` is deliberately ONE rule serving both, with `.cr-card` only quieting the
+   colour on the card.
+
+   Mono at the label scale, tabular figures, one line. Mono because this is a row of measures
+   and the type scale reserves mono for exactly that; tabular because a scrolling list of
+   readouts with proportional digits jitters column to column. The strip is allowed two lines
+   (a label line and the row), and nothing here may grow to three: it sits between the day bar
+   and the first card, and every pixel it takes is a pixel of the card the reader is meant to
+   compare it against. */
+.area-strip { display: flex; flex-direction: column; gap: 3px; }
+.as-label {
+  display: flex; align-items: baseline; gap: 5px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--faint);
+  white-space: nowrap; overflow: hidden;
+}
+/* "Area" is the word that stops the strip being read as a trail, so it is the one part of the
+   label line that carries weight. */
+.as-scope { color: var(--muted); font-weight: 600; letter-spacing: 0.1em; }
+.as-place { overflow: hidden; text-overflow: ellipsis; }
+.as-dot { color: var(--line); }
+/* Past the horizon the qualifier is "not hour by hour", in the same words the map legend's
+   note uses. Marked, not alarmed: this is a limit, not a warning, so it takes the muted ink
+   rather than --bad. */
+.as-frame.is-outlook { color: var(--muted); }
+
+.cond-row {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  white-space: nowrap; overflow: hidden;
+  min-height: 16px;
+}
+.cr-glyph { flex: 0 0 auto; color: var(--muted); }
+.cr-field { flex: 0 0 auto; }
+.cr-dot { flex: 0 0 auto; color: var(--line); }
+.cond-row.is-pending { color: var(--faint); }
+/* On the card the row closes a block of measures under the meta line, so it sits in the same
+   secondary ink as the meta row rather than competing with the trail name above it. */
+.cond-row.cr-card { margin: 7px 12px 0; color: var(--muted); }
+.cond-row.cr-card .cr-glyph { color: var(--faint); }
+
+/* The peek's pair: the route's highest sampled point and its lowest, each labelled, so the
+   SPREAD between them is the thing the block shows rather than two numbers that happen to sit
+   together. Full ink here, unlike the card's quieted copy: on the sheet these are a primary
+   reading the reader came for, not a footnote under a name. The label is a fixed width so the
+   two rows' figures line up vertically, which is what makes a difference between them legible
+   at a glance instead of something to be worked out. */
+.peek-conditions {
+  padding: 10px 14px 2px;
+  border-bottom: 1px solid var(--line-soft);
+  display: flex; flex-direction: column; gap: 5px;
+}
+.pc-line { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.pc-where {
+  flex: 0 0 52px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--faint);
+}
+.cond-row.cr-peek { min-width: 0; }
+
+/* ============================ BODY ============================ */
+
+.app-body { position: relative; flex: 1 1 auto; min-height: 0; }
+.app-scroll {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.app-body.is-map .app-scroll { pointer-events: none; }
+.app-body.is-map .app-scroll > * { pointer-events: auto; }
+
+/* ============================ SEARCH SCREENS ============================ */
+
+.screen-search { padding: 4px 0 24px; }
+
+.s-head {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
+  padding: 16px 14px 6px;
+}
+.s-row {
+  display: flex; align-items: flex-start; gap: 12px; width: 100%;
+  background: none; border: none; border-bottom: 1px solid var(--line-soft);
+  padding: 13px 14px; cursor: pointer; text-align: left;
+}
+.s-row:hover { background: var(--panel-2); }
+.s-tile {
+  flex: 0 0 auto;
+  width: 42px; height: 42px; border-radius: 8px;
+  background: var(--panel-2); border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent-ink);
+}
+.s-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.s-name { font-size: 15.5px; font-weight: 600; color: var(--text); line-height: 1.25; }
+.s-sub { font-size: 13px; color: var(--muted); }
+/* Measures, not labels: body face, not mono. */
+.s-meta {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  font-size: 13px; color: var(--muted);
+}
+.s-row.is-inert .s-tile { color: var(--faint); opacity: 0.7; }
+.s-row.is-inert .s-name { color: var(--muted); }
+.s-row.is-refused { background: #f8e7e4; }
+.s-row .cond-pill { margin-top: 5px; }
+
+.s-shortcuts { display: flex; gap: 9px; padding: 4px 14px 2px; overflow-x: auto; scrollbar-width: none; }
+.s-shortcuts::-webkit-scrollbar { display: none; }
+.sc-tile {
+  flex: 0 0 128px;
+  display: flex; flex-direction: column; gap: 6px; align-items: flex-start;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  padding: 11px 11px 10px; cursor: pointer; text-align: left;
+  color: var(--accent-ink);
+}
+.sc-tile:hover { border-color: var(--accent-ink); }
+.sc-name {
+  font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.25;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.sc-kind {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--faint);
+}
+
+.s-note {
+  margin: 16px 14px 0; padding: 12px 13px;
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px;
+  font-size: 13px; line-height: 1.55; color: var(--muted);
+}
+.s-seeall {
+  display: block; width: calc(100% - 28px); margin: 14px;
+  background: var(--panel); border: 1px solid var(--accent-ink); border-radius: 6px;
+  color: var(--accent-ink); cursor: pointer;
+  font-size: 14px;
+  padding: 12px 13px; text-align: left;
+}
+.s-seeall:hover { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+
+/* ============================ LIST HEADER ============================
+
+   Count and sort, and that is all. The exclusion disclosure moved into the filter sheet:
+   it is a rule about what is in the list, so it belongs with the other such rules rather
+   than on the strip the reader crosses on the way to the first card. */
+
+.list-head {
+  padding: 13px 14px 11px;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--chrome);
+}
+.lh-row { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+.lh-count { font-size: 16px; font-weight: 700; color: var(--text); }
+.lh-sorted { font-size: 13px; color: var(--faint); }
+/* A conditions sort names its day on the button ("Best for Tomorrow"), so the lead-in is a
+   separator rather than a preposition. It takes the push to the right and the button
+   follows it, which keeps "87 trails · Best for Tomorrow" reading as one line. */
+.lh-sorted.is-dot { margin-left: auto; }
+.lh-sorted.is-dot + .lh-sort { margin-left: 0; }
+.lh-sort {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 4px;
+  background: none; border: none; padding: 0; cursor: pointer;
+  color: var(--accent-ink); font-size: 14.5px; font-weight: 600;
+}
+.lh-sort:hover { text-decoration: underline; text-underline-offset: 2px; }
+/* The conditions sort fell away past the horizon: the header shows what the list is
+   actually ordered by, and says why the ordering changed. */
+.lh-sort.is-fallback { color: var(--muted); }
+.lh-fallback {
+  margin-top: 6px;
+  font-size: 12.5px; line-height: 1.45;
+  color: var(--bad);
+}
+/* Top rated has to say what it does with the unrated majority, which is most of the list.
+   Quieter than the fallback line: this is the sort working as designed, not a warning. */
+.lh-note {
+  margin-top: 6px;
+  font-size: 12.5px; line-height: 1.45;
+  color: var(--muted);
+}
+/* A sort that cannot be computed for the selected day. */
+.opt-row.is-unavailable { opacity: 0.45; cursor: default; }
+.opt-row.is-unavailable:hover { background: none; }
+
+/* ============================ THE CARD ============================
+
+   Six elements: hero, pill, name, rating, three measures. It carried eleven before, and
+   the extras (route type, distance away, the best window, the elevation range, the parts
+   count, the `computed` badge) were explanation repeated on every row. */
+
+/* Bottom padding clears the floating list/map toggle so the last card is never half
+   covered by it. */
+.card-list { display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 74px; }
+
+/* The seam Top rated cuts. Everything below it is unrated, and the divider says so with a
+   count rather than leaving the reader to notice that the stars stopped appearing. */
+.list-split {
+  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  margin: 6px 2px 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.ls-label {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+}
+.ls-note { font-size: 12.5px; color: var(--faint); }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0 0 14px;
+  cursor: pointer;
+  overflow: hidden;
+}
+.card:hover { border-color: var(--faint); }
+
+/* ---- the hero: the elevation profile, not a photograph ----
+   It replaces AllTrails' photo, so it gets photograph proportions and photograph weight:
+   96px tall, a gradient fill tinted by the condition level, and a confident stroke. The
+   seam breaks stay: a multi-part trail has a real discontinuity and drawing through it
+   invents a cliff that is not on the ground. */
+.card-hero {
+  position: relative;
+  height: 96px;
+  background: linear-gradient(180deg, #fdfbf5 0%, var(--panel-2) 100%);
+  border-bottom: 1px solid var(--line-soft);
+}
+.card-hero .pf-svg { display: block; width: 100%; height: 100%; }
+.pf-line {
+  fill: none; stroke: var(--ink); stroke-width: 2.2;
+  stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke;
+}
+.pf-dot { fill: var(--ink); }
+/* The profile line runs wherever the terrain does, so a label anchored to a corner will
+   sooner or later sit on top of it. A white halo behind the glyphs is the cheap fix that
+   works for a rising route, a falling one and a saddle alike. */
+.pf-label {
+  font-family: var(--font-mono); font-size: 10.5px; fill: var(--muted);
+  stroke: #ffffff; stroke-width: 3px; paint-order: stroke; stroke-linejoin: round;
+}
+/* The treeline rule and its label, peek sheet only (see ProfileOpts.treeline in ui.ts for
+   why the card never asks for it). Deliberately the same dashed-muted treatment as
+   `.cx-tl` in src/trail/route.css, so the discovery peek and Concept B's chart mark
+   treeline with one mark rather than two. The label takes `.pf-label`'s white halo for the
+   same reason that rule exists: the profile line goes wherever the terrain does, and a
+   label pinned to the left edge will eventually sit on top of it. */
+.pf-tl-rule { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.pf-tl {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; fill: var(--muted);
+  stroke: #ffffff; stroke-width: 3px; paint-order: stroke; stroke-linejoin: round;
+}
+
+/* The only overlay left on a card hero: a trail that is probably a subdivision street.
+   That claim changes what the whole card means, so it has to sit on the row itself. */
+.hero-tags { position: absolute; left: 8px; top: 8px; display: flex; gap: 5px; }
+.hero-tag {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--muted);
+  background: rgba(255, 255, 255, 0.9); border: 1px solid var(--line);
+  padding: 2px 6px; border-radius: 3px;
+}
+.hero-tag.is-warn { color: var(--bad); border-color: #dcb3ad; }
+
+/* ---- the conditions pill ----
+   A PILL, on its own full-width row, directly under the profile. The difficulty dot is a
+   DOT, and it now lives in the peek sheet rather than the card. Different shape, different
+   place: two traffic lights on one card would mean two different things (SCOPE_PLAN §5). */
+.cond-pill {
+  display: flex; align-items: center; gap: 8px;
+  margin: 11px 12px 0;
+  padding: 7px 12px;
+  border-radius: 17px;
+  border: 1px solid transparent;
+  font-size: 13.5px; line-height: 1.3;
+  min-height: 34px;
+}
+.cp-glyph { flex: 0 0 auto; }
+.cp-level {
+  flex: 0 0 auto;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.cp-text { flex: 1 1 auto; min-width: 0; }
+.cond-pill.is-prime { background: #e7f4ec; border-color: #b6d9c4; color: #14603a; }
+.cond-pill.is-mixed { background: #fdf0dc; border-color: #e2c79a; color: #7d4d00; }
+.cond-pill.is-poor { background: #f8e7e4; border-color: #dcb3ad; color: #8f2c22; }
+/* Outlook: the neutral inset and the dashed border say "day-scale, not route-specific",
+   and the border and text colour still carry the level, because past the horizon there IS
+   a level now. A settled Monday and a stormy Monday must not render identically. */
+.cond-pill.is-outlook {
+  background: var(--panel-2); border-color: var(--line); border-style: dashed; color: var(--muted);
+}
+.cond-pill.is-outlook.lv-prime { border-color: #a9cfba; color: #2c6a49; }
+.cond-pill.is-outlook.lv-mixed { border-color: #ddc094; color: #7d4d00; }
+.cond-pill.is-outlook.lv-poor { border-color: #d6ada7; color: #8f2c22; }
+.cond-pill.is-pending { background: var(--panel-2); border-color: var(--line-soft); color: var(--faint); }
+/* Search rows carry the level only, so the pill shrinks to it instead of ruling a full
+   width band across every row. */
+.cond-pill.is-compact {
+  margin: 0; padding: 4px 9px; font-size: 12px; min-height: 24px; border-radius: 12px;
+  width: fit-content; align-self: flex-start;
+}
+.cond-pill.is-compact .cp-level { font-size: 10.5px; }
+
+.card-name {
+  margin: 11px 12px 0;
+  font-family: var(--font-display);
+  font-size: 19px; font-weight: 600; letter-spacing: 0.01em; line-height: 1.15;
+  color: var(--text);
+}
+.card-meta {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+  margin: 8px 12px 0;
+  font-size: 14.5px; color: var(--muted);
+}
+.cm-dot { color: var(--line); }
+.cm-gain { display: inline-flex; align-items: center; gap: 3px; }
+/* The loop glyph. Loops only (ui.ts, routeTypeGlyph); absent entirely on point-to-point
+   rather than swapped for a second icon, so the row never grows for the common case. */
+.cm-route { display: inline-flex; align-items: center; }
+
+/* ---- the difficulty dot: the learned metaphor, kept, and always labelled computed.
+   It came off the card and lives in the peek sheet and the filter sheet, where the
+   `computed` label can appear once instead of on every row of a scrolling list. ---- */
+.diff { display: inline-flex; align-items: center; gap: 5px; }
+.diff-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; display: inline-block; }
+.diff-dot.d-easy { background: #1a7a45; }
+.diff-dot.d-moderate { background: #d07e00; }
+.diff-dot.d-hard { background: #b23a2e; }
+.diff-computed {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--faint);
+  border: 1px solid var(--line); border-radius: 3px; padding: 0 4px;
+}
+
+/* ============================ STARS AND RATINGS ============================
+
+   The signal open data does not carry. Every star on this page is drawn from seeded
+   sample content (src/scope/ugc.ts), so the `sample` tag beside it is load-bearing and
+   must not be dropped to save a line. */
+
+.stars { display: inline-flex; align-items: center; gap: 1.5px; flex: 0 0 auto; }
+.star { position: relative; display: inline-block; line-height: 1; flex: 0 0 auto; }
+.star-back, .star-front {
+  position: absolute; left: 0; top: 0; height: 100%;
+  overflow: hidden; line-height: 1;
+}
+.star-back { width: 100%; color: #ddd7c6; }
+.star-front { color: #e09216; }
+.star-back::before, .star-front::before {
+  content: '★';
+  display: block;
+  font-size: 1.18em; line-height: 1;
+  white-space: nowrap;
+}
+
+.rating {
+  display: flex; align-items: center; gap: 7px;
+  margin: 9px 12px 0;
+  font-size: 14px; color: var(--muted);
+}
+.r-avg { font-size: 15px; font-weight: 700; color: var(--text); }
+.r-count { color: var(--muted); }
+.r-sample {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--faint);
+  border: 1px solid var(--line); border-radius: 3px; padding: 0 4px;
+}
+/* There is no empty state here on purpose: an unrated card drops the row entirely rather
+   than printing a zero-star row or repeating a negative down eighty rows. The cold start
+   is stated in the peek sheet and in the Top rated header instead (ui.ts, ratingLine). */
+
+/* ---- the rating control ---- */
+.star-pick { display: inline-flex; gap: 3px; }
+.sp-star {
+  background: none; border: none; padding: 2px; cursor: pointer;
+  font-size: 22px; line-height: 1; color: #ddd7c6;
+}
+.sp-star::before { content: '★'; display: block; }
+.sp-star.on { color: #e09216; }
+.sp-star:hover { color: #c98c34; }
+
+/* ============================ EMPTY STATE ============================ */
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 52px 28px; text-align: center;
+}
+.es-glyph { color: var(--faint); }
+.es-title { font-family: var(--font-display); font-size: 21px; font-weight: 600; }
+.es-body { font-size: 13.5px; line-height: 1.6; color: var(--muted); }
+
+/* ============================ MAP ============================ */
+
+.map-layer { position: absolute; inset: 0; }
+.map-layer[hidden] { display: none; }
+/* MapLibre stamps `maplibregl-map` (position: relative) onto this element, and whichever
+   stylesheet loads last wins, so `inset` alone cannot be trusted to size it. Explicit
+   100% dimensions hold either way; without them the container collapses to 0 height and
+   the canvas sits at the 300 px HTML default, which reads as a blank map. */
+.map-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-canvas .maplibregl-map { font-family: var(--font-body); }
+.map-canvas .maplibregl-ctrl-attrib { font-size: 9px; }
+.map-canvas .maplibregl-ctrl-attrib-button { display: none; }
+
+.map-legend {
+  position: absolute; left: 10px; right: 10px; top: 10px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--line); border-radius: 6px;
+  padding: 8px 10px 7px;
+  pointer-events: none;
+}
+.lg-title {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 6px;
+}
+.lg-row { display: flex; gap: 12px; flex-wrap: wrap; }
+/* Only rendered on an outlook day, where the same three levels draw muted. */
+.lg-note { margin-top: 4px; font-size: 12px; color: var(--muted); }
+.lg-item { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--text); }
+.lg-swatch { width: 14px; height: 4px; border-radius: 2px; display: inline-block; }
+
+/* ---- zoom buttons ----
+   Bottom right, above the attribution line, clear of the centered view toggle. */
+.map-zoom {
+  position: absolute; right: 10px; bottom: 64px;
+  display: flex; flex-direction: column;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--line); border-radius: 8px;
+  overflow: hidden;
+}
+.mz-btn {
+  width: 34px; height: 34px;
+  background: none; border: none; cursor: pointer;
+  font-size: 19px; line-height: 1; color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+}
+.mz-btn:hover { background: var(--panel-2); }
+.mz-btn + .mz-btn { border-top: 1px solid var(--line); }
+
+.map-bar {
+  position: relative; z-index: 2;
+  display: flex; align-items: baseline; gap: 7px;
+  margin: 64px 10px 0; padding: 7px 12px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--line); border-radius: 6px;
+  width: fit-content; max-width: calc(100% - 20px);
+}
+.mb-count { font-size: 14.5px; font-weight: 700; }
+.mb-sort { font-size: 12.5px; color: var(--faint); }
+
+.view-toggle {
+  /* Clears the map's attribution strip, which sits on the bottom edge and must stay
+     legible: it is the ODbL/USGS credit, not decoration. */
+  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
+  z-index: 6;
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--ink); color: var(--chrome);
+  border: none; border-radius: 22px;
+  padding: 10px 19px; cursor: pointer;
+  font-size: 14.5px; font-weight: 600;
+  box-shadow: 0 4px 12px rgba(31, 42, 36, 0.3);
+}
+.view-toggle:hover { background: #2c3a32; }
+
+/* ============================ TAB BAR ============================ */
+
+.tabbar {
+  flex: 0 0 auto;
+  display: flex; align-items: stretch;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  z-index: 4;
+}
+.tab {
+  flex: 1 1 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  background: none; border: none; padding: 7px 2px 8px; cursor: pointer;
+  font-size: 11px; letter-spacing: 0.01em;
+  color: var(--faint);
+}
+.tab.on { color: var(--accent-ink); font-weight: 600; }
+.tab.is-off { opacity: 0.38; cursor: default; }
+
+/* ============================ SHEETS ============================ */
+
+.sheet-layer { position: absolute; inset: 0; z-index: 20; display: flex; flex-direction: column; justify-content: flex-end; }
+.sheet-layer[hidden] { display: none; }
+.sh-scrim { position: absolute; inset: 0; background: rgba(31, 42, 36, 0.34); }
+
+.sh {
+  position: relative;
+  display: flex; flex-direction: column;
+  max-height: 84%;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -8px 26px rgba(31, 42, 36, 0.22);
+  overflow: hidden;
+}
+.sh-grab {
+  flex: 0 0 auto;
+  width: 44px; height: 5px; border-radius: 3px;
+  background: var(--line);
+  margin: 9px auto 4px;
+}
+.sh-head {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 10px;
+  padding: 5px 14px 11px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.sh-title {
+  flex: 1 1 auto;
+  font-family: var(--font-display); font-size: 23px; font-weight: 700; letter-spacing: 0.02em;
+}
+.sh-action {
+  flex: 0 0 auto;
+  background: none; border: none; padding: 0; cursor: pointer;
+  font-size: 13.5px; color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px;
+}
+.sh-close {
+  flex: 0 0 auto;
+  width: 32px; height: 32px; border-radius: 16px;
+  background: var(--panel-2); border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--muted); padding: 0;
+}
+.sh-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 6px 14px 18px; }
+.sh-foot {
+  flex: 0 0 auto;
+  padding: 11px 14px 13px;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+}
+.sh-apply {
+  width: 100%;
+  background: var(--accent); border: 1px solid var(--accent); border-radius: 7px;
+  color: var(--ink); font-size: 15.5px; font-weight: 700;
+  padding: 13px 0; cursor: pointer;
+}
+.sh-apply.is-empty { background: var(--panel-2); border-color: var(--line); color: var(--muted); }
+
+/* ---- option rows (sort, condition filters) ---- */
+.opt-row {
+  display: flex; align-items: center; gap: 11px; width: 100%;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  padding: 13px 12px; margin-bottom: 8px; cursor: pointer; text-align: left;
+}
+.opt-row:hover { border-color: var(--faint); }
+.opt-row.on { border-color: var(--accent-ink); background: #fffaf0; }
+.opt-glyph { flex: 0 0 auto; color: var(--accent-ink); }
+.opt-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.opt-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.opt-label { font-size: 15px; font-weight: 600; }
+.opt-help { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.opt-check { flex: 0 0 auto; color: var(--accent-ink); }
+/* A condition filter answering a coarser question than its label promises, because the
+   selected day is past the forecast horizon. It still answers; it answers less precisely. */
+.opt-tag {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--accent-ink);
+  border: 1px solid var(--accent-ink); border-radius: 3px; padding: 0 4px;
+}
+.opt-row.is-coarse { border-style: dashed; }
+
+/* ---- filter groups ---- */
+.fg { padding: 14px 0 6px; border-bottom: 1px solid var(--line-soft); }
+.fg:last-of-type { border-bottom: none; }
+.fg-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.fg-title {
+  flex: 1 1 auto;
+  font-family: var(--font-display); font-size: 16px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text);
+}
+.fg-clear {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font-size: 13px; color: var(--accent-ink);
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.fg-sub {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--faint);
+  margin: 13px 0 7px;
+}
+.fg-tag {
+  font-size: 10.5px; letter-spacing: 0.04em;
+  border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; color: var(--faint);
+}
+.fg-note {
+  margin: 8px 0 3px;
+  font-size: 12.5px; line-height: 1.55; color: var(--muted);
+}
+.fg-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+.fg-range { margin-top: 3px; }
+.sel-pill {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 17px;
+  padding: 8px 14px; cursor: pointer;
+  font-size: 13.5px; color: var(--muted); white-space: nowrap;
+}
+.sel-pill:hover { border-color: var(--faint); color: var(--text); }
+.sel-pill.on { background: var(--accent); border-color: var(--accent); color: var(--ink); font-weight: 600; }
+.sel-pill.is-out {
+  opacity: 0.42; cursor: not-allowed;
+  text-decoration: line-through; text-decoration-thickness: 1px;
+}
+
+/* ============================ THE PEEK ============================ */
+
+.sh-peek { max-height: 88%; }
+.peek-head {
+  flex: 0 0 auto;
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 3px 14px 11px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.peek-heading { flex: 1 1 auto; min-width: 0; }
+.peek-name {
+  margin: 0;
+  font-family: var(--font-display); font-size: 26px; font-weight: 700;
+  letter-spacing: 0.01em; line-height: 1.12;
+}
+.peek-sub {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  margin-top: 6px; font-size: 13.5px; color: var(--muted);
+}
+.ps-type { font-weight: 600; }
+/* The reload glyph plus "Loop": its own tight flex pairing (4px) rather than the row's own
+   6px item gap, so the icon reads as attached to the word it sits in front of instead of
+   as a third, evenly-spaced item in the row. */
+.ps-route { display: inline-flex; align-items: center; gap: 4px; }
+.ps-loop-glyph { color: var(--muted); }
+.sh-peek .cond-pill { margin: 12px 0 0; }
+
+.msr-row {
+  display: flex; align-items: stretch; gap: 0;
+  margin: 14px 0 6px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+.msr {
+  flex: 1 1 0; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 10px 4px 9px;
+  border-right: 1px solid var(--line);
+}
+.msr:last-child { border-right: none; }
+.msr-top {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap;
+}
+.msr-top svg { color: var(--faint); }
+.msr-label {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--faint);
+}
+
+/* ---- how you're walking it ----
+   Two-option toggle, directly under the measures row because it is what makes the Est.
+   time figure in that row mean what it currently says. Loop trails ask direction
+   (Clockwise/Counterclockwise); point-to-point trails ask whether the estimate should
+   count the walk back (One way/Incl. return). A scrolling card list has no room to ask
+   this, so the peek is the only place that does (`phone/peek.ts`'s `traversalRow`). */
+.trav-row { display: flex; gap: 7px; margin: 10px 0 0; }
+.trav-btn {
+  flex: 1 1 0;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 7px;
+  padding: 8px 6px; cursor: pointer; text-align: center;
+  font-size: 13px; font-weight: 600; color: var(--muted);
+}
+.trav-btn:hover { border-color: var(--faint); color: var(--text); }
+.trav-btn.on { background: var(--accent); border-color: var(--ink); color: var(--ink); }
+
+/* ---- the conditions verdict ----
+
+   The block that keeps the level word from ever appearing undefined. It reads as one
+   object: a tinted level chip and the day it applies to on the first line, the sentence
+   that explains both underneath.
+
+   NO COLOURED LEFT EDGE. It had one, taking the level's own hue with a dashed variant for
+   outlook days, and review threw it out on sight: a tinted 3px rail down the left of a card
+   is the single most over-used gesture in generated UI, and it was carrying no information
+   the tinted pill 8px to its right was not already carrying in colour, glyph and words.
+   Removing it costs nothing and the panel reads quieter for it. If the level ever needs a
+   second carrier here, it should be something this app already uses (the profile fill, the
+   pill) rather than a rail. */
+.peek-verdict {
+  margin: 15px 0 4px;
+  padding: 11px 12px 12px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.pv-head {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 7px;
+}
+/* The sheet-wide pill margin exists for the old layout, where the pill sat on its own row
+   under the header. In here it is an inline chip. */
+.sh-peek .peek-verdict .cond-pill { margin: 0; }
+.pv-when {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--faint);
+}
+/* The level's gloss, and only the gloss: one short sentence saying what the pill's word
+   means. The bold `.pv-level` lead-in that used to open it is gone with the level word
+   itself, and the clause list that used to follow it is gone into `.pv-brief` below. */
+.pv-say {
+  margin: 0 0 9px;
+  font-size: 14px; line-height: 1.45; color: var(--text);
+}
+/* THE BRIEF. One fact per line, glyph then clause, in the order the grade's own penalties
+   put them. Replaces both a comma-joined sentence here and the four-row "What's driving
+   this" block that used to sit near the bottom of the sheet (see briefLines in peek.ts).
+
+   The glyph column is a fixed width so the clauses left-align down the list: an icon
+   followed by text at its natural width is a ragged left edge, which is exactly the thing
+   that makes a list slower to scan than the paragraph it replaced. */
+.pv-brief { display: flex; flex-direction: column; gap: 1px; }
+.pvb-line {
+  display: flex; align-items: baseline; gap: 9px;
+  padding: 5px 0;
+  font-size: 14px; line-height: 1.35;
+}
+.pvb-glyph {
+  flex: 0 0 15px;
+  color: var(--faint);
+  /* Optically centred against the first line of text rather than sat on its baseline,
+     which for a 15px glyph beside 14px type reads as one pixel low. */
+  align-self: center; position: relative; top: 0.5px;
+}
+.pvb-text { flex: 1 1 auto; color: var(--text); }
+/* THE MEASURE, INLINE. It was a right-aligned column until the storm measure grew from
+   "peaks 4% at 15:00" to "storm chance peaks 4% at 15:00" to say what the number counts.
+   The column sized the claim from whatever was left, so the wider measure squeezed
+   "Stays clear through the afternoon" into one word per line. The note that used to sit here
+   reasoned that a long clause wrapping was fine while the measure stayed whole; that holds
+   only while measures are short, and this one is not, so the column went instead.
+
+   Now it runs on as part of the clause, kept subordinate by ink rather than by position:
+   same family and size as the body text, so it wraps with it as one sentence, in the faintest
+   ink so it still reads as evidence for the claim and not as a second claim. Dropping the
+   mono is part of that: mono at the label scale was legible as a column entry and would be a
+   jolt mid-sentence. */
+.pvb-measure {
+  color: var(--faint);
+}
+/* The first line is the best window when there is one, and it is the answer the reader came
+   for, so it takes the weight the old `.pw-say` headline in the WHEN TO GO block had before
+   the window moved up here. Its MEASURE keeps the common ink: emphasising the first row's
+   evidence too would put the same visual weight on the claim and on the thing supporting it,
+   and the column only reads as one column if every entry in it looks the same. */
+.pvb-line:first-child .pvb-text { font-weight: 600; }
+/* ...but not into the measure nested inside it, which keeps the common ink. */
+.pvb-line:first-child .pvb-measure { font-weight: 400; }
+.pvb-line:first-child .pvb-glyph { color: var(--muted); }
+
+.peek-profile { margin: 16px 0 8px; }
+.peek-profile .pf-svg {
+  display: block; width: 100%; height: 118px;
+  background: linear-gradient(180deg, #fdfbf5 0%, var(--panel-2) 100%);
+  border: 1px solid var(--line-soft); border-radius: 6px;
+}
+.pp-axis {
+  display: flex; justify-content: space-between;
+  margin-top: 5px;
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--faint);
+}
+
+/* ---- the peek's own map ----
+   Same fix as the results map needed (SCOPE_PLAN §11): MapLibre stamps its own
+   `position: relative` onto whichever element it is given, and load order decides which
+   stylesheet wins, so `inset: 0` on a relatively-positioned ancestor cannot be trusted on
+   its own. An explicit height on the wrapper plus explicit 100% dimensions on the canvas
+   hold under either position value. Fixed rather than viewport-relative: this sits inside
+   a scrolling sheet, not a full screen, so it gets a modest budget rather than a share of
+   one. */
+.peek-map-wrap {
+  position: relative;
+  height: 150px;
+  margin: 14px 0 0;
+  border: 1px solid var(--line-soft); border-radius: 6px;
+  overflow: hidden;
+}
+.peek-map-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.peek-map-canvas .maplibregl-ctrl-attrib { font-size: 8px; }
+/* ---- the time window ---- */
+.strip-wrap { margin-top: 20px; }
+.strip-title {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--faint);
+  display: flex; flex-wrap: wrap; gap: 7px; align-items: baseline;
+  margin-bottom: 8px;
+}
+.strip-sub { letter-spacing: 0.01em; text-transform: none; font-size: 10.5px; opacity: 0.92; }
+/* The transient state while the grade is still being worked out. */
+.strip-note { font-size: 13px; color: var(--muted); }
+.strip { display: flex; gap: 2px; height: 32px; }
+.st-cell {
+  flex: 1 1 0; border-radius: 3px;
+  background: var(--panel-2); border: 1px solid var(--line-soft);
+}
+.st-cell.lv-0 { background: #eef3ee; }
+.st-cell.lv-1 { background: #fdf0dc; border-color: #eddcba; }
+.st-cell.lv-2 { background: #f6cf8f; border-color: #e2b263; }
+.st-cell.lv-3 { background: #d98d72; border-color: #c26f52; }
+.st-cell.is-past { background: repeating-linear-gradient(45deg, #f0ece0, #f0ece0 3px, #e6e0d0 3px, #e6e0d0 6px); }
+.st-cell.in-best { box-shadow: inset 0 -4px 0 var(--good); }
+.strip-ticks { display: flex; gap: 2px; margin-top: 3px; }
+.st-tick {
+  flex: 1 1 0; text-align: center;
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--faint);
+}
+/* Sentences, so body face rather than mono. */
+.strip-legend {
+  display: flex; flex-wrap: wrap; gap: 5px 14px; margin-top: 9px;
+  font-size: 13px; color: var(--muted);
+}
+.sl-item { display: inline-flex; align-items: center; gap: 5px; }
+.sl-swatch { width: 12px; height: 4px; border-radius: 2px; display: inline-block; }
+.sl-swatch.is-best { background: var(--good); }
+.strip-none {
+  display: flex; align-items: flex-start; gap: 9px;
+  padding: 12px 12px;
+  background: var(--panel-2); border: 1px dashed var(--line); border-radius: 6px;
+  font-size: 13px; line-height: 1.55; color: var(--muted);
+}
+.strip-none svg { flex: 0 0 auto; margin-top: 2px; color: var(--faint); }
+
+
+/* ============================ UGC ============================
+
+   Ratings, photos and comments: the gap the benchmark found, answered. Every seeded
+   artefact carries a `sample` tag and everything the reader adds carries a `yours` tag,
+   and the seeded average never moves when the reader rates the trail. */
+
+.ugc { margin-top: 22px; padding-top: 4px; }
+
+.ugc-sum {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 13px;
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px;
+}
+.us-avg {
+  font-family: var(--font-display); font-size: 30px; font-weight: 700; line-height: 1;
+  color: var(--text);
+}
+.us-right { display: flex; flex-direction: column; gap: 4px; }
+.us-count { font-size: 13px; color: var(--muted); }
+
+/* ---- the first-contribution panel: the state most trails are in ----
+   Not a greyed-out box. It reads as the primary thing on the block, because on a trail
+   nobody has rated the primary thing IS the invitation to rate it. Accent border, the
+   star control sitting inside the panel rather than in a row further down. */
+.ugc-first {
+  display: flex; flex-direction: column; gap: 11px;
+  padding: 14px 14px 13px;
+  background: var(--panel);
+  border: 1px solid var(--accent-ink);
+  border-radius: 8px;
+}
+.uf-copy { display: flex; flex-direction: column; gap: 5px; }
+.uf-title {
+  font-family: var(--font-display);
+  font-size: 16.5px; font-weight: 600; line-height: 1.2; color: var(--text);
+}
+.uf-body { font-size: 13px; line-height: 1.5; color: var(--muted); }
+.uf-act { display: flex; align-items: center; gap: 10px; }
+/* Bigger and a shade stronger than the same control in the rated case. Here it is the
+   primary action on the block, and a ghost-grey row of stars does not read as one. */
+.uf-act .sp-star { font-size: 27px; color: #cbbfa2; }
+.uf-act .sp-star:hover { color: #c98c34; }
+.uf-act .sp-star.on { color: #e09216; }
+.uf-tag {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--accent-ink);
+  border: 1px solid var(--accent-ink); border-radius: 3px; padding: 0 4px;
+}
+
+/* ---- photo strip ---- */
+.ph-strip {
+  display: flex; gap: 8px; margin-top: 10px;
+  overflow-x: auto; scrollbar-width: none; padding-bottom: 2px;
+}
+.ph-strip::-webkit-scrollbar { display: none; }
+.ph-tile {
+  position: relative; flex: 0 0 96px; height: 76px;
+  border: 1px solid var(--line); border-radius: 7px; overflow: hidden;
+  background: var(--panel-2);
+}
+.ph-tile.is-mine { border-color: var(--accent-ink); }
+.ph-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* A seeded photo has no image. Inventing one would be inventing evidence about a real
+   place, so the slot says what it is instead. */
+.ph-empty {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--faint);
+  background: repeating-linear-gradient(45deg, #f4efe2, #f4efe2 5px, #ece6d6 5px, #ece6d6 10px);
+}
+.ph-tag {
+  position: absolute; left: 4px; bottom: 4px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--muted);
+  background: rgba(255, 255, 255, 0.92); border: 1px solid var(--line);
+  border-radius: 3px; padding: 0 4px;
+}
+.ph-tag.is-mine { color: var(--accent-ink); border-color: var(--accent-ink); }
+
+/* The add tile leads the strip, in every state. Most trails have no photos, so the strip
+   is usually this tile alone: an action where a grey box used to say "No photos yet". */
+.ph-add {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  border-style: dashed; border-color: var(--accent-ink);
+  background: var(--panel); color: var(--accent-ink);
+  cursor: pointer;
+}
+.ph-add:hover { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+.pa-label { font-size: 12.5px; font-weight: 600; }
+
+/* ---- the reader's own contribution ---- */
+.ugc-mine {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 14px;
+}
+.um-label {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--faint);
+}
+/* A real file input, not a mock. Hidden visually, driven by its label. */
+.ugc-file {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.ugc-compose { display: flex; align-items: flex-end; gap: 9px; margin-top: 12px; }
+.ugc-text {
+  flex: 1 1 auto; min-width: 0; resize: none;
+  font-family: inherit; font-size: 14px; line-height: 1.45; color: var(--text);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 11px;
+}
+.ugc-text::placeholder { color: var(--faint); }
+.ugc-text:focus { outline: none; border-color: var(--accent-ink); }
+.ugc-post {
+  flex: 0 0 auto;
+  background: var(--accent); border: 1px solid var(--accent); border-radius: 8px;
+  color: var(--ink); font-size: 14px; font-weight: 700;
+  padding: 11px 18px; cursor: pointer;
+}
+
+/* ---- comments ---- */
+.cmt { padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+.cmt:last-child { border-bottom: none; }
+.cmt-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cmt-who { font-size: 14px; font-weight: 600; color: var(--text); }
+.cmt-when { font-size: 12.5px; color: var(--faint); }
+.cmt-tag {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--faint);
+  border: 1px solid var(--line); border-radius: 3px; padding: 0 4px;
+}
+.cmt-tag.is-mine { color: var(--accent-ink); border-color: var(--accent-ink); }
+.cmt-text { margin: 5px 0 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.cmt.is-mine .cmt-text { color: var(--text); }
+
+/* ---- the phase 2 stub ---- */
+.peek-details {
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  margin-top: 20px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px 14px; cursor: pointer;
+  font-size: 15px; font-weight: 600; color: var(--text);
+}
+.peek-details:hover { border-color: var(--faint); }
+.pd-caret { transform: rotate(-90deg); color: var(--faint); transition: transform 0.15s; }
+.peek-details.is-open .pd-caret { transform: rotate(0deg); }
+.peek-stub {
+  margin-top: 8px; padding: 13px 13px;
+  background: var(--panel-2); border: 1px dashed var(--line); border-radius: 6px;
+  font-size: 13px; line-height: 1.6; color: var(--muted);
+}
+.peek-stub[hidden] { display: none; }
+
+/* ============================ PEEK: THE WEEK ============================
+
+   Seven day chips under the verdict, each carrying THIS TRAIL's grade as a dot. It is a
+   compact control, not a second day bar: no dates, no HOURLY / OUTLOOK label, no wall. The
+   header's day bar is the full instrument and this is the per-trail read of it, so anything
+   repeated between them is weight for nothing.
+
+   The dots take the level colours the difficulty dot and the map already use, unchanged, so
+   green / amber / red means one thing everywhere on this page.
+
+   PAST THE HORIZON THE CHIP FADES rather than greying out. The level is still real (a
+   settled Friday must not look like a stormy one) and the confidence is not, which is the
+   same "same hue, less weight" treatment the profile fill and the map lines use. */
+.pweek-wrap { margin-top: 18px; }
+.pweek {
+  display: flex; align-items: stretch; gap: 5px;
+  overflow-x: auto; scrollbar-width: none;
+  margin: 0 -2px; padding: 1px 2px 2px;
+}
+.pweek::-webkit-scrollbar { display: none; }
+.pweek-day {
+  flex: 1 1 0; min-width: 42px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 7px;
+  padding: 7px 4px 8px; cursor: pointer;
+}
+.pweek-day:hover { border-color: var(--faint); }
+.pwd-name { font-size: 12.5px; font-weight: 600; color: var(--text); white-space: nowrap; }
+.pwd-dot { width: 10px; height: 10px; border-radius: 50%; display: block; }
+.pwd-dot.lv-prime { background: #1a7a45; }
+.pwd-dot.lv-mixed { background: #d07e00; }
+.pwd-dot.lv-poor { background: #b23a2e; }
+.pwd-dot.lv-pending { background: var(--line); }
+/* Selected: the same amber-fill-plus-ink-ring the day bar uses, so the two controls read as
+   one setting seen twice rather than as two different kinds of thing. */
+.pweek-day.on {
+  background: var(--accent); border-color: var(--ink);
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+.pweek-day.on .pwd-name { color: var(--ink); font-weight: 700; }
+.pweek-day.is-outlook { background: var(--panel-2); border-style: dashed; }
+.pweek-day.is-outlook .pwd-name { color: var(--muted); font-weight: 500; }
+.pweek-day.is-outlook .pwd-dot { opacity: 0.42; }
+.pweek-day.is-outlook.on { background: var(--accent); border-style: solid; }
+.pweek-day.is-outlook.on .pwd-name { color: var(--ink); font-weight: 700; }
+.pweek-note {
+  margin-top: 7px;
+  font-size: 12.5px; line-height: 1.5; color: var(--faint);
+}
+
+/* ============================ PEEK: THE HOUR TOOLTIP ============================
+
+   Replaces the `title` attribute the cells used to carry. It answers the review question
+   the shading could not ("why is this one green and that one orange"), so it names the
+   reason and not just the numbers.
+
+   Absolutely positioned inside .strip-figure, which is the only reason showing it moves
+   nothing on the sheet. JS sets `left` in pixels, clamped to the figure's own width, so a
+   tooltip on the first or last cell stays inside the phone rather than crossing the bezel.
+   The explicit [hidden] rule is load-bearing: `display: flex` below would otherwise beat the
+   attribute's default styling and the tooltip would never hide. */
+.strip-figure { position: relative; }
+.st-tip {
+  position: absolute; top: 0; left: 0; z-index: 4;
+  transform: translate(-50%, -100%);
+  margin-top: -7px;
+  display: flex; flex-direction: column; gap: 2px;
+  max-width: 230px; width: max-content;
+  padding: 7px 10px 8px;
+  background: var(--ink); color: #f7f4ec;
+  border-radius: 7px;
+  box-shadow: 0 6px 18px rgba(31, 42, 36, 0.22);
+  pointer-events: none;
+}
+.st-tip[hidden] { display: none; }
+.tt-head {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.tt-why { font-size: 12.5px; line-height: 1.4; opacity: 0.86; }
+/* The cells are the hover target, so they have to look like one. */
+.st-cell { cursor: pointer; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pd-caret { transition: none; }
+}
+
+/* Area strip: where today is going, when that differs from where it is. Quieter than the
+   readout above it, because it is a second-order fact about the same place: the reader
+   should take the current numbers first and the trajectory as the qualifier it is. */
+.as-traj {
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--accent-ink);
+}
+.as-traj[hidden] { display: none; }
